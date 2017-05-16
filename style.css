@@ -1,0 +1,12 @@
+#title{
+  text-align:center;
+}
+
+a:after{
+  content:"\a";
+  white-space:pre; /*Too lazy to add new lines in the HTML, so I'm doing this in CSS*/
+}
+
+a{
+  text-decoration:none;
+}

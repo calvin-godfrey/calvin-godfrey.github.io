@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<head>
+  <title>Circle</title>
+  <meta charset="utf-8">
+  <script src="script.js"></script>
+</head>
+<body>
+  <input id="points" type="range" min="4" max="512">Points</input><button id="start">Start</button><button id="stop">Stop</button><input type="checkbox" id="lines">Show lines?</input><input type="checkbox" id="useMult">Use Multiplier?</input>
+  <br>
+  <input id="magic" type="range" min="1" max="2000" step="0.01">Magic</input><input id="set" type="checkbox">Set magic</input>
+  <br>
+  <input id="radius" type="range" min="1" max="150">Inner Radius</input><input id="nums" type="checkbox">One line?</input>
+  <br>
+  <input id="Rradius" type="range" min="150" max="500">Outer Radius</input><input id="ellipse" type="checkbox">Show ellipse?</input>
+  <br>
+  <input id="mult" type="range" min="1" max="2" step="0.01">Multiplier</input>
+  <button id="random">RANDOMIZE</button>
+  <p>Points: <span id="selected"></span></p>
+  <p>Magic: <span id="dispMagic"></span></p>
+  <p>Inner Radius: <span id="dispRadius"></span></p>
+  <p>Outer Radius: <span id="dispRRadius"></span></p>
+  <p>Multiplier: <span id="multiplier"></span></p>
+  <canvas id="canvas" style="width:100%;height:100%"></canvas>
+</body>
+</html>

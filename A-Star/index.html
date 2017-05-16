@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<head>
+  <title>A Star Search</title>
+  <meta charset="utf-8">
+  <script src="script.js"></script>
+</head>
+<body>
+  <p>Click to make the nodes of a graph. Draw lines to connect them and make the graph. Click one again to make it the start (green) and another the end (red).</p>
+  <button id="getPoints">Search</button><button id="step">Step</button>
+  <table id="queue" border="1"><tr><th>Node</th><th>Heuristic Value</th><th>Path From</th></tr></table>
+  <p id="path"></p>
+  <p id="percent"></p>
+  <canvas style="width:100%;height:100%" id="canvas"></canvas>
+</body>
+</html>
