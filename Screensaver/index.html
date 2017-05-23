@@ -1,0 +1,108 @@
+<body>
+<script>window.onload = function(){
+  var canvas = document.getElementById("canvas");
+  canvas.height = screen.height;
+  canvas.width = screen.width;
+  var ctx = canvas.getContext('2d');
+  f = screen.height/1.5;
+  var points = [new Point(canvas.width/2, 0, new Vector(0, 0)), new Point(canvas.width/2-f/1.5, f ,new Vector(0, 0)), new Point(canvas.width/2+f/1.5, f, new Vector(0, 0))];
+  var lines = [new Line(10, 0), new Line(10, 0), new Line(10, 0)];
+
+  var time = 0;
+
+  function Vector(x, y){
+    this.x = x;
+    this.y = y;
+  }
+
+  function Point(x, y, velocity){
+    this.x = x;
+    this.y = y;
+    this.velocity = velocity;
+  }
+
+  Point.prototype.update = function(){
+    this.x += this.velocity.x;
+    this.y += this.velocity.y;
+  }
+
+  Point.prototype.force = function(x, y){
+    this.velocity.x += x;
+    this.velocity.y += y;
+  }
+
+  function Line(num, velocity){
+    this.num = num;
+    this.velocity = velocity;
+  }
+
+  Line.prototype.update = function(){
+      this.num += this.velocity;
+  }
+
+  Line.prototype.force = function(force){
+    this.velocity += force;
+  }
+
+  function interpolate(p1, p2, percent){
+    return new Point(p1.x - (p1.x-p2.x)*percent, p1.y - (p1.y-p2.y)*percent);
+  }
+
+  function line(p1, p2){
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.stroke();
+  }
+
+  function drawTriangle(factor1, factor2, factor3){
+    ctx.strokeStyle = "hsl(" + ((time/2)%360) + ", 100%, 50%)";
+    for(var i=0;i<points.length-1;i++){
+      line(points[i], points[i+1]);
+    }
+    line(points[points.length-1], points[0]);
+    var newPoints1 = [];
+    var newPoints2 = [];
+    var newPoints3 = [];
+    for(var i=1;i<factor1;i++){
+      newPoints1.push(interpolate(points[1], points[0], i/factor1));
+    }
+    for(var i=1;i<factor2;i++){
+      newPoints2.push(interpolate(points[2], points[1], i/factor2));
+    }
+    for(var i=1;i<factor3;i++){
+      newPoints3.push(interpolate(points[2], points[0], i/factor3));
+    }
+    for(var i=0;i<newPoints1.length;i++){
+      line(points[2], newPoints1[i]);
+    }
+    for(var i=0;i<newPoints2.length;i++){
+      line(points[0], newPoints2[i]);
+    }
+    for(var i=0;i<newPoints3.length;i++){
+      line(points[1], newPoints3[i]);
+    }
+  }
+
+  function main(){
+    time++;
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0,0,screen.width,screen.height);
+    drawTriangle(lines[0].num, lines[1].num, lines[2].num);
+    for(var i=0;i<lines.length;i++){
+      lines[i].update();
+      if(i==0)console.log(lines[i].velocity);
+      lines[i].force(Math.random()*0.005 -0.001 - 0.0001*lines[i].num);
+    }
+    for(var i=0;i<points.length;i++){
+      points[i].update();
+      points[i].force(Math.random()*0.5-0.25+0.0001*(screen.width/2-points[i].x), Math.random()*0.5-0.25+0.0001*(screen.height/2-points[i].y));
+    }
+    requestAnimationFrame(main);
+  }
+  requestAnimationFrame(main);
+
+}
+</script>
+<canvas id="canvas">
+</canvas>
