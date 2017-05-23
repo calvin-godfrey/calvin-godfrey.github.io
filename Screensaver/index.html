@@ -24,6 +24,7 @@
   Point.prototype.update = function(){
     this.x += this.velocity.x;
     this.y += this.velocity.y;
+    if(this.x>2*screen.width||this.x<-screen.width||this.y>2*screen.height||this.y<-screen.height)reset();
   }
 
   Point.prototype.force = function(x, y){
@@ -84,6 +85,11 @@
     }
   }
 
+  function reset(){
+    points = [new Point(canvas.width/2, 0, new Vector(0, 0)), new Point(canvas.width/2-f/1.5, f ,new Vector(0, 0)), new Point(canvas.width/2+f/1.5, f, new Vector(0, 0))];
+    lines = [new Line(10, 0), new Line(10, 0), new Line(10, 0)];
+  }
+
   function main(){
     time++;
     ctx.fillStyle = "#000";
@@ -92,7 +98,7 @@
     for(var i=0;i<lines.length;i++){
       lines[i].update();
       if(i==0)console.log(lines[i].velocity);
-      lines[i].force(Math.random()*0.005 -0.001 - 0.0001*lines[i].num);
+      lines[i].force(Math.random()*0.005 -0.001 - 0.0001*(lines[i].num-10));
     }
     for(var i=0;i<points.length;i++){
       points[i].update();
