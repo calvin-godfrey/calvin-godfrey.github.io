@@ -64,6 +64,15 @@ window.onload = function(){
   function drawBackground(){
     ctx.fillStyle = "#FFF";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    if(document.getElementById("showbig").checked){
+       ctx.save();
+       ctx.translate(X_CENTER, Y_CENTER);
+       ctx.beginPath();
+       ctx.lineStyle = "black";
+       ctx.arc(0, 0, RADIUS, 0, Math.PI*2);
+       ctx.stroke();
+       ctx.restore();
+    }
     for(var i=0;i<outerPoints.length;i++){
       ctx.save();
       ctx.translate(X_CENTER, Y_CENTER);
