@@ -7,6 +7,7 @@ window.onload = function(){
   var Y_CENTER = canvas.height/2;
   var INNER_RADIUS = RADIUS/2;
   var ctx = canvas.getContext("2d");
+  var Q;
   ctx.translate(0.5,0.5);
   window.requestAnimFrame = (function() { //Dunno if this is right but it works so I'm not removing it
     var lastTime = 0;
@@ -50,6 +51,19 @@ window.onload = function(){
   }
 
   Point.prototype.draw = function(){
+    if(document.getElementById("showsmall").checked){
+      ctx.save();
+      ctx.translate(X_CENTER, Y_CENTER);
+      var tempx = (RADIUS-radius)*Math.cos(this.life+this.angle);
+      var tempy = (RADIUS-radius)*Math.sin(this.life+this.angle);
+
+      ctx.translate(tempx, tempy);
+      ctx.strokeStyle = "green";
+      ctx.beginPath();
+      ctx.arc(0, 0, radius, 0, Math.PI*2);
+      ctx.stroke();
+      ctx.restore();
+    }
     ctx.save();
     ctx.translate(X_CENTER, Y_CENTER);
     ctx.beginPath();
@@ -100,7 +114,6 @@ window.onload = function(){
         if(useMult){
           ctx.lineTo(points[i].x-dx*mult, points[i].y-dy*mult);
           if(showEllipse)outerPoints.push([points[i].x-dx*mult, points[i].y-dy*mult]);
-          //if(outerPoints.length==128*points.length)outerPoints = [];
         }
         else{ctx.lineTo(points[i].x-dx, points[i].y-dy);}
         ctx.stroke();
@@ -121,7 +134,7 @@ window.onload = function(){
       ctx.strokeStyle = getColor(distance);
       ctx.lineTo(points[0].x-dx*mult, points[0].y-dy*mult);
       if(showEllipse)outerPoints.push([points[0].x-dx*mult, points[0].y-dy*mult]);
-      if(outerPoints.length==256)outerPoints = []; //Means we have made a full revolution
+      if(outerPoints.length==256*Q)outerPoints = []; //Means we have made a full revolution
       ctx.stroke();
       ctx.restore();
     }
@@ -177,6 +190,14 @@ window.onload = function(){
     return ans;
   }
 
+  var gcd = function(a, b) {
+    if ( ! b) {
+        return a;
+    }
+
+    return gcd(b, a % b);
+};
+
   document.getElementById("start").addEventListener("mousedown", function(event){
     stop();
     restart = true;
@@ -187,6 +208,7 @@ window.onload = function(){
     else{var magic = document.getElementById("magic").value;}
     radius = document.getElementById("radius").value;
     RADIUS = document.getElementById("Rradius").value;
+    Q = radius/gcd(RADIUS, radius); //get multiple
     mult = document.getElementById("mult").value;
     points = [];
     for(var i=0;i<numPoints;i++){
