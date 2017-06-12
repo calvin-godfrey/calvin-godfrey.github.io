@@ -52,7 +52,7 @@
       if(document.getElementById("path").checked){
         if(this.history.length > 1){
           ctx.moveTo(this.history[this.history.length-2][0], this.history[this.history.length-2][1]);
-          ctx.lineWidth = CONST_STEP ? 1 : 1+1/Math.pow(new Vector(this.delta.x, this.delta.y).magnitude, 1.4);
+          ctx.lineWidth = CONST_STEP ? 1 : Math.pow(new Vector(this.delta.x, this.delta.y).magnitude, 1.4);
           ctx.lineTo(this.history[this.history.length-1][0], this.history[this.history.length-1][1]);
           ctx.stroke();
         } else {
