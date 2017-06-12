@@ -1,0 +1,120 @@
+<head>
+  <title>Pursuit Curve</title>
+  <script>
+  window.onload = function(){
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = "black";
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+    canvas.width = screen.width;
+    canvas.height = screen.height;
+    var STEP = 0;
+    var RADIUS = 1;
+    var STARTED = false;
+    var CONST_STEP = false;
+    var points = [];
+    function getMousePos(canvas, evt){
+      var rect = canvas.getBoundingClientRect();
+      return {x: (evt.clientX-rect.left)/(rect.right-rect.left)*canvas.width,
+              y: (evt.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height};
+    }
+    var Vector = function(x, y){
+      this.x = x;
+      this.y = y;
+      this.magnitude = Math.pow(Math.pow(this.x, 2)+Math.pow(this.y, 2), 0.5);
+    }
+    var Point = function(x, y){
+      this.x = x;
+      this.y = y;
+      this.history = [[this.x, this.y]];
+    }
+    Point.prototype.setTarget = function(other){
+      this.target = other;
+    }
+    Point.prototype.update = function(other){
+      this.delta = new Vector(this.x-this.target.x, this.y-this.target.y);
+      if(CONST_STEP){
+        this.delta.x *= (STEP/this.delta.magnitude);
+        this.delta.y *= (STEP/this.delta.magnitude);
+      } else {
+        this.delta.x /= (screen.width/5);
+        this.delta.y /= (screen.width/5);
+      }
+      this.x -= this.delta.x;
+      this.y -= this.delta.y;
+      this.history.push([this.x, this.y]);
+
+    }
+
+    Point.prototype.draw = function(){
+      ctx.beginPath();
+      if(document.getElementById("path").checked){
+        if(this.history.length > 1){
+          ctx.moveTo(this.history[this.history.length-2][0], this.history[this.history.length-2][1]);
+          ctx.lineWidth = CONST_STEP ? 1 : 1+1/Math.pow(new Vector(this.delta.x, this.delta.y).magnitude, 1.4);
+          ctx.lineTo(this.history[this.history.length-1][0], this.history[this.history.length-1][1]);
+          ctx.stroke();
+        } else {
+          return;
+        }
+      } else {
+        ctx.moveTo(this.x, this.y);
+        ctx.arc(this.x, this.y, RADIUS, 0, Math.PI*2);
+        ctx.stroke();
+        ctx.fill();
+      }
+    }
+
+    function main(){
+      if(!document.getElementById("path").checked)ctx.clearRect(0, 0, screen.width, screen.height);
+      for(var i=0;i<points.length;i++){
+        points[i].draw();
+        if(STARTED)points[i].update();
+      }
+      requestAnimationFrame(main);
+    }
+
+    update = setInterval(function(){
+      document.getElementById("dispStep").innerHTML = document.getElementById("step").value;
+      STEP = document.getElementById("step").value
+      CONST_STEP = document.getElementById("conststep").checked;
+    }, 500);
+
+    requestAnimationFrame(main);
+
+    document.getElementById("start").addEventListener("mousedown", function(event){
+      STARTED = true;
+      points[points.length-1].setTarget(points[0]);
+    });
+
+    canvas.addEventListener("mousedown", function(event){
+      if(STARTED)return;
+      var pos = getMousePos(canvas, event);
+      points.push(new Point(pos.x, pos.y));
+      if(points.length > 1)points[points.length-2].setTarget(points[points.length-1]);
+    });
+
+    document.getElementById("rand").addEventListener("mousedown", function(event){
+      for(var i=0;i<document.getElementById("numrand").value;i++){
+        points.push(new Point(canvas.width*Math.random(), canvas.height*Math.random()));
+        if(i > 0)points[i-1].setTarget(points[i]);
+      }
+      points[points.length-1].setTarget(points[0]);
+      STARTED = true;
+    });
+
+  }
+  </script>
+</head>
+<body>
+  <input id="path" type="checkbox">Show Path</input>
+  <br>
+  <button id="start">Start</button>
+  <br>
+  <input type="number" id="numrand">Number of random points</input><button id="rand">Generate Random Points</button>
+  <br>
+  <input id="step" type="range" min="0.1" max="30" step="0.1" value="1.0">Step size (pixels)</input><span id="dispStep"></span>
+  <input id="conststep" type="checkbox">Constant step size</input>
+  <canvas id="canvas" style="width:100%;height:100%"></canvas>
+</body>
