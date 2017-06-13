@@ -155,7 +155,7 @@ window.onload = function(){
     drawBackground();
     for(var i=0;i<points.length;i++){
       points[i].calcPoint();
-      points[i].draw();
+      if(document.getElementById("showpoints").checked || i == 0)points[i].draw();
     }
     if(drawLines)drawLine();
     if(restart){stopped=true;return;}
