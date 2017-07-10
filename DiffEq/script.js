@@ -18,7 +18,7 @@ window.onload = function(){
     }
     i = height;
     while(i > 0){
-      ctx.filleRect(0, i, width, i+10);
+      ctx.fillRect(0, i, width, i+10);
     }
     requestAnimationFrame(main);
   }
