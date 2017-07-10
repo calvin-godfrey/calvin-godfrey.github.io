@@ -17,7 +17,7 @@ window.onload = function(){
       i += space;
     }
     i = height;
-    while(i > height){
+    while(i > 0){
       ctx.filleRect(0, i, width, i+10);
     }
     requestAnimationFrame(main);
