@@ -13,12 +13,12 @@ window.onload = function(){
     ctx.fillStyle = "#FFF";
     var i = 0;
     while(i < width){
-      ctx.fillRect(i, 0, i+10, height);
+      ctx.fillRect(i, 0, 10, height);
       i += space;
     }
     i = height;
     while(i > 0){
-      ctx.fillRect(0, i, width, i+10);
+      ctx.fillRect(0, i, width, 10);
     }
     requestAnimationFrame(main);
   }
