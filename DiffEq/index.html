@@ -1,7 +1,87 @@
 <head>
 <title>Differential Equation Visualization</title>
   <meta charset="utf-8">
-  <script src="script.js"></script>
+  <script>
+window.onload = function(){
+  var canvas = document.getElementById("canvas");
+  canvas.width = screen.width;
+  canvas.height = screen.height;
+  var height = canvas.height;
+  var width = canvas.width;
+  var ctx = canvas.getContext("2d");
+  var SPACE = 80;
+  var LINE_WIDTH = 5;
+  var EQUATION = null;
+  var CLICK_X = null;
+  var CLICK_Y = null;
+  var STEP = .2;
+  var SCALE = 100;
+  
+  function getMousePos(canvas, evt){
+    var rect = canvas.getBoundingClientRect();
+    return {x: (evt.clientX-rect.left)/(rect.right-rect.left)*canvas.width,
+            y: (evt.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height};
+  }
+
+  function main(){
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, width, height);
+    ctx.fillStyle = "#FFF";
+    var i = 0;
+    while(i < width){
+      ctx.fillRect(i, 0, LINE_WIDTH, height);
+      i += SPACE;
+    }
+
+    i = height;
+    while(i > 0){
+      ctx.fillRect(0, i, width, LINE_WIDTH);
+      i -= SPACE;
+    }
+    
+    if(EQUATION !== null){
+      var valid = ['1', '2', '3', '4', '5', '6', ' ', '7', '8', '9', '0', 'x', 'y', '*', '/', '(', ')', '+', '-']
+      for(var i = 0;i<EQUATION.length;i++){
+        char = EQUATION.charAt(i);
+        works = false;
+        for(var j=0;j<valid.length;j++){
+          if(char==valid[j])works = true;
+        }
+        if(!works){
+          alert("Not a valid Equation");
+          EQUATION = null;
+        }
+      }
+      if(CLICK_X !== null && CLICK_Y !== null){
+        var x = CLICK_X/SCALE;
+        var y = (height - CLICK_Y)/SCALE;
+        ctx.strokeStyle = "F00";
+        ctx.lineWidth = 3;
+        ctx.moveTo(x*SCALE, y*SCALE);
+        while(x < width/SCALE){
+          var delta = eval(EQUATION); //oh boy
+          y += (delta*STEP);
+          x += STEP;
+          ctx.lineTo(x*SCALE, height - y*SCALE);
+        }
+        ctx.stroke();
+      }
+    }
+
+    requestAnimationFrame(main);
+  }
+  requestAnimationFrame(main);
+  
+  document.getElementById("submit").addEventListener("mousedown", function(evt){
+    EQUATION = document.getElementById("equation").value;
+  });
+  document.getElementById("canvas").addEventListener("mousedown", function(evt){
+    loc = getMousePos(canvas, evt);
+    CLICK_X = loc.x;
+    CLICK_Y = loc.y;
+  })
+}
+</script>
 </head>
 <body>
 <input id="equation" type="text">Type Equation</input><button id="submit">Submit</button>
