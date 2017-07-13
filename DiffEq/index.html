@@ -84,11 +84,15 @@ window.onload = function(){
     loc = getMousePos(canvas, evt);
     CLICK_X = loc.x;
     CLICK_Y = loc.y;
-  })
+  });
+  getStep = setInterval(function(){
+    document.getElementById("step").value = STEP;
+  }, 500);
 }
 </script>
 </head>
 <body>
+  <input type="range" min="0.01" max="0.5" id="step">Step size</input>
 <input id="equation" type="text">Type Equation</input><button id="submit">Submit</button>
 <canvas id="canvas" style="width:100%;height:100%"></canvas>
 </body>
