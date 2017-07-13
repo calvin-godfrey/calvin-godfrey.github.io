@@ -9,13 +9,13 @@ window.onload = function(){
   var height = canvas.height;
   var width = canvas.width;
   var ctx = canvas.getContext("2d");
-  var SPACE = 80;
-  var LINE_WIDTH = 5;
+  var SPACE = 100;
+  var LINE_WIDTH = 3;
   var EQUATION = null;
   var CLICK_X = null;
   var CLICK_Y = null;
   var STEP = .2;
-  var SCALE = 100;
+  var SCALE = 1000;
   
   function getMousePos(canvas, evt){
     var rect = canvas.getBoundingClientRect();
@@ -40,24 +40,29 @@ window.onload = function(){
     }
     
     if(EQUATION !== null){
-      var valid = ['1', '2', '3', '4', '5', '6', ' ', '7', '8', '9', '0', 'x', 'y', '*', '/', '(', ')', '+', '-']
-      for(var i = 0;i<EQUATION.length;i++){
-        char = EQUATION.charAt(i);
-        works = false;
-        for(var j=0;j<valid.length;j++){
-          if(char==valid[j])works = true;
+      //we're going to assume its valid and secure
+      for(var i=0;i<EQUATION.length;i++){
+        if(EQUATION.charAt(i) == ";"){
+            EQUATION = null;
+            break;
         }
-        if(!works){
-          alert("Not a valid Equation");
-          EQUATION = null;
+        if(EQUATION.charAt(i) == "."){
+          if(i == 0 || (EQUATION.charAt(i-1) == "h" && EQUATION.charAt(i-2) == "t")){
+            continue; 
+          } else {
+            EQUATION = null;
+            break;
+          }
         }
       }
       if(CLICK_X !== null && CLICK_Y !== null){
         var x = CLICK_X/SCALE;
         var y = (height - CLICK_Y)/SCALE;
-        ctx.strokeStyle = "F00";
+        ctx.strokeStyle = "#0F0";
         ctx.lineWidth = 3;
-        ctx.moveTo(x*SCALE, y*SCALE);
+        ctx.beginPath();
+        
+        ctx.moveTo(x*SCALE, height - y*SCALE);
         while(x < width/SCALE){
           var delta = eval(EQUATION); //oh boy
           y += (delta*STEP);
