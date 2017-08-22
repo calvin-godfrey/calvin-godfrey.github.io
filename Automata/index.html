@@ -24,6 +24,11 @@
   <br>
   <br>
   <p>Another fun combination is rule 2845749852 with range of 2 and colors of your choice. But put in your own set of rules, and see what the design makes!</p>
+  <p>You can use the mini tool below to figure out the range of rules you can use for a given pair of range and number of colors</p>
+  <input type="number" id="testRange">Range</input><br>
+  <input type="number" id="testColors">Number of colors</input><br>
+  <button id="test">Submit</button>
+  <p>Max rule: <span id="maxrule"></span></p>
   <br>
   <p>Colors:</p>
   <input type="number" id="redStart">Starting color gradient - RED (0-255)</input><br>
@@ -36,7 +41,7 @@
   <input type="number" id="rule">Input rule number</input><br>
   <input type="number" id="range">Input range (number of pixels to each side taken into account)</input><br>
   <input type="number" id="colors">Input number of colors</input><br>
-  <input type="checkbox" id="random">Random initial conditions</input><br>
+  <input type="range" min="1" max="100" value="1" id="scale">Zoom factor: </input><span id="dispScale"></span><br>
   <button id="start">Start</button><br>
   <canvas id="canvas" style="width:100%;height:100%"></canvas>
 </body>

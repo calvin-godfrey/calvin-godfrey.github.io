@@ -2,14 +2,11 @@ window.onload = function(){
   var canvas = document.getElementById("canvas");
   canvas.width = screen.width;
   canvas.height = screen.height;
-  var width = canvas.width;
-  var height = canvas.height;
+  var width, height;
   var ctx = canvas.getContext("2d");
-  var rule, range, numColors, ruleBase, useRandom;
-  var ruleArray = [];
-  var currRow = [];
-  var prevRow = [];
-  var currHeight = 0;
+  var rule, range, numColors, ruleBase, SCALE, ruleArray, currRow, prevRow, allPixels;
+  var STARTED = false;
+  var currHeight;
   var alpha = "0123456789abcdefghijklmnopqrstuvwxyz";
   var colorArray = [];
   ctx.translate(0.5, 0.5); //anti-aliasing
@@ -83,55 +80,73 @@ window.onload = function(){
   }
 
   function initialRow(){
-    if(useRandom){
-      for(var i=0;i<width;i++){
-        prevRow.push(Math.floor(Math.random() * colors));
-      }
-    } else {
-      for(var i=0;i<width;i++){
-        prevRow.push(0);
-      }
-      prevRow[width/2] = Math.floor(Math.random() * colors); //just the middle is random
+    for(var i=0;i<width;i++){
+      prevRow.push(Math.floor(Math.random() * colors));
     }
   }
 
-  function displayRow(array){
+  function displayRow(array, offset){
     for(var i=0;i<array.length;i++){
       ctx.fillStyle = colorArray[colorArray.length-1-array[i]];
-      ctx.fillRect(i, currHeight, 1, 1);
+      ctx.fillRect(i*SCALE, offset*SCALE, SCALE, SCALE);
+      if(i*SCALE > canvas.width)return;
     }
   }
 
   function main(){
     currHeight += 1;
+    allPixels.push(prevRow);
     if(currHeight > height)return;
     for(var i=0;i<prevRow.length;i++){
       var value = 0;
       for(var j=-range;j<=range;j++){
-        if(i+j<0)continue;
-        if(i+j>=prevRow.length)break;
-        value += alpha.indexOf(prevRow[i+j]) * Math.pow(colors, range+j);
+        if(i+j<0||i+j>=prevRow.length){
+          value += Math.pow(colors, range-j) * Math.floor(Math.random() * colors); //Unknown is random
+          continue;
+        };
+        value += alpha.indexOf(prevRow[i+j]) * Math.pow(colors, range-j);
         }
-      currRow.push(ruleArray[value]);
+      currRow.push(ruleArray[ruleArray.length-1-value]);
     }
-    displayRow(currRow);
     prevRow = currRow.slice(0);
     currRow = [];
     main();
   }
 
+  s = setInterval(function(){
+    var newScale = document.getElementById("scale").value;
+    document.getElementById("dispScale").innerHTML = newScale;
+    if(!STARTED)return;
+    if(newScale != SCALE){
+      SCALE = newScale;
+      clearCanvas();
+      drawBoard();
+    }
+  }, 50);
+
+  function clearCanvas(){
+    ctx.fillStyle = "white";
+    ctx.fillRect(-1, -1, canvas.width, height);
+  }
+
+  function drawBoard(){
+    for(var i=0;i<allPixels.length;i++){
+      displayRow(allPixels[i], i);
+      if(i*SCALE > canvas.height)return;
+    }
+  }
 
   document.getElementById("start").addEventListener("mousedown", function(){
     range = +document.getElementById("range").value;
     rule = document.getElementById("rule").value;
     colors = document.getElementById("colors").value;
-    useRandom = document.getElementById("random").checked;
+    SCALE = document.getElementById("scale").value;
     if(colors<2){
       alert("The value for colors must be at least 2");
       return;
     }
     if(colors>20){
-      alert("Too many colors");
+      alert("Too many colors, cannot compute");
       return;
     }
     if(range>20){
@@ -143,6 +158,16 @@ window.onload = function(){
       alert("Rule too big for range and number of colors");
       return;
     }
+    width = canvas.width;
+    height = canvas.height;
+    width/=SCALE;
+    height/=SCALE;
+    ruleArray = [];
+    currRow = [];
+    prevRow = [];
+    allPixels = [];
+    currHeight = 0;
+    STARTED = true;
     for(var i=0;i<Math.pow(colors, 1+2*range);i++){
       ruleArray.push(0);
     }
@@ -150,12 +175,22 @@ window.onload = function(){
     for(var i=0;i<ruleBase.length;i++){
       ruleArray[ruleArray.length-i-1] = alpha.indexOf(ruleBase.charAt(ruleBase.length-i-1));
     }
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, width, height);
+    console.log(ruleArray);
+    clearCanvas();
     generateColors();
     console.log(colorArray);
     initialRow();
-    displayRow(prevRow);
+    console.log(prevRow);
     main();
+    drawBoard();
+    console.log("done");
+  });
+
+  document.getElementById('canvas').addEventListener("mousedown", function(){
+    ctx.translate(1, 1);
+  });
+
+  document.getElementById("test").addEventListener("mousedown", function(){
+      document.getElementById("maxrule").innerHTML = Math.pow(+document.getElementById("testColors").value, Math.pow(+document.getElementById("testColors").value, 1+2*(+document.getElementById("testRange").value)));
   });
 }
