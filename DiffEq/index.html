@@ -59,17 +59,18 @@ window.onload = function(){
         var x = CLICK_X/SCALE;
         var y = (height - CLICK_Y)/SCALE;
         ctx.strokeStyle = "#0F0";
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 1;
         ctx.beginPath();
         
         ctx.moveTo(x*SCALE, height - y*SCALE);
         while(x < width/SCALE){
           var delta = eval(EQUATION); //oh boy
           y += (delta*STEP);
-          x += STEP;
+	  x = +parseFloat(x);
+          x += parseFloat(STEP);
           ctx.lineTo(x*SCALE, height - y*SCALE);
         }
-        ctx.stroke();
+	ctx.stroke();
       }
     }
 
