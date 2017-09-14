@@ -1,0 +1,94 @@
+<head>
+  <title>Riemann Zeta Function</title>
+  <meta charset="utf-8">
+  <script>
+window.onload = function(){
+  var canvas = document.getElementById("canvas");
+  canvas.width = screen.width;
+  canvas.height = screen.height;
+  var width = canvas.width;
+  var height = canvas.height;
+  var SCALE = 8/width; //So that the x-axis is roughly -10 to 10
+  var ctx = canvas.getContext("2d");
+  var points = [];
+
+  function getMousePos(canvas, evt){
+    var rect = canvas.getBoundingClientRect();
+    return {x: (evt.clientX-rect.left)/(rect.right-rect.left)*canvas.width,
+            y: (evt.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height};
+  }
+
+  function mouseToCoords(location){
+    location.x = (location.x-width/2)*SCALE;
+    location.y = (height/2-location.y)*SCALE;
+    return location;
+  }
+
+  function drawBackground(){
+    ctx.fillStyle = "#FFF";
+    ctx.lineWidth = 1;
+    ctx.fillRect(0, 0, width, height);
+    ctx.beginPath();
+    ctx.moveTo(width/2, 0);
+    ctx.lineTo(width/2, height);
+    ctx.stroke();
+    ctx.moveTo(0, height/2);
+    ctx.lineTo(width, height/2);
+    ctx.strokeStyle = "#000";
+    ctx.stroke();
+  }
+
+  function calcRiemann(r, i){
+    /*if(r<=1){
+      alert("x value (real part) must be greater than 1");
+      return [];
+    }*/
+    var arr = [[0, 0], [1, 0]];
+    for(var j=2;j<5000;j++){
+      var magnitude = Math.pow(1/j, r);
+      var angle = Math.asin(i % 1)*(j-1);
+      var x = arr[j-1][0];
+      var y = arr[j-1][1];
+      var new_x = x+magnitude*Math.cos(angle);
+      var new_y = y+magnitude*Math.sin(angle);
+      arr.push([new_x, new_y]);
+    }
+    for(var j=0;j<arr.length;j++){ //convert back to canvas points
+      var point = arr[j];
+      arr[j] = [width/2+point[0]/SCALE, height/2+point[1]/SCALE];
+    }
+    return arr;
+  }
+
+  function main(){
+    drawBackground();
+    ctx.lineWidth = 2;
+    if(points.length>0){
+      ctx.beginPath();
+      ctx.moveTo(points[0][0], points[0][1]);
+      for(var i=1;i<points.length;i++){
+        var point = points[i];
+        ctx.lineTo(points[i][0], points[i][1]);
+      }
+      ctx.strokeStyle = "#0F0";
+      ctx.stroke();
+    }
+    requestAnimationFrame(main);
+  }
+  requestAnimationFrame(main);
+
+  canvas.addEventListener("mousedown", function(event){
+    var loc = getMousePos(canvas, event);
+    loc = mouseToCoords(loc);
+    points = calcRiemann(loc.x, loc.y);
+  });
+}
+  </script>
+</head>
+<body>
+  <p>Click on the grid (usually with an x-value [real part] > 1) to find the value when plugged into the Riemann Zeta Function.</p>
+  <p>The Riemann Zeta Function, f(x) is equal to the infinite sum 1/(n^x) as n goes from 1 to infinity and x is the input to the function.</p>
+  <p>For example, f(2) is equal to pi^2/6, and f(4) is pi^4/90.</p>
+  <p>Visually, the real part (x-value) describes how long each segment is, and the y-value (imaginary part) describes the rotation of each segment from the previous.</p>
+  <canvas id="canvas" style="width:100%;height:100%"></canvas>
+</body>
