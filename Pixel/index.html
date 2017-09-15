@@ -1,0 +1,89 @@
+<head>
+  <title>Pixel Manipulation</title>
+  <meta charset="utf-8">
+  <script>
+window.onload = function(){
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext('2d');
+  canvas.width = screen.width;
+  canvas.height = screen.height;
+  var width = canvas.width;
+  var height = canvas.height;
+  var SCALE = 8; //Width and height of the "pixel" building block
+  var time = 0;
+  var EQUATION = null;
+
+  function decimalToHex(d, padding) {
+    var hex = Number(d).toString(16);
+    padding = typeof (padding) === "undefined" || padding === null ? padding = 2 : padding;
+
+    while (hex.length < padding) {
+        hex = "0" + hex;
+    }
+    return hex;
+}
+
+  function parseEquation(){
+    for(var i=0;i<EQUATION.length;i++){
+      if(EQUATION.charAt(i) === ";"){
+        EQUATION = null;
+        break;
+      }
+      if(EQUATION.charAt(i) === "."){
+        if(i == 0)continue;
+        var charBefore = EQUATION.charAt(i-1);
+        if(!isNaN(charBefore)){ //Number followed by decimal is ok
+          continue;
+        } else {
+          if(i>=4){
+            if(EQUATION.substring(i-4, i) !== "Math"){
+              EQUATION = null;
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  function main(){
+    if(EQUATION !== null){
+      parseEquation();
+      if(EQUATION !== null){
+        time += 1;
+        for(var y_real=0;y_real<height;y_real+=SCALE){
+          for(var x_real=0;x_real<width;x_real+=SCALE){
+            var x = x_real;
+            var y = y_real;
+            var val = eval(EQUATION); //oh boy
+            val = Math.floor(val);
+            if(val<0)val = 0;
+            color = "#" + decimalToHex(val, 6);
+            ctx.fillStyle = color;
+            ctx.fillRect(x_real, y_real, SCALE, SCALE);
+          }
+        }
+      }
+    }
+    requestAnimationFrame(main);
+  }
+  requestAnimationFrame(main);
+
+  document.getElementById("submit").addEventListener("mousedown", function(event){
+    EQUATION = document.getElementById("equation").value;
+  });
+}
+  </script>
+</head>
+<body>
+  <p>Valid input variables:</p>
+  <ul>
+    <li>x, y (where the origin is the top left corner)</li>
+    <li>time (measured in frames drawn, starting at 1)</li>
+    <li>Standard mathematical signs (+, -, * /)</li>
+    <li>Bitwise operations (|, &, ^, <<, >>)</li>
+    <li>Javascript math functions (Math.random(), Math.sin(), Math.cos(), Math.pow(), etc.)</li>
+    <li>Plain constant numbers (1, 38274, 243.2342)</li>
+  <input id="equation" type="text">Type Equation</input><button id="submit">Submit</button>
+  <canvas id="canvas" style="width:100%;height:100%"></canvas>
+</body>
