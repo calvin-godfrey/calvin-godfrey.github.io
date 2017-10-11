@@ -1,0 +1,148 @@
+<head>
+  <title>Cyclical Cellular Automata</title>
+  <meta charset="utf-8">
+  <script>
+  window.onload = function(){
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext('2d');
+    var width = canvas.width;
+    var height = canvas.height;
+    var NUM_COLORS = 0;
+    var STARTED = false;
+    var image = ctx.createImageData(canvas.width, canvas.height);
+
+
+    arr = [];
+
+    function hslToRgb(h, s, l){ //NOT MY CODE
+      var r, g, b;
+
+      if(s == 0){
+        r = g = b = l; // achromatic
+      } else {
+        function hue2rgb(p, q, t){
+          if(t < 0) t += 1;
+          if(t > 1) t -= 1;
+          if(t < 1/6) return p + (q - p) * 6 * t;
+          if(t < 1/2) return q;
+          if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+          return p;
+        }
+        var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        var p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1/3.0);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3.0);
+      }
+      return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+    }
+
+    function iter(arr){
+      var new_arr = [];
+      for(var y=0;y<arr.length;y++){
+        new_arr.push([]);
+        for(var x=0;x<arr[0].length;x++){
+          var neighbor = neighbors(arr, x, y);
+          var val = arr[y][x];
+          var search_for = ((val+1)%NUM_COLORS);
+          var to_add = -1;
+          for(var i=0;i<neighbor.length;i++){
+            if(neighbor[i] == search_for){
+              to_add = search_for;
+              break;
+            }
+          }
+          if(to_add == -1){
+            to_add = val;
+          }
+          new_arr[y].push(to_add);
+        }
+      }
+      return new_arr;
+    }
+
+    function neighbors(arr, x, y){
+      if(x == 0){
+        if(y == 0){
+          return [arr[x][y+1], arr[x][arr[0].length-1], arr[x+1][y], arr[x+1][y+1], arr[x+1][arr[0].length-1], arr[arr.length-1][arr[0].length-1], arr[arr.length-1][y], arr[arr.length-1][y+1]];
+        }
+        if(y == arr.length-1){
+          return [arr[x][y-1], arr[x][0], arr[x+1][y], arr[x+1][y-1], arr[x+1][0], arr[arr.length-1][y-1], arr[arr.length-1][y], arr[arr.length-1][0]];
+        }
+        return [arr[x][y-1], arr[x][y+1], arr[x+1][y], arr[x+1][y-1], arr[x+1][y+1], arr[arr.length-1][y+1], arr[arr.length-1][y], arr[arr.length-1][y-1]];
+      }
+      if(x == arr[0].length-1){
+        if(y == 0){
+          return [arr[x][y+1], arr[x][arr[0].length-1], arr[x-1][arr[0].length-1], arr[x-1][y], arr[x-1][y+1], arr[0][arr[0].length-1], arr[0][y], arr[0][y+1]];
+        }
+        if(y == arr.length-1){
+          return [arr[x][0], arr[x][y-1], arr[x-1][y-1], arr[x-1][y], arr[x-1][0], arr[0][y-1], arr[0][y], arr[0][0]];
+        }
+        return [arr[x][y+1], arr[x][y-1], arr[x-1][y-1], arr[x-1][y], arr[x-1][y+1], arr[0][y-1], arr[0][y], arr[0][y+1]];
+      }
+      if(y == 0){
+        return [arr[x][y+1], arr[x][arr[0].length-1], arr[x-1][arr[0].length-1], arr[x-1][y], arr[x-1][y+1], arr[x+1][arr[0].length-1], arr[x+1][y], arr[x+1][y+1]];
+      }
+      if(y == arr[0].length-1){
+        return [arr[x][0], arr[x][y-1], arr[x-1][y-1], arr[x-1][y], arr[x-1][0], arr[x+1][y-1], arr[x+1][y], arr[x+1][0]];
+      }
+      return [arr[x][y+1], arr[x][y-1], arr[x-1][y-1], arr[x-1][y], arr[x-1][y+1], arr[x+1][y-1], arr[x+1][y], arr[x+1][y+1]];
+    }
+
+    function main(){
+      var data = image.data;
+      ctx.clearRect(0, 0, width, height);
+      for(var y=0;y<arr.length;y++){
+        for(var x=0;x<arr[0].length;x++){
+          var num = arr[y][x];
+          var hue = num/NUM_COLORS;
+          var rgb = hslToRgb(hue, .85, .50);
+          var r = rgb[0];
+          var g = rgb[1];
+          var b = rgb[2];
+          var i = (arr[0].length*y + x)*4;
+          data[i] = r;
+          data[i+1] = g;
+          data[i+2] = b;
+          data[i+3] = 255;
+        }
+      }
+      image.data = data;
+      ctx.putImageData(image, 0, 0);
+      arr = iter(arr);
+      requestAnimationFrame(main);
+    }
+
+    document.getElementById("Start").addEventListener("mousedown", function(event){
+      if(STARTED)return;
+      STARTED = true;
+      NUM_COLORS = document.getElementById("num").value;
+      for(var i=0;i<height;i++){
+        arr.push([]);
+        for(var j=0;j<width;j++){
+          arr[i].push(Math.floor(Math.random() * NUM_COLORS));
+        }
+      }
+      requestAnimationFrame(main);
+    });
+
+    setInterval(function(){
+      if(STARTED){
+        document.getElementById("colors").innerHTML = NUM_COLORS;
+      } else {
+        document.getElementById("colors").innerHTML = document.getElementById("num").value;
+      }
+    }, 50);
+
+}
+  </script>
+</head>
+<body>
+  <p>The way this works is that the grid starts out with a random color on each pixel. Each frame, every pixel looks at its neighboring pixels and checks if any is the one right after in the rainbow. If there is, then it turns into that color. This repeats forever.</p>
+  <p>Pick a number of colors. The smaller the number, the more rapidly the pattern oscillates. The bigger the number, the slower it oscillates and the greater the chance that the pattern gets "stuck".</p>
+  <input type="range" id="num" min="2" max="100">Number of colors: <span id="colors"></span>.</input><br>
+  <button id="Start">Begin</button>
+  <br>
+    <canvas id="canvas" width="500" height="500"></canvas>
+  </div>
+</body>

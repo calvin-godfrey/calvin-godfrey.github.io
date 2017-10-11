@@ -1,0 +1,236 @@
+<head>
+  <title>Haferman Carpet</title>
+  <meta charset="utf-8">
+  <script>
+  window.onload = function(){
+    document.getElementById("graph").style.display = 'none';
+    document.getElementById("step2").style.display = "none";
+    document.getElementById("step3").style.display = "none";
+
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext('2d');
+    var width = canvas.width;
+    var height = canvas.height;
+    var NUM_COLORS = 0;
+    var curr_num = 1;
+    var KEY_SIZE = 0;
+
+    arr = [];
+    colors = [];
+    key = [];
+    iter_num = 0;
+
+    function iterate(){
+      var newarr = [];
+      for(var i=0;i<arr.length;i++){
+        var temparr = [];
+        for(var temp=0;temp<key[0].length;temp++){
+          temparr.push([]);
+        }
+        for(var j=0;j<arr[i].length;j++){
+          var square = key[arr[i][j]];
+          for(var k=0;k<square.length;k++){
+            for(var l=0;l<square[k].length;l++){
+              temparr[k].push(square[k][l]);
+            }
+          }
+        }
+        for(var l=0;l<temparr.length;l++){
+          newarr.push(temparr[l]);
+        }
+      }
+      arr = newarr;
+      iter_num += 1;
+    }
+
+    function draw(){
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      var y_scale = canvas.height/(arr.length);
+      for(var i=0;i<arr.length;i++){
+        var x_scale = canvas.width/(arr[i].length);
+        for(var j=0;j<arr[i].length;j++){
+          ctx.fillStyle = colors[arr[i][j]];
+          ctx.fillRect(x_scale*j+0.5, y_scale*i+0.5, x_scale, y_scale);
+        }
+      }
+    }
+
+    function generateColors(num){
+      var steps = num-2;
+      if(steps == 0)return ["#000", "#FFF"];
+      var ans = [];
+      var step = 255/(steps+1);
+      for(var i=0;i<256;i+=step){
+        var str = "#";
+        var j = Math.floor(i);
+        j = j.toString(16);
+        if(j.length == 1)j = '0'+j;
+        str += (j+j+j);
+        ans.push(str);
+      }
+      return ans;
+    }
+
+    document.getElementById("iter").addEventListener("mousedown", function(event){
+      iterate();
+      draw();
+    });
+
+    document.getElementById("color_sub").addEventListener("mousedown", function(event){
+      NUM_COLORS = document.getElementById("colors").value;
+      if(NUM_COLORS < 2){
+        alert("Number of colors must be at least 2.");
+        return;
+      }
+      document.getElementById("step1").style.display = "none";
+      document.getElementById('step2').style.display = "block";
+      var disp_color_num = document.getElementsByClassName("num_colors");
+      document.getElementById("curr_num").innerHTML = curr_num;
+      for(var i=0;i<disp_color_num.length;i++){
+        disp_color_num[i].innerHTML = NUM_COLORS;
+      }
+      colors = generateColors(NUM_COLORS);
+      for(var i=0;i<NUM_COLORS;i++){
+        var col = document.getElementById("colors_"); //I'm sorry
+        var num = document.getElementById("numbers");
+        var col_ele = document.createElement("td");
+        col_ele.style.backgroundColor = colors[i];
+        var num_ele = document.createElement("td");
+        num_ele.innerHTML = (i+1);
+        col.appendChild(col_ele);
+        num.appendChild(num_ele);
+      }
+    });
+
+    document.getElementById("submit_pattern").addEventListener("mousedown", function(event){
+      curr_num += 1;
+      document.getElementById("curr_num").innerHTML = curr_num;
+      var pattern = document.getElementById("pattern").value;
+      document.getElementById("pattern").value = '';
+      if(pattern.split(",").length == 1){
+        if(curr_num == 2){
+          KEY_SIZE = parseInt(pattern);
+        }
+        var to_array = [];
+        var num = parseInt(pattern);
+        if(num != KEY_SIZE){
+          alert("All of the keys must have the same size");
+          KEY_SIZE = 0;
+          curr_num = 1;
+          key = [];
+          return;
+        }
+        for(var i=0;i<num;i++){
+          to_array.push([]);
+          for(var j=0;j<num;j++){
+            to_array[to_array.length-1].push(Math.floor(Math.random() * NUM_COLORS));
+          }
+        }
+      } else {
+        var rows = pattern.split(",");
+        if(curr_num == 2){
+          KEY_SIZE = rows.length;
+        }
+        if(rows.length != KEY_SIZE){
+          alert("All keys must have the same size");
+          KEY_SIZE = 0;
+          curr_num = 1;
+          key = [];
+          return;
+        }
+        var to_array = [];
+        for(var i=0;i<rows.length;i++){
+          var row = rows[i];
+          if(row.length != rows.length){
+            alert("Pattern is of the wrong size. It must be a square.");
+            curr_num = 1;
+            KEY_SIZE = 0;
+            key = [];
+            return;
+          }
+          row = row.split('');
+          for(var j=0;j<row.length;j++){
+            var num = parseInt(row[j])-1;
+            if(num>=NUM_COLORS){
+              alert("Used number to big, max is " + (NUM_COLORS+1) + ".");
+              curr_num = 1;
+              key = [];
+              return;
+            }
+            row[j] = parseInt(row[j])-1;
+          }
+          to_array.push(row);
+        }
+      }
+      key.push(to_array);
+      if(curr_num > NUM_COLORS){
+        document.getElementById("step2").style.display = 'none';
+        document.getElementById('step3').style.display = "block";
+        return;
+      }
+    });
+
+    document.getElementById("submit_start").addEventListener("mousedown", function(event){
+      document.getElementById("step3").style.display = 'none';
+      document.getElementById("graph").style.display = 'block';
+      var start = document.getElementById("begin").value;
+      var rows = start.split(",");
+      for(var i=0;i<rows.length;i++){
+        var row = rows[i];
+        var int_row = [];
+        for(var j=0;j<row.length;j++){
+          int_row.push(parseInt(row[j])-1);
+        }
+        arr.push(int_row);
+      }
+      draw();
+    });
+
+}
+  </script>
+</head>
+<body>
+  <p>The goal of this interactive activity is to make a sort of fractal, by starting with a colored grid and replacing each colored tile with a set of smaller tiles to see what design is produced.</p>
+  <div id="step1">
+    <p>To begin, how many colors would you like to use? The colors will be grey scale, going from black to white.</p>
+    <input type="number" id="colors"></input><button id="color_sub">Submit</button>
+  </div>
+  <div id="step2">
+    <p>Awesome! The next step is to figure out how the image will iterate. This means that for each color you have chosen, you must chose a square matrix full of smaller colors that will replace the original color when the image iterates.</p>
+    <p>For example, you could have:</p>
+    <pre>
+                2    1
+      1   ->
+                1    2
+    </pre>
+    <p>Which means that when you go to the next iteration of the image, the color represented by 1 is replace by the four colors as shown above. Since you have <span class="num_colors"></span> colors, you will have to do this <span class="num_colors"></span> times.</p>
+    <p>The table below will help you. The square represents the color, and the number will represent the color when choosing the pattern.</p>
+    <table>
+      <tr id="colors_">
+        <th>Color</th>
+      </tr>
+      <tr id="numbers">
+        <th>Number</th>
+      </tr>
+    </table>
+    <p>First you will input the pattern for the color above 1, then above 2, and so on until you have reached how ever many colors.</p>
+    <p>To input the pattern, type in the numbers for the first row, followed by a comma, followed by the numbers for the second row, etc.</p>
+    <p>So for the example above, you would type in 21,12 into the input below.</p>
+    <p>Alternative, enter a single number to have the computer generate an n by n random pattern for that color instead.</p>
+    <p>Currently submitting pattern for color number <span id="curr_num"></span></p>
+    <input type="text" id="pattern"></input>
+    <button id="submit_pattern">Submit</button>
+  </div>
+  <div id="step3">
+    <p>Cool! The last step is to set up the starting grid before iteration. To do this, it's like filling in the pattern in the previous step.</p>
+    <p>Put the whole thing the text box, separating rows with commas.</p>
+    <textarea id="begin" rows="2" cols="100"></textarea><button id="submit_start">Submit</button>
+  </div>
+
+  <div id="graph">
+    <p>The box below shows the current iteration of the pattern. Click the next step button to see the next step of your design.</p>
+    <button id="iter">Next step</button>
+    <br>
+    <canvas id="canvas" width="500" height="500"></canvas>
+  </div>
+</body>

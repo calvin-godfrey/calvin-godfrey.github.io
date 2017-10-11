@@ -1,0 +1,130 @@
+<head>
+  <title>Vector Fields</title>
+  <script>
+window.onload = function(){
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext('2d');
+  canvas.width = screen.width;
+  canvas.height = screen.height;
+  var width = canvas.width;
+  var height = canvas.height;
+  var t = 0;
+  var DX = null;
+  var DY = null;
+  var MAX = 8;
+  var SCALE = .005;
+  var MAX_STEP = 0.0025*MAX;
+  var started = false;
+  vectors = [];
+
+  var Vector = function(){
+    this.x = Math.floor(Math.random()*width);
+    this.y = Math.floor(Math.random()*height);
+    this.maxLife = 150+Math.floor(Math.random()*300);
+    this.life = this.maxLife;
+    this.radius = 0.5;
+  }
+
+
+  Vector.prototype.draw = function(){
+    var color = 255-Math.round(255/(this.maxLife/this.life));
+    var hex = color.toString(16);
+    if(hex.length == 1)hex = "0"+hex;
+    ctx.fillStyle = "#"+hex+hex+hex;
+    ctx.strokeStyle = ctx.fillStyle;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+    ctx.stroke();
+    ctx.fill();
+  }
+
+  Vector.prototype.calculate = function(){
+    var x = (this.x/width-0.5)*MAX*2;
+    var y = (this.y/height-0.5)*MAX*2;
+    var deltax = eval(DX);
+    var deltay = eval(DY);
+    var mag = Math.pow(Math.pow(deltax, 2)+ Math.pow(deltay, 2), 0.5);
+    if(mag > MAX_STEP){
+      deltax = deltax/mag*MAX_STEP;
+      deltay = deltay/mag*MAX_STEP;
+    }
+    x += deltax;
+    y -= deltay;
+    this.x = (x/(2*MAX)+0.5)*width;
+    this.y = (y/(2*MAX)+0.5)*height;
+    this.life -= 1;
+  }
+
+  function parseEquation(EQUATION){
+    for(var i=0;i<EQUATION.length;i++){
+      if(EQUATION.charAt(i) === ";"){
+        EQUATION = null;
+        break;
+      }
+      if(EQUATION.charAt(i) === "."){
+        if(i == 0)continue;
+        var charBefore = EQUATION.charAt(i-1);
+        if(!isNaN(charBefore)){ //Number followed by decimal is ok
+          continue;
+        } else {
+          if(i>=4){
+            if(EQUATION.substring(i-4, i) !== "Math"){
+              EQUATION = null;
+              break;
+            }
+          }
+        }
+      }
+    }
+    return EQUATION;
+  }
+
+  function main(){
+    ctx.globalAlpha = 0.1;
+    ctx.fillStyle = "#FFF";
+    ctx.fillRect(0, 0, width, height);
+    ctx.globalAlpha = 1.0;
+    for(var i=0;i<vectors.length;i++){
+      vectors[i].draw();
+    }
+    for(var i=0;i<vectors.length;i++){
+      vectors[i].calculate();
+      if(vectors[i].life == 0 || vectors[i].x < 0 || vectors[i].x > width || vectors[i].y < 0 || vectors[i].y > height){
+        vectors.splice(i, 1);
+        vectors.push(new Vector());
+      }
+    }
+    t += 1;
+    requestAnimationFrame(main);
+  }
+
+  for(var i=0;i<3000;i++){
+    vectors.push(new Vector());
+  }
+
+  document.getElementById("equation").addEventListener("mousedown", function(event){
+    DX = document.getElementById("dx").value;
+    DX = parseEquation(DX);
+    if(DX === null){
+      alert("Equation for dx/dt is not valid");
+    }
+    DY = document.getElementById("dy").value;
+    DY = parseEquation(DY);
+    if(DY === null){
+      alert("Equation for dy/dt is not valid");
+    }
+    if(started){
+      return;
+    }
+    started = true;
+    requestAnimationFrame(main);
+  });
+}
+  </script>
+</head>
+<body>
+  <p>Give an equation for dx/dt and dy/dt, which determines how the position of each particle changes in the x and y direction, respectively.</p>
+  <input type="text" id="dx">dx/dt</input><br>
+  <input type="text" id="dy">dy/dt</input>&nbsp;<button id="equation">Submit</button>
+  <canvas id="canvas" style="height:100%;"></canvas>
+</body>
