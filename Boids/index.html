@@ -5,6 +5,17 @@
   <script src="script.js"></script>
 </head>
 <body>
+  <p>Boids is a flocking simulation program, first designed by Craig Reynolds in 1986 and published in 1987. The name comes from "bird-oid objects", or "bird-like objects."</p>
+  <p>The world that they fly in is a torus, meaning that it wraps top to bottom and left to right. In addition, each boid is colored based on its heading.</p>
+  <p>There are three main rules that the individual boids follow:</p>
+  <ul>
+    <li><b>Separation: </b>Steers to avoid nearby boids</li>
+    <li><b>Alignment: </b>Steers to move in the same direction as nearby boids</li>
+    <li><b>Cohesion: </b>Steers toward the center of mass of nearby boids</li>
+  </ul>
+  <input type="range" id="separate" min="0.5" max="30" value="10">Separation</input><br>
+  <input type="range" id="alignment" min="10" max="1000" step="5" value="300">Alignment</input><br>
+  <input type="range" id="cohesion" min="0.01" max="2" step="0.01">Cohesion</input><br>
   <canvas id="canvas" style="width:100%;height:100%"></canvas>
 </body>
 </html>

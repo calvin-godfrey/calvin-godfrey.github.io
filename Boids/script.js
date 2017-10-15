@@ -193,5 +193,11 @@ window.onload = function(){
     requestAnimationFrame(main);
   }
 
+  get_scales = setInterval(function(){
+    COHESION_SCALE = document.getElementById("cohesion").value;
+    SEPARATE_SCALE = document.getElementById("separate").value;
+    ALIGNMENT_SCALE = document.getElementById("alignment").value;
+  }, 50);
+
   requestAnimationFrame(main);
 };

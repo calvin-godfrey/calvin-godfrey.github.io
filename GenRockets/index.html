@@ -5,7 +5,10 @@
   <script src="script.js"></script>
 </head>
 <body>
-  <p id="gen"></p><button id="start">start</button><input id="speed" type="range" min="1" max = "30">Speed</input>
+  <p>These rockets have one goal in mind - to hit that target at the top of the page. At first, they simply fly randomly for a given amount of time. After that initial generation, however, the rockets that end closest to the target become parents for the next generation of rockets. Each generation, some randomness is thrown in just like in real evolution between generations.</p>
+  <p>You can left click and draw obstacles to block the path of the rockets so that they have to learn a more complex path to the target.</p>
+  <p>The speed slider below helps make the generations progress faster. When the slider is at the lowest value, it will animate every generation. If the slider is all the way right, it will do the math and calculations for every generation, but only animate it on the screen every 30th generation. So even though it may look like nothing is happening, the rockets are still learning.</p>
+  <p id="gen"></p><button id="start">start</button><input id="speed" type="range" min="1" max="30">Speed</input>
   <canvas id="canvas" style="width:100%;height:100%"></canvas>
 </body>
 </html>
