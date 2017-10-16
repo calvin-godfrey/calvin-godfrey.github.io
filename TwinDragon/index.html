@@ -1,0 +1,105 @@
+<head>
+<title>Twin Dragon Visualization</title>
+  <meta charset="utf-8">
+  <script>
+window.onload = function(){
+  var canvas = document.getElementById("canvas");
+  canvas.width = screen.width;
+  canvas.height = screen.height;
+  var height = canvas.height;
+  var width = canvas.width;
+  var ctx = canvas.getContext('2d');
+  var ITERATION = 1;
+  var time = 0;
+  var NUM_STEPS = 101;
+
+  function Block(x, y, b_width, b_height, x_sign, y_sign){
+    this.x = x;
+    this.y = y;
+    this.width = b_width;
+    this.height = b_height;
+    this.delta_x = 0;
+    this.delta_y = 0;
+    this.x_done = false;
+    this.y_done = false;
+    this.x_sign = x_sign;
+    this.y_sign = y_sign;
+  }
+
+  Block.prototype.draw = function(){
+    ctx.save();
+    ctx.translate(this.delta_x, this.delta_y);
+    ctx.fillStyle = "hsl(" + Math.round(time*360/NUM_STEPS) + ", 80%, 50%)";
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+    if(this.x_sign != 0){
+      if(Math.abs(this.delta_x) < this.width/4){
+        this.delta_x += (this.width/4)/NUM_STEPS*this.x_sign;
+      } else {
+        this.x_done = true;
+      }
+    } else {
+      this.x_done = true;
+    }
+    if(this.y_sign != 0){
+      if(Math.abs(this.delta_y) < this.height/4){
+        this.delta_y += (this.height/4)/NUM_STEPS*this.y_sign;
+      } else {
+        this.y_done = true;
+      }
+    } else {
+      this.y_done = true;
+    }
+    ctx.restore();
+  }
+
+  Block.prototype.divide = function(){
+    var ans = [];
+    this.x += this.delta_x;
+    this.y += this.delta_y;
+    if(ITERATION % 2 == 0){
+      ans.push(new Block(this.x, this.y, this.width, this.height/4, -1, 0));
+      ans.push(new Block(this.x, this.y+this.height/4, this.width, this.height/4, 1, 0));
+      ans.push(new Block(this.x, this.y+this.height/2, this.width, this.height/4, -1, 0));
+      ans.push(new Block(this.x, this.y+3*this.height/4, this.width, this.height/4, 1, 0));
+    } else {
+      ans.push(new Block(this.x, this.y, this.width/4, this.height, 0, 1));
+      ans.push(new Block(this.x+this.width/4, this.y, this.width/4, this.height, 0, -1));
+      ans.push(new Block(this.x+this.width/2, this.y, this.width/4, this.height, 0, 1));
+      ans.push(new Block(this.x+3*this.width/4, this.y, this.width/4, this.height, 0, -1));
+    }
+    return ans;
+  }
+
+  function main(){
+    time += 1;
+    var time_to_iter = false;
+    ctx.clearRect(0, 0, width, height);
+    for(var i=0;i<blocks.length;i++){
+      blocks[i].draw();
+      if(blocks[i].x_done && blocks[i].y_done){
+        blocks.push.apply(blocks, blocks[i].divide());
+        blocks.splice(i, 1);
+        i--;
+        time_to_iter = true;
+      }
+    }
+    if(time_to_iter){
+      ITERATION += 1;
+      time = 0;
+    }
+    if(ITERATION == 8)return;
+    requestAnimationFrame(main);
+  }
+
+  blocks = [];
+  blocks.push(new Block(width/2-height/4, height/4, height/2, height/4, -1, 0));
+  blocks.push(new Block(width/2-height/4, height/2, height/2, height/4, 1, 0));
+  requestAnimationFrame(main);
+}
+
+  </script>
+</head>
+<body>
+  <p>This is an animation for the generation of each step of the twin dragon curve.</p>
+  <canvas id="canvas" style="width:100%;height:100%"></canvas>
+</body>
