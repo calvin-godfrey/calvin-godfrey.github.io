@@ -1,0 +1,78 @@
+<head>
+  <title>Julia Sets</title>
+  <meta charset="utf-8">
+  <script>
+window.onload = function(){
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext('2d');
+  var width, height, scale;
+  var min_x, max_x, min_y, max_y;
+  min_x = -2;
+  max_x = 2;
+  min_y = -2;
+  max_y = 2;
+  //var c_re = -0.7;
+  //var c_im = 0.27015;
+  var c_re, c_im;
+
+  function iterate(re, im){
+    var i = 0;
+    for(i;i<360;i++){
+      var old_re = re;
+      var old_im = im;
+      re = old_re*old_re-old_im*old_im+c_re;
+      im = 2*old_re*old_im+c_im;
+      if(re*re+im*im > 4)break;
+    }
+    return i;
+  }
+
+  function main(){
+    for(var y=0;y<height;y++){
+      for(var x=0;x<width;x++){
+        var num = iterate(((y-height/2)/height)*2*max_y, ((x-width/2)/width)*2*max_x);
+        if(num >= 359){
+          ctx.fillStyle = "#000";
+        } else {
+          ctx.fillStyle = "hsl(" + num + ", 80%, 50%)";
+        }
+        ctx.fillRect(y*SCALE, x*SCALE, SCALE, SCALE);
+      }
+    }
+  }
+
+
+  document.getElementById("start").addEventListener("mousedown", function(event){
+    c_re = +document.getElementById("real").value;
+    c_im = +document.getElementById("imaginary").value;
+    SCALE = +document.getElementById("scale").value;
+    width = canvas.width/SCALE;
+    height = canvas.height/SCALE;
+    main();
+  });
+
+  document.getElementById("rand").addEventListener("mousedown", function(event){
+    document.getElementById('real').value = -4*Math.random()+2;
+    document.getElementById('imaginary').value = -4*Math.random()+2;
+  });
+
+  f = setInterval(function(){
+    document.getElementById('dispRe').innerHTML = document.getElementById('real').value;
+    document.getElementById('dispIm').innerHTML = document.getElementById('imaginary').value;
+    document.getElementById('dispScale').innerHTML = document.getElementById('scale').value;
+  }, 50);
+
+}
+</script>
+</head>
+<body>
+  <p>The Julia Set is a fractal. The way the color for each pixel is generated is as followed: Find the corresponding complex number x+yi based on the position on the complex plane (or the canvas below).
+    Using this as the starting value z, calculate z^2+c, where c is a complex number of user's choice, until a maximum number of iterations (in this case 360) is reached or the distance of z from the origin is greater than 4.
+    Black numbers reach the max iteration number, while red numbers quickly leave the bounding radius. You can use the sliders below to change the real and imaginary part of c as well as the scale factor for pixels.
+    The bigger the scale, the faster it will draw but the lower the resolution. You can also hit randomize to randomly pick numbers for the real and imaginary parts of c.</p>
+  <input type="range" id="real" min="-2" max="2" step="0.0001">Real part of C: </input><span id="dispRe"></span><br>
+  <input type="range" id="imaginary" min="-2" max="2" step="0.0001">Imaginary part of C: </input><span id="dispIm"></span><br>
+  <input type="range" id="scale" min="1" max="32" step="1">Factor to scale the pixels: </input><span id="dispScale"></span><br>
+  <button id="start">Submit</button><button id="rand">Randomize</button>
+  <br>
+  <canvas id="canvas" width="800" height="800"></canvas>
