@@ -1,3 +1,4 @@
+
 <head>
   <title>Julia Sets</title>
   <meta charset="utf-8">
@@ -14,6 +15,10 @@ window.onload = function(){
   //var c_re = -0.7;
   //var c_im = 0.27015;
   var c_re, c_im;
+  var started = false;
+  var zoom = 1;
+  var mouse_down = false;
+  var start_pos;
 
   function iterate(re, im){
     var i = 0;
@@ -27,16 +32,24 @@ window.onload = function(){
     return i;
   }
 
+  function getMousePos(canvas, evt){
+    var rect = canvas.getBoundingClientRect();
+    return {x: (evt.clientX-rect.left)/(rect.right-rect.left)*canvas.width,
+            y: (evt.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height};
+  }
+
   function main(){
-    for(var y=0;y<height;y++){
+    for(var _y=0;_y<height;_y++){
+      var y = height-_y-1;
       for(var x=0;x<width;x++){
-        var num = iterate(((y-height/2)/height)*2*max_y, ((x-width/2)/width)*2*max_x);
+        if(y==height/2)console.log(min_x + (x/width)*(max_x-min_x));
+        var num = iterate(min_y + (y/height)*(max_y-min_y), min_x+(x/width)*(max_x-min_x));
         if(num >= 359){
           ctx.fillStyle = "#000";
         } else {
           ctx.fillStyle = "hsl(" + num + ", 80%, 50%)";
         }
-        ctx.fillRect(y*SCALE, x*SCALE, SCALE, SCALE);
+        ctx.fillRect(x*SCALE, y*SCALE, SCALE, SCALE);
       }
     }
   }
@@ -48,6 +61,7 @@ window.onload = function(){
     SCALE = +document.getElementById("scale").value;
     width = canvas.width/SCALE;
     height = canvas.height/SCALE;
+    started = true;
     main();
   });
 
@@ -56,10 +70,61 @@ window.onload = function(){
     document.getElementById('imaginary').value = -4*Math.random()+2;
   });
 
+  document.getElementById("canvas").addEventListener("mousemove", function(event){
+    if(!started)return;
+    var pos = getMousePos(canvas, event);
+    var x = pos.x/SCALE;
+    var y = pos.y/SCALE;
+    y = height-y;
+    document.getElementById("dispX").innerHTML = (min_x + (x/width)*(max_x-min_x)).toFixed(3);
+    document.getElementById("dispY").innerHTML = (min_y + (y/height)*(max_y-min_y)).toFixed(3);
+  });
+
+  document.getElementById("canvas").addEventListener("mousedown", function(event){
+    mouse_down = true;
+    start_pos = getMousePos(canvas, event);
+    start_pos.y = height-start_pos.y/SCALE;
+    start_pos.x /= SCALE;
+    start_pos.x = min_x + (start_pos.x/width)*(max_x-min_x);
+    start_pos.y = min_y + (start_pos.y/height)*(max_y-min_y);
+  });
+
+  document.getElementById("canvas").addEventListener("mouseup", function(event){
+    var end_pos = getMousePos(canvas, event);
+    end_pos.y = height-end_pos.y/SCALE;
+    end_pos.x /= SCALE;
+    end_pos.x = min_x + (end_pos.x/width)*(max_x-min_x);
+    end_pos.y = min_y + (end_pos.y/height)*(max_y-min_y);
+    console.log(max_x + "\t" + min_x);
+    console.log(end_pos);
+    var delta_x = end_pos.x - start_pos.x;
+    var delta_y = end_pos.y - start_pos.y;
+    min_x -= delta_x;
+    max_x -= delta_x;
+    min_y += delta_y;
+    max_y += delta_y;
+    mouse_down = false;
+    main();
+  });
+
+  document.getElementById("zoom").addEventListener("change", function(event){
+    var new_zoom = Math.pow(2, +document.getElementById('zoom').value);
+    var center_x = (min_x+max_x)/2;
+    var center_y = (min_y+max_y)/2;
+    var factor = new_zoom/zoom;
+    zoom = new_zoom;
+    min_x = center_x-(center_x-min_x)/factor;
+    max_x = center_x+(max_x-center_x)/factor;
+    min_y = center_y-(center_y-min_y)/factor;
+    max_y = center_y+(max_y-center_y)/factor;
+    main();
+  })
+
   f = setInterval(function(){
     document.getElementById('dispRe').innerHTML = document.getElementById('real').value;
     document.getElementById('dispIm').innerHTML = document.getElementById('imaginary').value;
     document.getElementById('dispScale').innerHTML = document.getElementById('scale').value;
+    document.getElementById("dispZoom").innerHTML = Math.pow(2, +document.getElementById('zoom').value);
   }, 50);
 
 }
@@ -70,9 +135,16 @@ window.onload = function(){
     Using this as the starting value z, calculate z^2+c, where c is a complex number of user's choice, until a maximum number of iterations (in this case 360) is reached or the distance of z from the origin is greater than 4.
     Black numbers reach the max iteration number, while red numbers quickly leave the bounding radius. You can use the sliders below to change the real and imaginary part of c as well as the scale factor for pixels.
     The bigger the scale, the faster it will draw but the lower the resolution. You can also hit randomize to randomly pick numbers for the real and imaginary parts of c.</p>
+
   <input type="range" id="real" min="-2" max="2" step="0.0001">Real part of C: </input><span id="dispRe"></span><br>
   <input type="range" id="imaginary" min="-2" max="2" step="0.0001">Imaginary part of C: </input><span id="dispIm"></span><br>
-  <input type="range" id="scale" min="1" max="32" step="1">Factor to scale the pixels: </input><span id="dispScale"></span><br>
+  <input type="range" id="scale" min="1" max="32" step="1" value="4">Factor to scale the pixels: </input><span id="dispScale"></span><br>
+  <input type="range" id="zoom" min="0" max="50" step="1" value="0">Zoom factor: </input><span id="dispZoom"></span><br>
   <button id="start">Submit</button><button id="rand">Randomize</button>
   <br>
-  <canvas id="canvas" width="800" height="800"></canvas>
+  <p>Coordinate of mouse position: </p>
+  <ul>
+    <li>real part (x): <span id="dispX"></span></li>
+    <li>complex part (y): <span id="dispY"></span></li>
+  </ul><br>
+  <canvas id="canvas" width="600" height="600"></canvas>
