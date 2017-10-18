@@ -1,4 +1,3 @@
-
 <head>
   <title>Julia Sets</title>
   <meta charset="utf-8">
@@ -131,11 +130,11 @@ window.onload = function(){
 </script>
 </head>
 <body>
-  <p>The Julia Set is a fractal. The way the color for each pixel is generated is as followed: Find the corresponding complex number x+yi based on the position on the complex plane (or the canvas below).
-    Using this as the starting value z, calculate z^2+c, where c is a complex number of user's choice, until a maximum number of iterations (in this case 360) is reached or the distance of z from the origin is greater than 4.
-    Black numbers reach the max iteration number, while red numbers quickly leave the bounding radius. You can use the sliders below to change the real and imaginary part of c as well as the scale factor for pixels.
+  <p>Julia Sets are fractals. The way the color for each pixel is generated is as followed: Find the corresponding complex number x+yi based on the position on the complex plane (or the canvas below).
+    Using this as the starting value z, calculate z^2+c, where c is a complex number of user's choice, until a maximum number of iterations (in this case 360) is reached or the distance of z from the origin is greater than 2.
+    Black numbers reach the max iteration number, while red numbers quickly leave the bounding radius and green means it takes a medium number of iterations. You can use the sliders below to change the real and imaginary part of c as well as the scale factor for pixels.
     The bigger the scale, the faster it will draw but the lower the resolution. You can also hit randomize to randomly pick numbers for the real and imaginary parts of c.</p>
-
+  <p>You can also drag the image on the canvas to pan, which allows you to zoom in on specific parts of the fractal.</p>
   <input type="range" id="real" min="-2" max="2" step="0.0001">Real part of C: </input><span id="dispRe"></span><br>
   <input type="range" id="imaginary" min="-2" max="2" step="0.0001">Imaginary part of C: </input><span id="dispIm"></span><br>
   <input type="range" id="scale" min="1" max="32" step="1" value="4">Factor to scale the pixels: </input><span id="dispScale"></span><br>
