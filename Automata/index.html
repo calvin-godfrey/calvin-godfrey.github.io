@@ -7,7 +7,7 @@
 <body>
   <h2>Explanation</h2>
   <p>Cellular Automata is a process in which the there is one row of pixels, each filled with one of "k" colors. The starting row is predetermined, and after that the rows are calculated based on the values of the rule number, range, and number of colors.
-    In the most basic form, there are only two colors and the range is 1, which means that each pixel is determined by the pixel above it and the one above diagonally to either side. The to determine which color to fill in the current pixel, it converts the rule number to base "k", the number of colors.
+    In the most basic form, there are only two colors and the range is 1, which means that each pixel is determined by the pixel above it and the one above diagonally to either side. Then to determine which color to fill in the current pixel, it converts the rule number to base "k", the number of colors.
     In the case of two colors, it is binary. Next, it assigns a possible combination of "parents" (the pixels above) to each digit in the rule converted to the correct base. Then it fills in that pixel based on the value of that digit.
   </p>
   <br>
@@ -24,11 +24,7 @@
   <br>
   <br>
   <p>Another fun combination is rule 2845749852 with range of 2 and colors of your choice. But put in your own set of rules, and see what the design makes!</p>
-  <p>You can use the mini tool below to figure out the range of rules you can use for a given pair of range and number of colors</p>
-  <input type="number" id="testRange">Range</input><br>
-  <input type="number" id="testColors">Number of colors</input><br>
-  <button id="test">Submit</button>
-  <p>Max rule: <span id="maxrule"></span></p>
+  <p>Depending on the range, it may take a long time to draw the initial image</p>
   <br>
   <p>Colors:</p>
   <input type="number" id="redStart">Starting color gradient - RED (0-255)</input><br>

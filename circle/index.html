@@ -5,9 +5,19 @@
   <script src="script.js"></script>
 </head>
 <body>
+  <p>This visualization can create art based on hypocycloids, or circles rolling within other circles. In a traditional hypocycloid, however, it traces the path of a single path as it travels around a circle within a circle. In this animation, there are multiple circles of the same size rolling within the same circle.</p>
+  <p>By default, it shows the inner and outer circles as well as all the points as they travel around the inner circles. By default, the animation shows the bigger circle and the path of the smaller circles as they travel around. The checkbox next to the start/stop buttons will draw lines connecting points whose associated circles are opposites.</p>
+  <p>So if there are 30 circles, it would draw lines between circles 1 and 16, 2 and 17, 3 and 18, etc. all the way to 15 and 30. These lines are colored based on length - longer lines are blue and shorter lines are red. If you check the "one line?" checkbox, then it will only draw one line. If you check that and the "show ellipse" box, it will keep track of where the end point of the line changes as the circles rotate.</p>
+  <p>The points slider changes the number of points, or inner circles. The separation slider changes the size of the angle of the tangent position of adjacent circles. The checkbox "set separation" sets this value to pi, which is a special case (see below).</p>
+  <p>The inner/outer radius sliders change the radius of the inner and outer circles, respectively. The mulitplier slider changes the multiplier for how long to draw the lines connecting points.</p>
+  <p>The special case mentioned above is setting the separation value to pi, and the radius of the inner circle to be half of the radius of the outer circle. When this happens, each individual point moves in a straight line along a diameter of the outer circle. If you check "show lines", "one line", and "show ellipse" in addition to those other values being the same, the shape traced will be a perfect elipse, with radii depending on the multiplier.</p>
+
+  <p>NOTE: Due to a quirk in Javascript, you have to click the stop button before hitting start if you change any of the sliders. Otherwise, it may start to calculate more than one frame in the time of one frame and potentially crash.</p>
+  <br>
+  <canvas id="canvas" style="width:80%;height:80%;float:left;"></canvas>
   <input id="points" type="range" min="4" max="512">Points</input><button id="start">Start</button><button id="stop">Stop</button><input type="checkbox" id="lines">Show lines?</input><input type="checkbox" id="useMult">Use Multiplier?</input>
   <br>
-  <input id="magic" type="range" min="1" max="2000" step="0.01">Magic</input><input id="set" type="checkbox">Set magic</input>
+  <input id="magic" type="range" min="1" max="2000" step="0.01">Separation</input><input id="set" type="checkbox">Set separation</input>
   <br>
   <input id="radius" type="range" min="1" max="150">Inner Radius</input><input id="nums" type="checkbox">One line?</input>
   <br>
@@ -19,14 +29,13 @@
   <br>
   <input id="showsmall" type="checkbox" checked>Show inner circles</input>
   <br>
-  <input id="showpoints" type="checkbox">Display all points</input>
+  <input id="showpoints" type="checkbox" checked>Display all points</input>
   <br>
   <button id="random">RANDOMIZE</button>
   <p>Points: <span id="selected"></span></p>
-  <p>Magic: <span id="dispMagic"></span> (used for the separation between different points)</p>
+  <p>Separation: <span id="dispMagic"></span></p>
   <p>Inner Radius: <span id="dispRadius"></span></p>
   <p>Outer Radius: <span id="dispRRadius"></span></p>
   <p>Multiplier: <span id="multiplier"></span></p>
-  <canvas id="canvas" style="width:100%;height:100%"></canvas>
 </body>
 </html>

@@ -230,12 +230,6 @@ window.onload = function(){
 
   function updateText(){
     document.getElementById("dispRebound").innerHTML = REBOUND;
-    var energy = 0;
-    for(var i=0;i<ballArray.length;i++){
-      energy += ballArray[i].mass * Math.pow(Math.pow(ballArray[i].velocityX, 2)+Math.pow(ballArray[i].velocityY, 2), 0.85);
-      energy += ballArray[i].mass * GRAVITY * (canvas.height - ballArray[i].y);
-    }
-    document.getElementById("energy").innerHTML = Math.round(energy);
   }
 
   var animate = function(){

@@ -11,6 +11,7 @@ window.onload = function(){
   var has_start = false;
   var has_end = false;
   var mouse_down = false;
+  var time;
   var start, end;
   canvas.width = screen.width;
   canvas.height = screen.height;
@@ -21,7 +22,7 @@ window.onload = function(){
   Point = function(x, y, id){
     this.x = x;
     this.y = y;
-    this.radius = 10;
+    this.radius = 15;
     this.color = "#aaa";
     this.lines = [];
     this.line_length = [];
@@ -48,7 +49,7 @@ window.onload = function(){
     ctx.fillStyle = this.color;
     ctx.fill();
     ctx.fillStyle = "#000";
-    ctx.fillText(this.letter, this.x-this.radius/1.3, this.y+this.radius/1.8);
+    ctx.fillText(this.letter, this.x-this.radius/1.6, this.y+this.radius/2);
   };
 
   Point.prototype.setType = function(which){ //0 normal, 1 start, 2 end
@@ -213,6 +214,7 @@ window.onload = function(){
         break;
       }
     }
+    time = new Date().getTime();
   })
 
   canvas.addEventListener("mouseup", function(event){
@@ -257,6 +259,7 @@ window.onload = function(){
   });
 
   canvas.addEventListener("mousemove", function(event){
+    if(new Date().getTime() - time < 20)return;
     if(!mouse_down){
       temp_line = [];
       return;

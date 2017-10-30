@@ -138,8 +138,8 @@
   </script>
 </head>
 <body>
-  <p>The way this works is that the grid starts out with a random color on each pixel. Each frame, every pixel looks at its neighboring pixels and checks if any is the one right after in the rainbow. If there is, then it turns into that color. This repeats forever.</p>
-  <p>Pick a number of colors. The smaller the number, the more rapidly the pattern oscillates. The bigger the number, the slower it oscillates and the greater the chance that the pattern gets "stuck".</p>
+  <p>The way this works is that the grid starts out with a random color on each pixel. Each frame, every pixel looks at its neighboring pixels and checks if any is the one right after in the rainbow, or the next hue value in HSL color space. If there is, then it turns into that color. This repeats forever.</p>
+  <p>Pick a number of colors. The smaller the number, the more rapidly the pattern oscillates. The bigger the number, the slower it oscillates and the greater the chance that the pattern gets "stuck". Then click the begin button.</p>
   <input type="range" id="num" min="2" max="100">Number of colors: <span id="colors"></span>.</input><br>
   <button id="Start">Begin</button>
   <br>

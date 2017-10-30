@@ -5,11 +5,12 @@
   <script src="script.js"></script>
 </head>
 <body>
-  <canvas id="canvas" style="width:100%;height:100%"></canvas>
-  <input type="checkbox" id="collision">Collision</input><input type="checkbox" id="gravity">Gravity</input>
+  <p>This simulates collisions between balls in 2-dimensional space. To make it more interesting, you can right click somewhere on the canvas and then right click somewhere else to draw a line for the balls to bounce off of.</p><br>
+  <input type="checkbox" id="collision" checked>Collision</input><input type="checkbox" id="gravity" checked>Gravity</input>
   <input type="range" min="0.01" max="1" step="0.001" id="rebound">Rebound ratio: </input><span id="dispRebound"></span>
+  <canvas id="canvas" style="width:100%;height:100%"></canvas>
+
   <br>
-  <p>Total Energy: <span id="energy"></span></p>
 </body>
 
 

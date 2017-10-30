@@ -16,7 +16,7 @@ window.onload = function(){
   var CLICK_Y = null;
   var STEP = .2;
   var SCALE = 1000;
-  
+
   function getMousePos(canvas, evt){
     var rect = canvas.getBoundingClientRect();
     return {x: (evt.clientX-rect.left)/(rect.right-rect.left)*canvas.width,
@@ -38,7 +38,7 @@ window.onload = function(){
       ctx.fillRect(0, i, width, LINE_WIDTH);
       i -= SPACE;
     }
-    
+
     if(EQUATION !== null){
       //we're going to assume its valid and secure
       for(var i=0;i<EQUATION.length;i++){
@@ -48,7 +48,7 @@ window.onload = function(){
         }
         if(EQUATION.charAt(i) == "."){
           if(i == 0 || (EQUATION.charAt(i-1) == "h" && EQUATION.charAt(i-2) == "t")){
-            continue; 
+            continue;
           } else {
             EQUATION = null;
             break;
@@ -61,7 +61,7 @@ window.onload = function(){
         ctx.strokeStyle = "#0F0";
         ctx.lineWidth = 1;
         ctx.beginPath();
-        
+
         ctx.moveTo(x*SCALE, height - y*SCALE);
         while(x < width/SCALE){
           var delta = eval(EQUATION); //oh boy
@@ -77,7 +77,7 @@ window.onload = function(){
     requestAnimationFrame(main);
   }
   requestAnimationFrame(main);
-  
+
   document.getElementById("submit").addEventListener("mousedown", function(evt){
     EQUATION = document.getElementById("equation").value;
   });
@@ -93,6 +93,7 @@ window.onload = function(){
 </script>
 </head>
 <body>
+  <p>This approximates solutions to differential equations. Input an equation in terms of x, y, and javascript math functions (like Math.sin(), Math.cos(), etc.) and choose a step size, then click submit and click on the graph as an initial condition.</p>
   <input type="range" min="0.01" step="0.01" max="0.5" id="step">Step size</input>
 <input id="equation" type="text">Type Equation</input><button id="submit">Submit</button>
 <canvas id="canvas" style="width:100%;height:100%"></canvas>

@@ -29,7 +29,7 @@ window.onload = function(){
   Block.prototype.draw = function(){
     ctx.save();
     ctx.translate(this.delta_x, this.delta_y);
-    ctx.fillStyle = "hsl(" + Math.round(time*360/NUM_STEPS) + ", 80%, 50%)";
+    ctx.fillStyle = "hsl(0, 80%, 50%)";
     ctx.fillRect(this.x, this.y, this.width, this.height);
     if(this.x_sign != 0){
       if(Math.abs(this.delta_x) < this.width/4){

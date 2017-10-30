@@ -105,15 +105,18 @@ window.onload = function(){
   document.getElementById("equation").addEventListener("mousedown", function(event){
     DX = document.getElementById("dx").value;
     DX = parseEquation(DX);
+    var bad = false;
     if(DX === null){
       alert("Equation for dx/dt is not valid");
+      bad = true;
     }
     DY = document.getElementById("dy").value;
     DY = parseEquation(DY);
     if(DY === null){
       alert("Equation for dy/dt is not valid");
+      bad = true;
     }
-    if(started){
+    if(started||bad){
       return;
     }
     started = true;
