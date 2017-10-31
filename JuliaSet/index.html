@@ -108,8 +108,8 @@ window.onload = function(){
     c_re = +document.getElementById("real").value;
     c_im = +document.getElementById("imaginary").value;
     SCALE = +document.getElementById("scale").value;
-    width = canvas.width/SCALE;
-    height = canvas.height/SCALE;
+    width = Math.round(canvas.width/SCALE);
+    height = Math.round(canvas.height/SCALE);
     started = true;
     main();
   });
