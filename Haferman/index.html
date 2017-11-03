@@ -193,7 +193,7 @@
   <p>The goal of this interactive activity is to make a sort of fractal, by starting with a colored grid and replacing each colored tile with a set of smaller tiles to see what design is produced.</p>
   <div id="step1">
     <p>To begin, how many colors would you like to use? The colors will be grey scale, going from black to white.</p>
-    <input type="number" id="colors"></input><button id="color_sub">Submit</button>
+    <input type="number" id="colors" autocomplete="off"></input><button id="color_sub">Submit</button>
   </div>
   <div id="step2">
     <p>Awesome! The next step is to figure out how the image will iterate. This means that for each color you have chosen, you must chose a square matrix full of smaller colors that will replace the original color when the image iterates.</p>
@@ -218,14 +218,14 @@
     <p>So for the example above, you would type in 21,12 into the input below.</p>
     <p>Alternative, enter a single number to have the computer generate an n by n random pattern for that color instead.</p>
     <p>Currently submitting pattern for color number <span id="curr_num"></span></p>
-    <input type="text" id="pattern"></input>
+    <input type="text" id="pattern" autocomplete="off"></input>
     <button id="submit_pattern">Submit</button>
   </div>
   <div id="step3">
     <p>Cool! The last step is to set up the starting grid before iteration. To do this, it's like filling in the pattern in the previous step.</p>
     <p>For example, to input a 3x3 starting block with 5 colors, a valid input could be 531,242,335.</p>
     <p>Put the whole thing the text box, separating rows with commas.</p>
-    <textarea id="begin" rows="2" cols="100"></textarea><button id="submit_start">Submit</button>
+    <textarea id="begin" rows="2" cols="100" autocomplete="off"></textarea><button id="submit_start">Submit</button>
   </div>
 
   <div id="graph">

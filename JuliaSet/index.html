@@ -13,31 +13,66 @@ window.onload = function(){
   min_y = -2;
   max_y = 2;
   MAX_ITER = 360;
-  var c_re, c_im;
+  var C = new Complex(0, 0);
   var started = false;
   var zoom = 1;
   var mouse_down = false;
   var start_pos;
+  var exp = 2;
 
-  function iterate(a, b, power){
+  function iterate(comp, power){
     var i = 0;
     for(i;i<MAX_ITER;i++){
       if(document.getElementById("abs").checked){
-        a = Math.abs(a);
-        b = Math.abs(b);
+        comp.re = Math.abs(comp.re);
+        comp.im = Math.abs(comp.im);
       }
-      var c = a;
-      var d = b;
-      for(var j=1;j<power;j++){
-        var temp_a = a*c-b*d;
-        b = a*d+b*c;
-        a = temp_a;
-      }
-      a += c_re;
-      b += c_im;
-      if(a*a+b*b > 4)break;
+      comp = complex_power(comp, power);
+      comp.re += C.re;
+      comp.im += C.im;
+      if(comp.magnitude() > 4)break;
     }
     return i;
+  }
+
+  function Complex(re, im){
+    this.re = re;
+    this.im = im;
+  }
+
+  Complex.prototype.magnitude = function(){
+    return this.re*this.re+this.im*this.im;
+  }
+
+  function add(comp1, comp2){
+    return new Complex(comp1.re+comp2.re, comp1.im+comp2.im);
+  }
+
+  function mult(comp1, comp2){
+    return new Complex(comp1.re*comp2.re-comp1.im*comp2.im, comp1.re*comp2.im+comp1.im*comp2.re);
+  }
+
+  function subtract(comp1, comp2){
+    return new Complex(comp1.re-comp2.re, comp1.im-comp2.im);
+  }
+
+  function divide(comp1, comp2){
+    var conj = new Complex(comp2.re, comp2.im*-1);
+    var numerator = mult(comp1, conj);
+    var denominator = mult(comp2, conj);
+    return new Complex(numerator.re/denominator.re, numerator.im/denominator.re);
+  }
+
+  function complex_power(c, n){
+    var comp = new Complex(c.re, c.im);
+    var re = comp.re;
+    var im = comp.im;
+    for(var j=1;j<n;j++){
+      var temp_a = comp.re*re-comp.im*im;
+      comp.im = comp.re*im+comp.im*re;
+      comp.re = temp_a;
+    }
+    return comp;
   }
 
   function hslToRgb(h, s, l){ //NOT MY CODE
@@ -73,17 +108,16 @@ window.onload = function(){
     ctx.clearRect(0, 0, width*SCALE, height*SCALE);
     var fixed = document.getElementById("fixed").checked;
     var image = ctx.createImageData(width, height);
-    var exp = +document.getElementById("exp").value;
     MAX_ITER = document.getElementById("iter").value;
     for(var _y=0;_y<height;_y++){
       var y = height-_y-1;
       for(var x=0;x<width;x++){
         var colors;
         if(!fixed){
-          c_re = min_y+(y/height)*(max_y-min_y);
-          c_im = min_x+(x/width)*(max_x-min_x);
+          C = new Complex(min_y+(y/height)*(max_y-min_y), min_x+(x/width)*(max_x-min_x));
         }
-        var num = iterate(min_y + (y/height)*(max_y-min_y), min_x+(x/width)*(max_x-min_x), exp);
+        var comp = new Complex(min_y + (y/height)*(max_y-min_y), min_x+(x/width)*(max_x-min_x));
+        var num = iterate(comp, exp);
         if(num >= MAX_ITER-1){
           colors = hslToRgb(0, .85, 0);
         } else {
@@ -94,7 +128,6 @@ window.onload = function(){
           image.data[i+j] = colors[j];
         }
         image.data[i+3] = 255; // alpha channel
-        //ctx.fillRect(x*SCALE, y*SCALE, SCALE, SCALE);
       }
     }
     ctx.putImageData(image, 0, 0);
@@ -105,8 +138,8 @@ window.onload = function(){
 
 
   document.getElementById("start").addEventListener("mousedown", function(event){
-    c_re = +document.getElementById("real").value;
-    c_im = +document.getElementById("imaginary").value;
+    C.re = +document.getElementById("real").value;
+    C.im = +document.getElementById("imaginary").value;
     SCALE = +document.getElementById("scale").value;
     width = Math.round(canvas.width/SCALE);
     height = Math.round(canvas.height/SCALE);
@@ -170,6 +203,11 @@ window.onload = function(){
     main();
   })
 
+  document.getElementById("exp").addEventListener("change", function(event){
+    exp = +document.getElementById("exp").value;
+    main();
+  });
+
   f = setInterval(function(){
     document.getElementById('dispRe').innerHTML = document.getElementById('real').value;
     document.getElementById('dispIm').innerHTML = document.getElementById('imaginary').value;
@@ -215,4 +253,11 @@ window.onload = function(){
   </ul><br>
   <input type="checkbox" checked="true" id="fixed">Fixed value of C</input>
   <input type="checkbox" id="abs">Take absolute value each iteration</input>
+  <br>
+  <ul>Examples of interesting patterns:
+    <li>Fixed value of C: unchecked; Take absolute value: unchecked; Exponent: 2; (doesn't matter what real/imaginary part is). This is the Mandelbrot Set</li>
+    <li>Fixed value of C: checked; Take absolute value: checked; Real part: 1.0043; Imaginary part: -0.2542; Exponent: 10</li>
+    <li>Fixed value of C: checked; Take absolute value: unchecked; Real part: 0.9946; Imaginary part: -0.322; Exponent: 11</li>
+    <li>Fixed value of C: checked; Take absolute value: unchecked; Real part: -0.2203; Imaginary part: -0.7288; Exponent: 2</li>
+  </ul>
 </body>

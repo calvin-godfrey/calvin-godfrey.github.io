@@ -93,7 +93,7 @@ window.onload = function(){
 </script>
 </head>
 <body>
-  <p>This approximates solutions to differential equations. Input an equation in terms of x, y, and javascript math functions (like Math.sin(), Math.cos(), etc.) and choose a step size, then click submit and click on the graph as an initial condition.</p>
+  <p>This approximates solutions to differential equations. Input an equation in terms of x, y, and javascript math functions (like Math.sin(), Math.cos(), etc.). Note that when using Math.sin() and other functions, Math must be uppercase. Finally, choose a step size, then click submit and click on the graph as an initial condition.</p>
   <input type="range" min="0.01" step="0.01" max="0.5" id="step">Step size</input>
 <input id="equation" type="text">Type Equation</input><button id="submit">Submit</button>
 <canvas id="canvas" style="width:100%;height:100%"></canvas>

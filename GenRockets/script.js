@@ -167,7 +167,7 @@ window.onload = function(){
     }
     life += 1;
     if(life==400){ //End of generation
-      document.getElementById("gen").innerHTML = "generation: " + gen;
+      document.getElementById("gen").innerHTML = "<b>Generation: </b>" + gen;
       for(var i=0;i<rockets.length;i++){
         rockets[i].health = rockets[i].calcHealth();
       }
@@ -277,6 +277,10 @@ window.onload = function(){
     }
   });
   var go = true;
+
+  var f = setInterval(function(){
+    document.getElementById("disp").innerHTML = document.getElementById("speed").value;
+  }, 10);
   requestAnimationFrame(drawBlocks);
 
 };
