@@ -1,3 +1,4 @@
+
 <head>
   <title>Vector Fields</title>
   <script>
@@ -40,7 +41,7 @@ window.onload = function(){
 
   Vector.prototype.calculate = function(){
     var x = (this.x/width-0.5)*MAX*2;
-    var y = (this.y/height-0.5)*MAX*2;
+    var y = ((height-this.y)/height-0.5)*MAX*2;
     var deltax = eval(DX);
     var deltay = eval(DY);
     var mag = Math.pow(Math.pow(deltax, 2)+ Math.pow(deltay, 2), 0.5);
@@ -49,9 +50,9 @@ window.onload = function(){
       deltay = deltay/mag*MAX_STEP;
     }
     x += deltax;
-    y -= deltay;
+    y += deltay;
     this.x = (x/(2*MAX)+0.5)*width;
-    this.y = (y/(2*MAX)+0.5)*height;
+    this.y = height-(y/(2*MAX)+0.5)*height;
     this.life -= 1;
   }
 
@@ -122,6 +123,7 @@ window.onload = function(){
     started = true;
     requestAnimationFrame(main);
   });
+
 }
   </script>
 </head>
