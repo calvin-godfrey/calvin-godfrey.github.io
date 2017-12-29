@@ -1,0 +1,163 @@
+<head>
+  <title>Point In Polygon</title>
+  <meta charset="utf-8">
+  <script>
+  window.onload = function(){
+
+    var canvas = document.getElementById("canvas");
+    canvas.width = screen.width;
+    canvas.height = screen.height;
+    var ctx = canvas.getContext("2d");
+    var mousePos = null;
+    var begin = false;
+    var points = [];
+
+    var polygons = [];
+
+    function getMousePos(canvas, evt){
+      var rect = canvas.getBoundingClientRect();
+      return {x: (evt.clientX-rect.left)/(rect.right-rect.left)*canvas.width,
+        y: (evt.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height};
+    }
+
+    function Polygon(points, text){
+      this.points = points; //array of Point objects represent vertices
+      this.text = text;
+      this.lines = [];
+      for(var i=0;i<points.length-1;i++){
+        this.lines.push(new Line(this.points[i], this.points[i+1]));
+      }
+      this.lines.push(new Line(this.points[this.points.length-1], this.points[0]));
+    }
+
+    Polygon.prototype.containsPoint = function(p1){
+      p2 = new Point(-1000, p1.y); //a new point definitely outside any polygon
+      line = new Line(p1, p2); // Count how many times this intersects the boundary lines of the polygon
+      var count = 0;
+      for(var i=0;i<this.lines.length;i++){
+        var intersection = intersect(line, this.lines[i]);
+        if(intersection.x <= Math.max(this.lines[i].p1.x, this.lines[i].p2.x) &&
+           intersection.x >= Math.min(this.lines[i].p1.x, this.lines[i].p2.x) &&
+           intersection.y <= Math.max(this.lines[i].p1.y, this.lines[i].p2.y) &&
+           intersection.y >= Math.min(this.lines[i].p1.y, this.lines[i].p2.y)){ // Intersection happens in the line segment, not off the border of polygon
+             if(intersection.x > p1.x)continue;
+             count += 1;
+        }
+      }
+      if(count % 2 == 1){ // If the line I make intersects the border of polygon an odd number of times, then it's contained
+        return true;
+      }
+      return false;
+    }
+
+    Polygon.prototype.draw = function(){
+      ctx.beginPath();
+      ctx.moveTo(this.points[0].x, this.points[0].y);
+      ctx.strokeStyle = "#000";
+      ctx.strokeWidth = 3;
+      for(var i=1;i<this.points.length;i++){
+        ctx.lineTo(this.points[i].x, this.points[i].y);
+      }
+      ctx.lineTo(this.points[0].x, this.points[0].y);
+      ctx.stroke();
+    }
+
+    function Point(x, y){
+      this.x = x;
+      this.y = y;
+    }
+
+    function Line(p1, p2){
+      this.p1 = p1;
+      this.p2 = p2;
+    }
+
+    Line.prototype.slope = function(){
+      return (this.p2.y-this.p1.y)/(this.p2.x-this.p1.x);
+    }
+
+    function distance(p1, p2){
+      return Math.pow(Math.pow(p1.x-p2.x, 2)+Math.pow(p1.y-p2.y,2),0.5);
+    }
+
+    function slope(p1, p2){
+      return new Line(p1, p2).slope();
+    }
+
+    function intersect(l1, l2){
+      var m1 = l1.slope(); //always 0
+      var m2 = l2.slope();
+      if(m2 == Infinity || m2 == -Infinity){
+        if(l1.p1.x < l2.p1.x)return new Point(-1000, -1000); // That means the mouse is to the left; and the line definitely won't intersect
+        var b1 = l1.p1.y;
+        var x = l2.p1.x;
+        var y = m1*x+b1;
+        return new Point(x, y);
+      }
+      var b1 = l1.p1.y-(m1*l1.p1.x); //y = mx+b, so b = y-mx
+      var b2 = l2.p1.y-(m2*l2.p1.x);
+      var x = (b2-b1)/(m1-m2); // If you divide by 0 the lines are parallel and so never intersect
+      if(x == Infinity || x == -Infinity){
+        return new Point(-1000, -1000);
+      }
+      var y = m1*x+b1;
+      return new Point(x, y);
+    }
+
+    function main(){
+      ctx.fillStyle = "#FFF";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = "#000";
+      ctx.fillStyle = "#000";
+      for(var i=0;i<points.length;i++){
+        ctx.beginPath();
+        ctx.arc(points[i].x, points[i].y, 3, 0, Math.PI*2);
+        ctx.stroke();
+      }
+      for(var i=0;i<polygons.length;i++){
+        polygons[i].draw();
+      }
+      var done = false;
+      for(var i=0;i<polygons.length;i++){
+        if(!mousePos)break;
+        if(polygons[i].containsPoint(new Point(mousePos.x, mousePos.y))){
+          document.getElementById("desc").innerHTML = polygons[i].text;
+          done = true;
+          break; //It's already in one, so we're done checking
+        }
+      }
+      if(!done){
+        document.getElementById("desc").innerHTML = '';
+      }
+      requestAnimationFrame(main);
+    }
+
+    requestAnimationFrame(main);
+
+    document.getElementById("canvas").addEventListener("mousemove", function(evt){
+      var loc = getMousePos(canvas, evt);
+      mousePos = loc;
+    })
+
+    canvas.addEventListener("mouseup", function(evt){
+      var click = getMousePos(canvas, evt);
+      if(begin)return;
+      points.push(new Point(click.x, click.y));
+    });
+
+    document.getElementById("start").addEventListener("mousedown", function(evt){
+      var p = new Polygon(points, "Inside");
+      points = [];
+      begin = true;
+      polygons.push(p);
+    });
+
+  }
+  </script>
+</head>
+<body>
+  <p>Click on the empty field below to create vertices, then click done to create a polygon. Then, you can move the mouse and it will determine whether your mouse is inside or outside of the polygon, using the ray casting algorithm.</p>
+  <p id="desc" style="height:5%"></p>
+  <button id="start">Done</button>
+  <canvas id="canvas" style="width:100%;height:100%"></canvas>
+</body>
