@@ -136,7 +136,7 @@
 <body>
   <canvas id="canvas" style="display:none;"></canvas> <!-- draw image here then I can get the pixels -->
   <video id="camera" autoplay="true" style="display:none;"></video>
-  <p>Upload an image file, and the program will render it in ASCII characters. There is an option for colors, but it will take significantly longer, and in some cases crash. Use the scale slider to change the final size; the smaller the scale the faster it will take.</p>
+  <p>If you allow acces to the webcam,  the program will render the live feed in ASCII characters. There is an option for colors, but it will take significantly longer, and in some cases crash. Use the scale slider to change the final size; the smaller the scale the faster the render time.</p>
   <button id="start">Begin</button><input type="checkbox" id="color">Color?</input><input type="range" id="scale" min="0.2" max="1" step="0.2" value="0.6">Scale: <span id="dispScale"></span></input><br>
   <span id="output" style="font-size: 4px;font-family:Courier;"></span>
 </body>
