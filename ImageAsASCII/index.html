@@ -1,0 +1,128 @@
+<head>
+  <title>Image To ASCII</title>
+  <meta charset="utf-8">
+  <script>
+  window.onload = function(){
+
+    var pixels;
+    var letter = '$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,"^`\'.'.split("");
+    var SCALE;
+    var RED_SCALE   = 0.3333;
+    var GREEN_SCALE = 0.3333;
+    var BLUE_SCALE  = 0.3333;
+    var WIDTH_SCALE = 1.9;
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext('2d');
+
+    document.getElementById("start").addEventListener("mousedown", function(event){
+      SCALE = (1-document.getElementById("scale").value)*5;
+      var files = document.getElementById("image").files;
+      var file = files[0];
+      if(file.type.match("image.*")){
+        var reader = new FileReader();
+        reader.onload = function(fileEvent){
+          var img = new Image();
+          img.src = fileEvent.target.result;
+          img.onload = function(){
+            var newCanvas = document.createElement('canvas');
+            var newCtx = newCanvas.getContext('2d');
+            newCanvas.width = img.naturalWidth;
+            newCanvas.height = img.naturalHeight;
+            canvas.width = img.naturalWidth*WIDTH_SCALE;
+            canvas.height = img.naturalHeight;
+            newCtx.drawImage(img, 0, 0);
+            ctx.scale(WIDTH_SCALE, 1); // Scale because font is not square
+            ctx.drawImage(newCanvas, 0, 0);
+            pixels = ctx.getImageData(0, 0, img.naturalWidth*WIDTH_SCALE, img.naturalHeight);
+            parse();
+          }
+        }
+        reader.readAsDataURL(file);
+      } else {
+        alert("Bad image file. Sorry.");
+        return;
+      }
+    });
+
+    function parse(){
+      var grey = [];
+      var chars = [];
+      var color = document.getElementById("color").checked;
+      data = pixels.data;
+      var height = 0;
+      var width;
+      for(var r=0;r<pixels.height;r+=(1+SCALE*2)){
+        width = 0;
+        height++;
+        for(var c=0;c<pixels.width;c+=(1+SCALE*2)){
+          var size = 0, red = 0, green = 0, blue = 0;
+          for(var i=-SCALE;i<=SCALE;i++){
+            for(var j=-SCALE;j<=SCALE;j++){
+              if(j+c<0||i+r<0||j>+c>=pixels.width||i+r>=pixels.height){
+                continue;
+              }
+              size += 1;
+              var index = 4*(pixels.width*(r+i)+(c+j));
+              red += data[index];
+              green += data[index+1];
+              blue += data[index+2];
+            }
+          }
+          if(size==0)continue;
+          width++; // Find how many characters wide the actual image is
+          red /= size;
+          green /= size;
+          blue /= size;
+          if(color){
+            grey.push(Math.round(red)+Math.round(green)*256+Math.round(blue)*Math.pow(256,2));
+          } else {
+            grey.push(Math.round(red*RED_SCALE + green*GREEN_SCALE + blue*BLUE_SCALE));
+          }
+        }
+      }
+      for(var i=0;i<grey.length;i++){
+        if(color){
+          var num = grey[i];
+          var blue = Math.floor(num/(256*256));
+          num %= (256*256);
+          var green = Math.floor(num/256);
+          var red = num % 256;
+          chars.push(letter[Math.min(Math.round((red*RED_SCALE + green*GREEN_SCALE + blue*BLUE_SCALE)/255*letter.length), letter.length-1)]);
+        } else {
+          chars.push([letter[Math.min(Math.round(grey[i]/255*letter.length), letter.length-1)]]);
+        }
+      }
+      var str = "";
+       for(var r=0;r<height;r++){
+        for(var c=0;c<width-1;c++){
+          var character = chars[width*r+c];
+          if(character == "<")character = '&lt;';
+          if(character == ">")character = "&gt;";
+          if(color){
+            var num = grey[width*r+c];
+            var blue = Math.floor(num/(256*256));
+            num %= (256*256);
+            var green = Math.floor(num/256);
+            var red = num % 256;
+            str = str + "<span style='color:rgba(" + red + ", " + green + ", " + blue + ", 255)'>" + character + "</span>";
+          } else {
+            str = str + character;
+          }
+        }
+        str += "<br>";
+      }
+      document.getElementById("output").innerHTML += str;
+    }
+
+    f = setInterval(function(){
+      document.getElementById("dispScale").innerHTML = document.getElementById("scale").value;
+    }, 50);
+  }
+  </script>
+</head>
+<body>
+  <canvas id="canvas" style="display:none;"></canvas> <!-- draw image here then I can get the pixels -->
+  <p>Upload an image file, and the program will render it in ASCII characters. There is an option for colors, but it will take significantly longer, and in some cases crash. Use the scale slider to change the final size; the smaller the scale the faster it will take.</p>
+  <input type="file" id="image"><button id="start">Done</button><input type="checkbox" id="color" checked>Color?</input><input type="range" id="scale" min="0.2" max="1" step="0.2" value="0.6">Scale: <span id="dispScale"></span></input><br>
+  <span id="output" style="font-size: 4px;font-family:Courier;"></span>
+</body>
