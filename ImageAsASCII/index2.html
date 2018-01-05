@@ -1,0 +1,142 @@
+<head>
+  <title>Image To ASCII</title>
+  <meta charset="utf-8">
+  <script>
+  window.onload = function(){
+
+    var pixels, newCanvas, newCtx;
+    var video = document.getElementById("camera");
+    var letter = '$@B%8&WM#*oahkbdpqwmZ0OQLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,"^`\'.'.split("");
+    var SCALE;
+    var RED_SCALE   = 0.35;
+    var GREEN_SCALE = 0.15;
+    var BLUE_SCALE  = 0.5;
+    var WIDTH_SCALE = 2;
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext('2d');
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+
+    function handleVideo(stream) {
+        video.src = window.URL.createObjectURL(stream);
+    }
+
+    function videoError(e) {
+        // this shouldn't have to run
+    }
+
+    document.getElementById("start").addEventListener("mousedown", function(event){
+      newCanvas = document.createElement('canvas');
+      newCtx = newCanvas.getContext('2d');
+      if (navigator.getUserMedia) {
+        navigator.getUserMedia({video: true}, handleVideo, videoError);
+      }
+      video.addEventListener( "loadedmetadata", function (e) {
+          setup();
+      }, false );
+    });
+
+    function setup(){
+      newCanvas.width = video.videoWidth;
+      newCanvas.height = video.videoHeight;
+      canvas.width = video.videoWidth*WIDTH_SCALE;
+      canvas.height = video.videoHeight;
+      requestAnimationFrame(main);
+    }
+
+    function main(){
+      newCtx.drawImage(video, 0, 0);
+      SCALE = Math.round((1-document.getElementById("scale").value)*5);
+      console.log(SCALE);
+      ctx.scale(WIDTH_SCALE, 1);
+      ctx.drawImage(newCanvas, 0, 0);
+      pixels = ctx.getImageData(0, 0, video.videoWidth*WIDTH_SCALE, video.videoHeight);
+      ctx.scale(1/WIDTH_SCALE, 1);
+      parse();
+      requestAnimationFrame(main);
+    }
+
+    function parse(){
+      var grey = [];
+      var chars = [];
+      var color = document.getElementById("color").checked;
+      document.getElementById("output").innerHTML = "";
+      data = pixels.data;
+      var height = 0;
+      var width;
+      for(var r=0;r<pixels.height;r+=(1+SCALE*2)){
+        width = 0;
+        height++;
+        for(var c=0;c<pixels.width;c+=(1+SCALE*2)){
+          var size = 0, red = 0, green = 0, blue = 0;
+          for(var i=-SCALE;i<=SCALE;i++){
+            for(var j=-SCALE;j<=SCALE;j++){
+              if(j+c<0||i+r<0||j>+c>=pixels.width||i+r>=pixels.height){
+                continue;
+              }
+              size += 1;
+              var index = 4*(pixels.width*(r+i)+(c+j));
+              red += data[index];
+              green += data[index+1];
+              blue += data[index+2];
+            }
+          }
+          if(size==0)continue;
+          width++; // Find how many characters wide the actual image is
+          red /= size;
+          green /= size;
+          blue /= size;
+          if(color){
+            grey.push(Math.round(red)+Math.round(green)*256+Math.round(blue)*65536);
+          } else {
+            grey.push(Math.round(red*RED_SCALE + green*GREEN_SCALE + blue*BLUE_SCALE));
+          }
+        }
+      }
+      for(var i=0;i<grey.length;i++){
+        if(color){
+          var num = grey[i];
+          var blue = Math.floor(num/(256*256));
+          num %= (256*256);
+          var green = Math.floor(num/256);
+          var red = num % 256;
+          chars.push(letter[Math.min(Math.round((red*RED_SCALE + green*GREEN_SCALE + blue*BLUE_SCALE)/255*letter.length), letter.length-1)]);
+        } else {
+          chars.push([letter[Math.min(Math.round(grey[i]/255*letter.length), letter.length-1)]]);
+        }
+      }
+      var str = "";
+       for(var r=0;r<height;r++){
+        for(var c=0;c<width-1;c++){
+          var character = chars[width*r+c];
+          if(character == "<")character = '&lt;';
+          if(character == ">")character = "&gt;";
+          if(color){
+            var num = grey[width*r+c];
+            var blue = Math.floor(num/(256*256));
+            num %= (256*256);
+            var green = Math.floor(num/256);
+            var red = num % 256;
+            var sub = "<span style='color:rgba(" + red + ", " + green + ", " + blue + ", 255)'>" + character + "</span>"
+            str += sub;
+          } else {
+            str += character;
+          }
+        }
+        str += "<br>";
+      }
+      document.getElementById("output").innerHTML += str;
+    }
+
+    f = setInterval(function(){
+      document.getElementById("dispScale").innerHTML = document.getElementById("scale").value;
+    }, 50);
+  }
+  </script>
+</head>
+<body>
+  <canvas id="canvas" style="display:none;"></canvas> <!-- draw image here then I can get the pixels -->
+  <video id="camera" autoplay="true" style="display:none;"></video>
+  <p>Upload an image file, and the program will render it in ASCII characters. There is an option for colors, but it will take significantly longer, and in some cases crash. Use the scale slider to change the final size; the smaller the scale the faster it will take.</p>
+  <button id="start">Begin</button><input type="checkbox" id="color">Color?</input><input type="range" id="scale" min="0.2" max="1" step="0.2" value="0.6">Scale: <span id="dispScale"></span></input><br>
+  <span id="output" style="font-size: 4px;font-family:Courier;"></span>
+</body>
