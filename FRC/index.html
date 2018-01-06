@@ -1,5 +1,5 @@
 <head>
-  <title>Point In Polygon</title>
+  <title>FIRST Power Up Field</title>
   <meta charset="utf-8">
   <script>
   window.onload = function(){
@@ -9,10 +9,88 @@
     canvas.height = screen.height;
     var ctx = canvas.getContext("2d");
     var mousePos = null;
-    var begin = false;
-    var points = [];
+    var field = new Image();
+    field.src = "field.png";
+    field.onload = function(){
+      ctx.drawImage(field, 0, 0, 1250, 600);
+    }
+    var allianceRed = new Polygon([new Point(0, 80), new Point(160, 80), new Point(160, 520), new Point(0, 520)], "Red Alliance Zone - a 22 ft. (~671 cm) wide by 10 ft. (~305 cm) deep by 10 ft. (~305 cm) tall\
+volume formed by, and including three (3) PLAYER STATIONS, an EXCHANGE wall, and 2 in. ALLIANCE colored gaffers tape.");
+    var topBluePortal = new Polygon([new Point(0, 0), new Point(215, 0), new Point(215, 25), new Point(160, 80), new Point(0, 80)],
+    "Top Blue Portal - HUMAN PLAYERS may deliver POWER CUBES to ROBOTS through either of the PORTAL walls. Each \
+PORTAL wall features a 1 ft. 2 in. (~36 cm) square opening, centered across the width of the panel and\
+located 1 ft. 8 in. (~51 cm) from the carpet. Behind the opening is a 1 ft. 6 ½ in. (~47 cm) polycarbonate\
+chute. The chute featues a swinging wall that the HUMAN PLAYER uses to push the POWER CUBE onto the FIELD. \
+The PORTAL closest to PLAYER STATION 1 will also contain a game timer.");
+    var bottomBluePortal = new Polygon([new Point(0, 520), new Point(160, 520), new Point(215, 570), new Point(215, 600), new Point(0, 600)],
+    "Bottom Blue Portal- HUMAN PLAYERS may deliver POWER CUBES to ROBOTS through either of the PORTAL walls. Each \
+PORTAL wall features a 1 ft. 2 in. (~36 cm) square opening, centered across the width of the panel and\
+located 1 ft. 8 in. (~51 cm) from the carpet. Behind the opening is a 1 ft. 6 ½ in. (~47 cm) polycarbonate\
+chute. The chute featues a swinging wall that the HUMAN PLAYER uses to push the POWER CUBE onto the FIELD. \
+The PORTAL closest to PLAYER STATION 1 will also contain a game timer.");
+    var redExchangeZone = new Polygon([new Point(168, 200), new Point(216, 200), new Point(216, 276), new Point(168, 276)],
+    "Red Exchange Zone - An EXCHANGE is a polycarbonate wall 6 ft. 5 ¾ in. (~197 cm) tall by 4 ft. (~122 cm) wide located \
+between PLAYER STATION 1 and PLAYER STATION 2 and used by ROBOTS to deliver POWER \
+CUBES to HUMAN PLAYERS. HUMAN PLAYERS can then either place POWER CUBES in the VAULT \
+or feed them back to the ROBOT through the RETURN. Each EXCHANGE has a lower opening \
+1 ft. 4 ¼ in. (~41 cm) tall and is 1 ft. 9 in. (~53 cm) wide used to deliver POWER CUBES to the HUMAN PLAYER. \
+A small ramp, 1 ¾ in. (~4 cm) tall by 6 ½ in. (~17 cm) deep, leads to a series of conveyor rollers. \
+The conveyor rollers are spun by the HUMAN PLAYER to move the POWER CUBE through a polycarbonate tunnel \
+that is 1 ft. 11 ¾ in. (~60 cm) deep. Each EXCHANGE also features a RETURN used to deliver POWER CUBES to ROBOTS. \
+The RETURN opening is a 1ft. 2 in. (~36 cm) square, centered above the lower opening and is located \
+1 ft. 8 in. (~51 cm) above the carpet. Behind the RETURN opening is a 1 ft. 6 ½ in. (~47 cm) deep \
+polycarbonate chute. The chute features a swinging wall designed to push the POWER CUBE onto the FIELD.");
+    var redPowerZone = new Polygon([new Point(308, 265), new Point(361, 265), new Point(361, 335), new Point(308, 335)],
+    "Red Power Cube Zone - A rectangular area 3 ft. 9 in. (~114 cm) wide by 3 ft. 6 in. (~107 cm) deep, \
+bounded by the SWITCH and 2 in. (~5 cm) ALLIANCE colored gaffers tape. The POWER CUBE ZONE includes the \
+gaffers tape, but excludes the SWITCH.");
+    var redAutoLine = new Polygon([new Point(330, 30), new Point(347, 30), new Point(347, 567), new Point(330, 567)],
+    "Red Auto Line -  a line of 2 in. (~5 cm), black gaffers tape that is the width of the FIELD and is 10 ft. \
+(~305 cm) from each ALLIANCE WALL to the leading edge of the tape. During autonomous, robots may try to cross their \
+AUTO LINE to score 5 points.");
+    var redPlatform = new Polygon([new Point(433, 185), new Point(620, 185), new Point(620, 408), new Point(433, 408)],
+    "Red Platform Zone -  a 11 ft. 1 ½ in. (~339 cm) wide by 9 ft. 11 ¾ in. (~304 cm) deep and infinitely tall \
+volume bounded by 2 in. (~5 cm) ALLIANCE colored gaffers tape, the faces of the OUTRIGGERS TOWER, and the SWITCH. \
+The PLATFORM ZONE includes the gaffers tape, but excludes the SWITCH and the faces of the OUTRIGGERS AND TOWER. \
+Each PLATFORM is 8 ft. 8 in. (~264 cm) wide by 3 ft. 5 ¼ in. (~105 cm) deep and 3 ½ in. (~9 cm) tall. The ramps \
+leading to the PLATFORM are 1 ft. 1 in. (~33 cm) long with a 15.35 deg. angle.");
+    var topNull = new Polygon([new Point(574, 27), new Point(673, 27), new Point(673, 184), new Point(574, 184)],
+    "Top Null Territory - one of two, 7 ft. 11 ¼ in. (~242 cm) wide by 6 ft. (~183 cm) deep and infinitely \
+tall volumes formed by 2 in. (~5 cm), white gaffers tape and the GUARDRAILS. The NULL TERRITORY includes the \
+gaffers tape, but excludes the GUARDRAILS. The ALLIANCE’S NULL TERRITORY for a MATCH corresponds to the SCALE PLATE \
+color in that NULL TERRITORY and does not change when the FORCE POWER UP is played. A robot CAN launch POWER CUBES \
+When any part of its BUMPERS are inside its ALLIANCE’S NULL TERRITORY, and it’s attempting to place a POWER CUBE on \
+the SCALE PLATE in its ALLIANCE’S NULL TERRITORY.");
+    var bottomNull = new Polygon([new Point(575, 409), new Point(673, 409), new Point(673, 569), new Point(573, 569)],
+    "Bottom Null Territory - one of two, 7 ft. 11 ¼ in. (~242 cm) wide by 6 ft. (~183 cm) deep and infinitely \
+tall volumes formed by 2 in. (~5 cm), white gaffers tape and the GUARDRAILS. The NULL TERRITORY includes the \
+gaffers tape, but excludes the GUARDRAILS. The ALLIANCE’S NULL TERRITORY for a MATCH corresponds to the SCALE PLATE \
+color in that NULL TERRITORY and does not change when the FORCE POWER UP is played. A robot CAN launch POWER CUBES \
+When any part of its BUMPERS are inside its ALLIANCE’S NULL TERRITORY, and it’s attempting to place a POWER CUBE on \
+the SCALE PLATE in its ALLIANCE’S NULL TERRITORY.");
+    var redStartLine = new Polygon([new Point(119, 0), new Point(133, 0), new Point(133, 600), new Point(119, 600)],
+    "Red Starting Line - Prior to the start of the match, DRIVERS and COACHES must be in their ALLIANCE STATION\
+    and behind the STARTING LINE; HUMAN PLAYERS must be behind the STARTING LINE and either in their\
+ALLIANCE STATION or one of their ALLIANCE PORTALS. Match will not start until situation is corrected");
+    var leftSwitch = new Polygon([new Point(367, 176), new Point(439, 176), new Point(439, 423), new Point(367, 423)],
+    "Red Switch - An ALLIANCE’S SWITCH is the one located closest to its ALLIANCE STATION. Each SWITCH features two (2) \
+    PLATES which are 3 ft. (~91 cm) wide and 4 ft. (~122 cm) deep. If the outside edge of an ALLIANCE colored PLATE is \
+    positioned between 3 in. (~8 cm) and 6 in. (~15cm) above the FIELD carpet then the ALLIANCE has OWNERSHIP of the \
+    SWITCH. If the outside edge of an ALLIANCE colored PLATE is positioned between 12 in (~30 cm) and 15 in. (~38 cm) \
+    above the FIELD carpet then the opposing ALLIANCE has OWNERSHIP. When neither ALLIANCE has OWNERSHIP of the SWITCH, \
+    the outside edges of the PLATES are between 6 in (~15 cm) and 12 in. (~30 cm) above the FIELD carpet. When you are \
+    in ownership of your own SWITCH, your ALLIANCE gets 2 points per second.");
+    var towers = new Polygon([new Point(621, 185), new Point(633, 185), new Point(633, 408), new Point(621, 408)],
+    "Scale, Tower, and Outriggers - Each SCALE features two (2) PLATES which are 3 ft. (~91 cm) wide and 4 ft. (~122 cm) deep. \
+    At the start of the MATCH the PLATES are even, such that the outside edges of each PLATE are 5 ft. (~152 cm) +/- 1 in. (~2.5 cm) \
+    above the FIELD carpet. If the outside edge of an ALLIANCE colored PLATE is positioned between 4 ft. (~122 cm) and 4 ft. 8 in. \
+(~142 cm) above the FIELD carpet then the ALLIANCE has OWNERSHIP of the SCALE. If the outside edge of an alliance colored PLATE is \
+positioned between 5 ft. 4 in. (~163 cm) and 6 ft. (~182 cm) above the FIELD carpet then the opposing ALLIANCE has OWNERSHIP. When \
+neither ALLIANCE has OWNERSHIP of the SCALE, the outside edges of the PLATES are between 5 ft. 4 in. (~163 cm) and 4 ft. 8 in. (~142 cm) \
+above the FIELD carpet. If your ALLIANCE is in control of the SCALE, your ALLIANCE gets 2 points per second.");
+    var polygons = [redStartLine, allianceRed, topBluePortal, bottomBluePortal, redExchangeZone, redPowerZone,
+                    redAutoLine, redPlatform, topNull, bottomNull, leftSwitch, towers];
 
-    var polygons = [];
 
     function getMousePos(canvas, evt){
       var rect = canvas.getBoundingClientRect();
@@ -48,18 +126,6 @@
         return true;
       }
       return false;
-    }
-
-    Polygon.prototype.draw = function(){
-      ctx.beginPath();
-      ctx.moveTo(this.points[0].x, this.points[0].y);
-      ctx.strokeStyle = "#000";
-      ctx.strokeWidth = 3;
-      for(var i=1;i<this.points.length;i++){
-        ctx.lineTo(this.points[i].x, this.points[i].y);
-      }
-      ctx.lineTo(this.points[0].x, this.points[0].y);
-      ctx.stroke();
     }
 
     function Point(x, y){
@@ -105,18 +171,6 @@
     }
 
     function main(){
-      ctx.fillStyle = "#FFF";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = "#000";
-      ctx.fillStyle = "#000";
-      for(var i=0;i<points.length;i++){
-        ctx.beginPath();
-        ctx.arc(points[i].x, points[i].y, 3, 0, Math.PI*2);
-        ctx.stroke();
-      }
-      for(var i=0;i<polygons.length;i++){
-        polygons[i].draw();
-      }
       var done = false;
       for(var i=0;i<polygons.length;i++){
         if(!mousePos)break;
@@ -134,30 +188,20 @@
 
     requestAnimationFrame(main);
 
+    document.getElementById("canvas").addEventListener("mousedown", function(evt){
+      console.log(getMousePos(canvas, evt));
+    });
+
     document.getElementById("canvas").addEventListener("mousemove", function(evt){
       var loc = getMousePos(canvas, evt);
       mousePos = loc;
-    })
-
-    canvas.addEventListener("mouseup", function(evt){
-      var click = getMousePos(canvas, evt);
-      if(begin)return;
-      points.push(new Point(click.x, click.y));
-    });
-
-    document.getElementById("start").addEventListener("mousedown", function(evt){
-      var p = new Polygon(points, "Inside");
-      points = [];
-      begin = true;
-      polygons.push(p);
     });
 
   }
   </script>
 </head>
-<body>
-  <p>Click on the empty field below to create vertices, then click done to create a polygon. Then, you can move the mouse and it will determine whether your mouse is inside or outside of the polygon, using the ray casting algorithm.</p>
-  <p id="desc" style="height:5%"></p>
-  <button id="start">Done</button>
+<body style="font-family:Arial;">
+  <h1>Team 612's FIRST Power Up Field Description</h1>
+  <p id="desc" style="height:15%;font-size:15px;"></p>
   <canvas id="canvas" style="width:100%;height:100%"></canvas>
 </body>
