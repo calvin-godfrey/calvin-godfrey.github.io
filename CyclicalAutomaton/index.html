@@ -42,7 +42,7 @@
       for(var y=0;y<arr.length;y++){
         new_arr.push([]);
         for(var x=0;x<arr[0].length;x++){
-          var neighbor = neighbors(arr, x, y);
+          var neighbor = neighbors(arr, y, x);
           var val = arr[y][x];
           var search_for = ((val+1)%NUM_COLORS);
           var to_add = -1;
