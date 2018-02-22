@@ -46,7 +46,7 @@
       var pixels = imageCtx.getImageData(0, 0, video.videoWidth, video.videoHeight);
       var data = pixels.data;
       for(var i=SCALE/2;i<pixels.height;i+=SCALE){
-        for(var j=SCALE/2;i<pixels.width;j+=SCALE){
+        for(var j=SCALE/2;j<pixels.width;j+=SCALE){
           var size = 0, red = 0, blue = 0, green = 0;
           for(var a=-SCALE/2;a<=SCALE/2;a++){
             for(var b=-SCALE/2;b<=SCALE/2;b++){
