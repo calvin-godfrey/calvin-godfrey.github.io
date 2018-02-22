@@ -64,7 +64,7 @@
           green /= size;
           blue /= size;
           ctx.fillStyle = "rgba(" + Math.round(red) +","+Math.round(green)+","+Math.round(blue)+",1)";
-          //console.log(ctx.fillStyle);
+          ctx.strokeStyle = "rgba(" + Math.round(red) +","+Math.round(green)+","+Math.round(blue)+",1)";
           ctx.beginPath();
           ctx.arc(j, i, SCALE/2, 0, Math.PI*2);
           ctx.stroke();
@@ -75,12 +75,16 @@
 
     }
 
+    f = setInterval(function(){
+      SCALE = document.getElementById("scale").value;
+    }, 50);
+
   }
   </script>
 </head>
 <body>
-  <canvas id="ima"></canvas> <!-- draw image here then I can get the pixels -->
-  <video id="camera" autoplay="true"></video>
-  <button id="start">Begin</button><br>
+  <canvas id="ima" style="display:none"></canvas> <!-- draw image here then I can get the pixels -->
+  <video id="camera" autoplay="true" style="display:none"></video>
+  <button id="start">Begin</button><input id="scale" type="range" min="2" max="40"></input><br>
   <canvas id="canvas"></canvas>
 </body>
