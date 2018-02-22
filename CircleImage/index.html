@@ -63,7 +63,8 @@
           red /= size;
           green /= size;
           blue /= size;
-          ctx.fillStyle = "rgba(" + red +","+green+","+blue+",0.5)";
+          ctx.fillStyle = "rgba(" + red +","+green+","+blue+",1)";
+          console.log(ctx.fillStyle);
           ctx.beginPath();
           ctx.arc(i, j, SCALE/2, 0, Math.PI*2);
           ctx.stroke();
