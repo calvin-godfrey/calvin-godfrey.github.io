@@ -6,8 +6,7 @@
 
     var pixels, newCanvas, newCtx;
     var video = document.getElementById("camera");
-    var SCALE = 4;
-    var WIDTH_SCALE = 1;
+    var SCALE = 40;
     var image = document.getElementById("ima");
 
     var imageCtx = image.getContext('2d');
@@ -37,21 +36,21 @@
     function setup(){
       image.width = video.videoWidth;
       image.height = video.videoHeight;
-      canvas.width = video.videoWidth*WIDTH_SCALE;
+      canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       requestAnimationFrame(main);
     }
 
     function main(){
       imageCtx.drawImage(video, 0, 0);
-      var pixels = imageCtx.getImageData(0, 0, video.videoWidth*WIDTH_SCALE, video.videoHeight);
+      var pixels = imageCtx.getImageData(0, 0, video.videoWidth, video.videoHeight);
       var data = pixels.data;
       for(var i=SCALE/2;i<pixels.height;i+=SCALE){
         for(var j=SCALE/2;i<pixels.width;i+=SCALE){
           var size = 0, red = 0, blue = 0, green = 0;
-          for(var a=-SCALE/2;a<=SCALE;a++){
-            for(var b=-SCALE/2;b<=SCALE;b++){
-              if(i+a >= pixels.height || j+b >= pixels.width){
+          for(var a=-SCALE/2;a<=SCALE/2;a++){
+            for(var b=-SCALE/2;b<=SCALE/2;b++){
+              if(i+a >= pixels.width || j+b >= pixels.height){
                 continue;
               }
               size++;
@@ -82,5 +81,5 @@
   <canvas id="ima"></canvas> <!-- draw image here then I can get the pixels -->
   <video id="camera" autoplay="true"></video>
   <button id="start">Begin</button><br>
-  <canvas id="canvas" style="width:100%;height:100%;"></canvas>
+  <canvas id="canvas"></canvas>
 </body>
