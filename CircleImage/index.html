@@ -47,7 +47,6 @@
       var pixels = imageCtx.getImageData(0, 0, video.videoWidth, video.videoHeight);
       var data = pixels.data;
       for(var i=SCALE/2;i<pixels.height;i+=SCALE){
-        console.log(i + "," + pixels.height + ","+SCALE);
         for(var j=SCALE/2;j<pixels.width;j+=SCALE){
           var size = 0, red = 0, blue = 0, green = 0;
           for(var a=-SCALE/2;a<=SCALE/2;a++){
@@ -56,7 +55,7 @@
                 continue;
               }
               size++;
-              var index = 4*(pixels.width*(i+a)+(j+b));
+              var index = 4*(pixels.width*(j+b)+(i+a));
               red += data[index];
               green += data[index+1];
               blue += data[index+2];
