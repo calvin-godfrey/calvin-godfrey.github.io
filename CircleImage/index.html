@@ -69,9 +69,9 @@
           ctx.arc(j, i, SCALE/2, 0, Math.PI*2);
           ctx.stroke();
           ctx.fill();
+          console.log(i + "," + j);
         }
       }
-      console.log(pixels.width + ", " + pixels.height);
       requestAnimationFrame(main);
 
     }
