@@ -60,11 +60,10 @@
               blue += data[index+2];
             }
           }
-          console.log(red + "\t" + green + "\t" + blue);
           red /= size;
           green /= size;
           blue /= size;
-          ctx.fillStyle = "rgba(" + red +","+green+","+blue+",1)";
+          ctx.fillStyle = "rgba(" + Math.round(red) +","+Math.round(green)+","+Math.round(blue)+",1)";
           //console.log(ctx.fillStyle);
           ctx.beginPath();
           ctx.arc(i, j, SCALE/2, 0, Math.PI*2);
