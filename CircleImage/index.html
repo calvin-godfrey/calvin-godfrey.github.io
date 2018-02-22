@@ -51,11 +51,11 @@
           var size = 0, red = 0, blue = 0, green = 0;
           for(var a=-SCALE/2;a<=SCALE/2;a++){
             for(var b=-SCALE/2;b<=SCALE/2;b++){
-              if(i+a >= pixels.width || j+b >= pixels.height){
+              if(i+a >= pixels.height || j+b >= pixels.width){
                 continue;
               }
               size++;
-              var index = 4*(pixels.width*(j+b)+(i+a));
+              var index = 4*(pixels.width*(i+a)+(j+b));
               red += data[index];
               green += data[index+1];
               blue += data[index+2];
