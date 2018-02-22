@@ -69,15 +69,17 @@
           ctx.arc(j, i, SCALE/2, 0, Math.PI*2);
           ctx.stroke();
           ctx.fill();
+          console.log("DRAW");
         }
       }
+      console.log("REDO");
       requestAnimationFrame(main);
 
     }
 
     f = setInterval(function(){
       SCALE = document.getElementById("scale").value;
-    }, 50);
+    }, 500);
 
   }
   </script>
