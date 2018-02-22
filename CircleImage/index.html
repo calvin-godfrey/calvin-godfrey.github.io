@@ -7,6 +7,7 @@
     var pixels, newCanvas, newCtx;
     var video = document.getElementById("camera");
     var SCALE;
+    var WIDTH_SCALE = 1;
     var image = document.getElementById("ima");
     var imageCtx = image.getContext('2d');
     var canvas = document.getElementById("canvas");
@@ -42,6 +43,7 @@
 
     function main(){
       newCtx.drawImage(video, 0, 0);
+      requestAnimationFrame(main);
     }
 
   }
