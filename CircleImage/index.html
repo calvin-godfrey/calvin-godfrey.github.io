@@ -9,7 +9,7 @@
     var SCALE;
     var WIDTH_SCALE = 1;
     var image = document.getElementById("ima");
-    
+
     var imageCtx = image.getContext('2d');
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext('2d');
@@ -43,7 +43,8 @@
     }
 
     function main(){
-      ctx.drawImage(video, 0, 0);
+      imageCtx.drawImage(video, 0, 0);
+      pixels = imageCtx.getImageData(0, 0, video.videoWidth*WIDTH_SCALE, video.videoHeight);
       requestAnimationFrame(main);
     }
 
@@ -51,7 +52,7 @@
   </script>
 </head>
 <body>
-  <canvas id="ima" style="display:none;"></canvas> <!-- draw image here then I can get the pixels -->
+  <canvas id="ima"></canvas> <!-- draw image here then I can get the pixels -->
   <video id="camera" autoplay="true"></video>
   <button id="start">Begin</button><br>
   <canvas id="canvas" style="width:100%;height:100%;"></canvas>
