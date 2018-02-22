@@ -1,0 +1,55 @@
+<head>
+  <title>Image As Circles</title>
+  <meta charset="utf-8">
+  <script>
+  window.onload = function(){
+
+    var pixels, newCanvas, newCtx;
+    var video = document.getElementById("camera");
+    var SCALE;
+    var image = document.getElementById("ima");
+    var imageCtx = image.getContext('2d');
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext('2d');
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+
+    function handleVideo(stream) {
+        video.src = window.URL.createObjectURL(stream);
+    }
+
+    function videoError(e) {
+        // this shouldn't have to run
+    }
+
+    document.getElementById("start").addEventListener("mousedown", function(event){
+      newCanvas = document.createElement('canvas');
+      newCtx = newCanvas.getContext('2d');
+      if (navigator.getUserMedia) {
+        navigator.getUserMedia({video: true}, handleVideo, videoError);
+      }
+      video.addEventListener( "loadedmetadata", function (e) {
+          setup();
+      }, false );
+    });
+
+    function setup(){
+      newCanvas.width = video.videoWidth;
+      newCanvas.height = video.videoHeight;
+      canvas.width = video.videoWidth*WIDTH_SCALE;
+      canvas.height = video.videoHeight;
+      requestAnimationFrame(main);
+    }
+
+    function main(){
+      return;
+    }
+
+  }
+  </script>
+</head>
+<body>
+  <canvas id="ima" style="display:none;"></canvas> <!-- draw image here then I can get the pixels -->
+  <video id="camera" autoplay="true"></video>
+  <button id="start">Begin</button><br>
+  <canvas id="canvas" style="width:100%;height:100%;"></canvas>
+</body>

@@ -1,0 +1,92 @@
+<head>
+<title>Random Walker</title>
+  <meta charset="utf-8">
+  <script>
+window.onload = function(){
+  //var SCALE = .5;
+  var STEP = 6;
+  var canvas = document.getElementById("canvas");
+  canvas.width = screen.width;
+  canvas.height = screen.height;
+  var height = canvas.height;
+  var width = canvas.width;
+  var ctx = canvas.getContext('2d');
+
+  Walker = function(){
+    this.x = width/2;
+    this.y = height/2;
+    this.angle = 0;
+    this.prev_x = width/2;
+    this.prev_y = height/2;
+  }
+
+  Walker.prototype.draw = function(){
+    //ctx.save();
+    //ctx.beginPath();
+    //ctx.translate(this.x, this.y);
+    //ctx.rotate(-this.angle*Math.PI/180);
+    //ctx.lineWidth = 1;
+    //ctx.moveTo(0, 0);
+    //ctx.lineTo(3*SCALE, -4*SCALE);
+    //ctx.lineTo(0*SCALE, 5*SCALE);
+    //ctx.lineTo(-3*SCALE, -4*SCALE);
+    //ctx.lineTo(0, 0);
+    //ctx.stroke();
+    //ctx.restore();
+    ctx.moveTo(this.prev_x, this.prev_y);
+    ctx.lineTo(this.x, this.y);
+    ctx.stroke();
+    this.prev_x = this.x;
+    this.prev_y = this.y;
+  }
+
+  Walker.prototype.step = function(){
+    /*this.angle %= 360;
+    if(this.angle == 0){
+      this.y += STEP;
+    } else if(this.angle == 90){
+      this.x += STEP;
+    } else if(this.angle == 180){
+      this.y -= STEP;
+    } else if(this.angle == 270){
+      this.x -= STEP;
+    }*/
+    var x = Math.random();
+    /*if(x < 0.25){
+      this.angle += 90;
+    } else{
+      if(x < 0.5){
+        this.angle -= 90;
+      } else {
+        if (x < 0.75){
+          this.angle += 180;
+        }
+      }
+    }*/
+    if(x < 0.25){
+      this.x += STEP;
+    } else if (x < 0.5){
+      this.x -= STEP;
+    } else if (x < 0.75){
+      this.y += STEP;
+    } else{
+      this.y -= STEP;
+    }
+  }
+
+  var w = new Walker();
+
+  function main(){
+    w.draw();
+    w.step();
+    requestAnimationFrame(main);
+  }
+  requestAnimationFrame(main);
+
+}
+
+  </script>
+</head>
+<body>
+  <canvas id="canvas" style="width:100%;height:100%"></canvas>
+</body>
