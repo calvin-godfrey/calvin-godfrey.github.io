@@ -6,7 +6,7 @@
 
     var pixels, newCanvas, newCtx;
     var video = document.getElementById("camera");
-    var SCALE;
+    var SCALE = 4;
     var WIDTH_SCALE = 1;
     var image = document.getElementById("ima");
 
@@ -35,8 +35,8 @@
     });
 
     function setup(){
-      newCanvas.width = video.videoWidth;
-      newCanvas.height = video.videoHeight;
+      image.width = video.videoWidth;
+      image.height = video.videoHeight;
       canvas.width = video.videoWidth*WIDTH_SCALE;
       canvas.height = video.videoHeight;
       requestAnimationFrame(main);
@@ -44,8 +44,35 @@
 
     function main(){
       imageCtx.drawImage(video, 0, 0);
-      pixels = imageCtx.getImageData(0, 0, video.videoWidth*WIDTH_SCALE, video.videoHeight);
+      var pixels = imageCtx.getImageData(0, 0, video.videoWidth*WIDTH_SCALE, video.videoHeight);
+      var data = pixels.data;
+      for(var i=SCALE/2;i<pixels.height;i+=SCALE){
+        for(var j=SCALE/2;i<pixels.width;i+=SCALE){
+          var size = 0, red = 0, blue = 0, green = 0;
+          for(var a=-SCALE/2;a<=SCALE;a++){
+            for(var b=-SCALE/2;b<=SCALE;b++){
+              if(i+a >= pixels.height || j+b >= pixels.width){
+                continue;
+              }
+              size++;
+              var index = 4*(pixels.width*(i+a)+(j+b));
+              red += data[index];
+              green += data[index+1];
+              blue += data[index+2];
+            }
+          }
+          red /= size;
+          green /= size;
+          blue /= size;
+          ctx.fillStyle = "rgba(" + red +","+green+","+blue+",0.5");
+          ctx.beginPath();
+          ctx.arc(i, j, SCALE/2, 0, Math.PI*2);
+          ctx.stroke();
+          ctx.fill();
+        }
+      }
       requestAnimationFrame(main);
+
     }
 
   }
