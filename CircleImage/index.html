@@ -46,7 +46,6 @@
       imageCtx.drawImage(video, 0, 0);
       var pixels = imageCtx.getImageData(0, 0, video.videoWidth, video.videoHeight);
       var data = pixels.data;
-      data = toBlackWhite(data);
       for(var i=SCALE/2;i<pixels.height;i+=SCALE){
         for(var j=SCALE/2;j<pixels.width;j+=SCALE){
           var size = 0, red = 0, blue = 0, green = 0, brightness = 0;
