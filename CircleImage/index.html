@@ -59,7 +59,7 @@
               red += data[index];
               green += data[index+1];
               blue += data[index+2];
-              brightness += Math.pow(Math.pow(red, 2)+Math.pow(green, 2)+Math.pow(blue, 2), 0.5);
+              brightness += Math.min(Math.pow(Math.pow(red, 2)+Math.pow(green, 2)+Math.pow(blue, 2), 0.5), 255);
             }
           }
           red /= size;
