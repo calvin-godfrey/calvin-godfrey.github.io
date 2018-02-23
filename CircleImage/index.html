@@ -39,21 +39,6 @@
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       requestAnimationFrame(main);
-    }
-
-    function toBlackWhite(data){
-      newData = [];
-      for(var i=0;i<data.length;i+=3){
-        var red = data[i];
-        var green = data[i+1];
-        var blue = data[i+2];
-        var num = (red+green+blue)/3;
-        newData.push(num);
-        newData.push(num);
-        newData.push(num);
-      }
-      return newData;
-    }
 
     function main(){
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -63,7 +48,7 @@
       data = toBlackWhite(data);
       for(var i=SCALE/2;i<pixels.height;i+=SCALE){
         for(var j=SCALE/2;j<pixels.width;j+=SCALE){
-          var size = 0, brightness = 0;
+          var size = 0, red = 0, blue = 0, green = 0, brightness = 0;
           for(var a=-SCALE/2;a<=SCALE/2;a++){
             for(var b=-SCALE/2;b<=SCALE/2;b++){
               if(i+a >= pixels.height || j+b >= pixels.width){
@@ -71,14 +56,20 @@
               }
               size++;
               var index = 4*(pixels.width*(i+a)+(j+b));
-              brightness += data[index];
+              red += data[index];
+              green += data[index+1];
+              blue += data[index+2];
+              brightness += Math.pow(Math.pow(red, 2)+Math.pow(green, 2)+Math.pow(blue, 2), 0.5);
             }
           }
+          red /= size;
+          green /= size;
+          blue /= size;
           brightness /= size;
-          ctx.fillStyle = "#000";
-          ctx.strokeStyle = "#000";
-          var radius = Math.floor(0.7*(brightness/255)*((parseInt(document.getElementById("scale").max)/2)/(parseInt(document.getElementById("scale").min)/2)));
+          ctx.fillStyle = "rgba(" + Math.round(red) +","+Math.round(green)+","+Math.round(blue)+",1)";
+          ctx.strokeStyle = "rgba(" + Math.round(red) +","+Math.round(green)+","+Math.round(blue)+",1)";
           ctx.beginPath();
+          var radius = Math.floor(((brightness/255)/(parseInt(document.getElementById("scale").max)/parseInt(document.getElementById("scale").min)))/2);
           ctx.arc(j, i, radius, 0, Math.PI*2);
           ctx.stroke();
           ctx.fill();
