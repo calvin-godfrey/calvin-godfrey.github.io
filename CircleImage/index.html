@@ -69,7 +69,7 @@
           ctx.fillStyle = "rgba(" + Math.round(red) +","+Math.round(green)+","+Math.round(blue)+",1)";
           ctx.strokeStyle = "rgba(" + Math.round(red) +","+Math.round(green)+","+Math.round(blue)+",1)";
           ctx.beginPath();
-          var radius = Math.floor(((brightness/255)*(parseInt(document.getElementById("scale").max)/parseInt(document.getElementById("scale").min)))/2);
+          var radius = Math.floor(((brightness/255)*(SCALE))/2);
           ctx.arc(j, i, radius, 0, Math.PI*2);
           ctx.stroke();
           ctx.fill();
