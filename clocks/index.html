@@ -60,10 +60,12 @@
 
     Clock.prototype.draw = function(){
       ctx.beginPath();
+      ctx.lineWidth = 1;
       ctx.arc(this.x, this.y, RADIUS, 0, Math.PI*2);
       ctx.stroke();
       ctx.beginPath();
       ctx.moveTo(this.x, this.y);
+      ctx.lineWidth = 3;
       ctx.lineTo(this.x+RADIUS*LENGTH*Math.cos(this.angle2*Math.PI/180-Math.PI/2), this.y+RADIUS*LENGTH*Math.sin(this.angle2*Math.PI/180-Math.PI/2));
       ctx.stroke();
       ctx.beginPath();
