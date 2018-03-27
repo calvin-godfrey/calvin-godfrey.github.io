@@ -1,0 +1,148 @@
+<head>
+  <title>Clock</title>
+  <script>
+  window.onload = function(){
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+    canvas.width = screen.width;
+    canvas.height = screen.height;
+    var RADIUS = 20;
+    var angles = [[[90,180] ,[90,180] ,[90,180] ,[90,180] ,[90,180] ,[90,180] ,[90,180] ,[90,180] ,[90,180] ,[90,180]],
+                  [[90,270] ,[90,270] ,[90,270] ,[90,270] ,[180,270],[90,270] ,[90,270] ,[90,270] ,[90,270] ,[90,270]],
+                  [[90,270] ,[180,270],[90,270] ,[90,270] ,[90,180] ,[90,270] ,[90,270] ,[90,270] ,[90,270] ,[90,270]],
+                  [[270,180],[225,225],[270,180],[270,180],[270,180],[270,180],[270,180],[270,180],[270,180],[270,180]],
+
+                  [[0,180],[0,90],[0,90],[0,90],[0,180],[0,180],[0,180],[0,90],[0,180],[0,180]],
+                  [[90,180],[270,180],[270,90],[270,90],[180,0],[180,90],[180,90],[270,90],[180,90],[180,90]],
+                  [[270,180],[0,180],[270,180],[270,180],[0,180],[270,90],[270,90],[270,180],[270,180],[270,180]],
+                  [[0,180],[225,225],[0,180],[0,180],[0,180],[0,270],[0,270],[180,0],[0,180],[0,180]],
+
+                  [[0,180],[225,225],[90,180],[90,180],[180,0],[0,180],[0,180],[225,225],[0,135],[0,180]],
+                  [[0,180],[0,180],[270,90],[270,90],[0,90],[0,90],[0,90],[225,225],[0,90],[0,90]],
+                  [[0,180],[0,180],[0,270],[0,270],[0,270],[90,270],[90,270],[0,225],[0,270],[0,270]],
+                  [[0,180],[225,225],[0,180],[0,180],[0,180],[270,180],[270,180],[0,225],[0,225],[0,180]],
+
+                  [[0,180],[225,225],[0,180],[0,90],[0,90],[0,90],[0,180],[225,225],[45,180],[0,90]],
+                  [[0,180],[0,180],[90,180],[90,270],[90,270],[90,270],[90,180],[45,180],[90,180],[90,270]],
+                  [[0,180],[0,180],[90,270],[180,270],[180,270],[180,270],[180,270],[45,180],[180,270],[180,270]],
+                  [[0,180],[225,225],[0,270],[0,180],[0,180],[0,180],[0,180],[225,225],[315,180],[0,180]],
+
+                  [[0,180],[180,90],[0,180],[90,180],[225,225],[90,180],[0,180],[225,225],[0,180],[225,225]],
+                  [[0,90],[0,270],[0,90],[270,90],[225,225],[270,90],[0,90],[0,180],[0,90],[225,225]],
+                  [[0,270],[0,90],[90,270],[0,270],[0,180],[0,270],[0,270],[0,180],[0,270],[0,180]],
+                  [[180,0],[180,270],[180,270],[180,0],[180,0],[180,0],[180,0],[225,225],[180,0],[180,0]],
+
+                  [[0,90],[0,90],[0,90],[0,90],[225,225],[0,90],[0,90],[225,225],[0,90],[225,225]],
+                  [[90,270],[90,270],[90,270],[90,270],[225,225],[90,270],[90,270],[0,90],[90,270],[225,225]],
+                  [[270,90],[270,90],[270,90],[270,90],[0,90],[270,90],[270,90],[0,270],[270,90],[0,90]],
+                  [[0,270],[0,270],[0,270],[0,270],[0,270],[0,270],[0,270],[225,225],[0,270],[0,270]]];
+
+    function resize(canvas) {
+      var displayWidth  = canvas.clientWidth;
+      var displayHeight = canvas.clientHeight;
+
+      if (canvas.width  != displayWidth || canvas.height != displayHeight) {
+        canvas.width  = displayWidth;
+        canvas.height = displayHeight;
+      }
+      RADIUS = Math.floor(canvas.height/36);
+    }
+
+    function Clock(x, y, angle1, angle2, id){
+      this.x = x;
+      this.y = y;
+      this.angle1 = angle1;
+      this.angle2 = angle2;
+      this.angles = angles[id];
+    }
+
+    Clock.prototype.draw = function(){
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, RADIUS, 0, Math.PI*2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.y);
+      ctx.lineTo(this.x+RADIUS*LENGTH*Math.cos(this.angle2*Math.PI/180-Math.PI/2), this.y+RADIUS*LENGTH*Math.sin(this.angle2*Math.PI/180-Math.PI/2));
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.y);
+      ctx.lineTo(this.x+RADIUS*LENGTH*Math.cos(this.angle1*Math.PI/180-Math.PI/2), this.y+RADIUS*LENGTH*Math.sin(this.angle1*Math.PI/180-Math.PI/2));
+      ctx.stroke();
+    }
+
+    Clock.prototype.setAngle = function(arr){
+      this.angle1 = arr[0];
+      this.angle2 = arr[1];
+    }
+
+    function Digit(x, y){
+      this.clocks = [];
+      for(var j=0;j<6;j++){
+        for(var i=0;i<4;i++){
+          this.clocks.push(new Clock(x+RADIUS/2+i*2*RADIUS, y+RADIUS/2+j*2*RADIUS, 0, 180, 4*j+i));
+        }
+      }
+    }
+
+    Digit.prototype.draw = function(){
+      for(var i=0;i<this.clocks.length;i++){
+        this.clocks[i].draw();
+      }
+    }
+
+    Digit.prototype.setDigit = function(num){
+      for(var i=0;i<this.clocks.length;i++){
+        this.clocks[i].setAngle(this.clocks[i].angles[num]);
+      }
+    }
+
+    var displayWidth  = canvas.clientWidth;
+    var displayHeight = canvas.clientHeight;
+
+    if (canvas.width  != displayWidth || canvas.height != displayHeight) {
+      canvas.width  = displayWidth;
+      canvas.height = displayHeight;
+    }
+
+    RADIUS = Math.floor(canvas.height/36);
+    var LENGTH = 1-2/Math.pow(RADIUS, 1/1.2); // So that they approach but do not touch the edge
+
+
+    var h1 = new Digit(canvas.width/2-8*RADIUS, RADIUS);
+    var h2 = new Digit(canvas.width/2, RADIUS);
+    var m1 = new Digit(canvas.width/2-8*RADIUS, 13*RADIUS);
+    var m2 = new Digit(canvas.width/2, 13*RADIUS);
+    var s1 = new Digit(canvas.width/2-8*RADIUS, 25*RADIUS);
+    var s2 = new Digit(canvas.width/2, 25*RADIUS);
+
+    function main(){
+      resize(canvas);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      var d = new Date();
+      var hour = d.getHours();
+      var min = d.getMinutes();
+      var sec = d.getSeconds();
+      h1.setDigit(Math.floor(hour/10));
+      h1.draw();
+      h2.setDigit(hour%10);
+      h2.draw();
+      m1.setDigit(Math.floor(min/10));
+      m1.draw();
+      m2.setDigit(min%10);
+      m2.draw();
+      s1.setDigit(Math.floor(sec/10));
+      s1.draw();
+      s2.setDigit(sec%10);
+      s2.draw();
+      requestAnimationFrame(main);
+    }
+    requestAnimationFrame(main);
+  }
+
+  </script>
+</head>
+<body>
+  <canvas id="canvas" style='width:98vw;height:98vh'></canvas>
+</body>
