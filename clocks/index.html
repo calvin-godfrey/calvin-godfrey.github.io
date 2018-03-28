@@ -51,6 +51,12 @@
         canvas.height = displayHeight;
       }
       RADIUS = Math.floor(canvas.height/36);
+      h1.resize();
+      h2.resize();
+      m1.resize();
+      m2.resize();
+      s1.resize();
+      s2.resize();
     }
 
     function Clock(x, y, angle1, angle2, id, animate, maxDigit, isLast){
@@ -111,7 +117,15 @@
       }
     }
 
-    function Digit(x, y, animate, maxDigit, isLast){
+    Clock.prototype.setPosition = function(x, y){
+      this.x = x;
+      this.y = y;
+    }
+
+    function Digit(id, x, y, animate, maxDigit, isLast){
+      this.x = x;
+      this.y = y;
+      this.id = id;
       this.clocks = [];
       for(var j=0;j<6;j++){
         for(var i=0;i<4;i++){
@@ -142,6 +156,42 @@
       }
     }
 
+    Digit.prototype.resize = function(){
+      switch(this.id){
+        case 1:
+          this.x = canvas.width/2-8*RADIUS;
+          this.y = RADIUS;
+          break;
+        case 2:
+          this.x = canvas.width/2;
+          this.y = RADIUS;
+          break;
+        case 3:
+          this.x = canvas.width/2-8*RADIUS;
+          this.y = 13*RADIUS;
+          break;
+        case 4:
+          this.x = canvas.width/2;
+          this.y = 13*RADIUS;
+          break;
+        case 5:
+          this.x = canvas.width/2-8*RADIUS;
+          this.y = 25*RADIUS;
+          break;
+        case 6:
+          this.x = canvas.width/2;
+          this.y = 25*RADIUS;
+          break;
+        default:
+          break; //never gonna happen
+      }
+      for(var j=0;j<6;j++){
+        for(var i=0;i<4;i++){
+          this.clocks[4*j+i].setPosition(this.x+RADIUS/2+i*2*RADIUS, this.y+RADIUS/2+j*2*RADIUS);
+        }
+      }
+    }
+
     var displayWidth  = canvas.clientWidth;
     var displayHeight = canvas.clientHeight;
 
@@ -154,12 +204,12 @@
     var LENGTH = 1-2/Math.pow(RADIUS, 1/1.2); // So that they approach but do not touch the edge
 
 
-    var h1 = new Digit(canvas.width/2-8*RADIUS, RADIUS, false, 3, false);
-    var h2 = new Digit(canvas.width/2, RADIUS, false, 10, false);
-    var m1 = new Digit(canvas.width/2-8*RADIUS, 13*RADIUS, false, 6, false);
-    var m2 = new Digit(canvas.width/2, 13*RADIUS, false, 10, false);
-    var s1 = new Digit(canvas.width/2-8*RADIUS, 25*RADIUS, false, 6, false);
-    var s2 = new Digit(canvas.width/2, 25*RADIUS, true, 10, true);
+    var h1 = new Digit(1, canvas.width/2-8*RADIUS, RADIUS, false, 3, false);
+    var h2 = new Digit(2, canvas.width/2, RADIUS, false, 10, false);
+    var m1 = new Digit(3, canvas.width/2-8*RADIUS, 13*RADIUS, false, 6, false);
+    var m2 = new Digit(4, canvas.width/2, 13*RADIUS, false, 10, false);
+    var s1 = new Digit(5, canvas.width/2-8*RADIUS, 25*RADIUS, false, 6, false);
+    var s2 = new Digit(6, canvas.width/2, 25*RADIUS, true, 10, true);
 
     function main(){
       resize(canvas);
