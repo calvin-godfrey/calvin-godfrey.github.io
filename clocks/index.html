@@ -79,13 +79,13 @@
         ctx.lineTo(this.x+RADIUS*LENGTH*Math.cos(this.angle1*Math.PI/180-Math.PI/2), this.y+RADIUS*LENGTH*Math.sin(this.angle1*Math.PI/180-Math.PI/2));
         ctx.stroke();
       } else {
-        console.log('hi');
-        var angle2 = this.angle2+(this.target2-this.angle2)*factor;
+        var f = 1 - 1/(1+Math.pow(Math.E, 10*factor-5));
+        var angle2 = this.angle2+(this.target2-this.angle2)*f;
         ctx.lineTo(this.x+RADIUS*LENGTH*Math.cos(angle2*Math.PI/180-Math.PI/2), this.y+RADIUS*LENGTH*Math.sin(angle2*Math.PI/180-Math.PI/2));
         ctx.stroke();
         ctx.beginPath();
         ctx.moveTo(this.x, this.y);
-        var angle1 = this.angle1+(this.target1-this.angle1)*factor;
+        var angle1 = this.angle1+(this.target1-this.angle1)*f;
         ctx.lineTo(this.x+RADIUS*LENGTH*Math.cos(angle1*Math.PI/180-Math.PI/2), this.y+RADIUS*LENGTH*Math.sin(angle1*Math.PI/180-Math.PI/2));
         ctx.stroke();
       }
@@ -157,8 +157,18 @@
       var sec = d.getSeconds();
       factor = (d.getTime() % 1000)/1000;
       h1.setDigit(Math.floor(hour/10));
+      if((hour == 9 || hour == 23) && min == 59 && sec == 59){
+        h1.animate(true);
+      } else {
+        h1.animate(false);
+      }
       h1.draw();
       h2.setDigit(hour%10);
+      if(min == 59 && sec == 59){
+        h2.animate(true);
+      } else {
+        h2.animate(false);
+      }
       h2.draw();
       m1.setDigit(Math.floor(min/10));
       if(min % 10 == 9 && sec == 59){
