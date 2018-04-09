@@ -93,7 +93,7 @@
           for(var j=0;j<canvas.width;j++){
 
             var c = evaluate(i, j);
-            rgb = hslToRgb(c[0], 1, 0.4+c[1]/5);
+            rgb = hslToRgb(c[0], .8, 0.4+c[1]/5);
             var r = rgb[0];
             var g = rgb[1];
             var b = rgb[2];
@@ -135,5 +135,5 @@
 </head>
 <body>
   <input id="equation" type="text">Type Equation</input><button id="submit">Submit</button><br>
-  <canvas id="canvas" style="width:500px;height:500px"></canvas><p> <span id="x"></span>, <span id="y"></span>, <span id="brightness"></span></p>
+  <canvas id="canvas" style="width:500px;height:500px" width=500 height=500></canvas><p> <span id="x"></span>, <span id="y"></span>, <span id="brightness"></span></p>
 </body>
