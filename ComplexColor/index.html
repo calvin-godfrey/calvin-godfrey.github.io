@@ -1,9 +1,14 @@
 <head>
   <title>Complex Color</title>
   <meta charset="utf-8">
-  <script>
-  window.onload = function(){
+</head>
+<body>
 
+  <input id="equation" type="text">Type Equation</input><button id="submit">Submit</button><br>
+  <canvas id="canvas" style="width:500px;height:500px" width=500 height=500></canvas>
+  <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/mathjs/4.1.0/math.min.js'></script>
+  <script type="text/javascript">
+  window.onload = function(){
     var EQUATION = '';
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext('2d');
@@ -80,10 +85,12 @@
 
     function evaluate(i, j){
       var z = new Complex(x_min+j*(x_max-x_min)/canvas.width, y_min+i*(y_max-y_min)/canvas.height);
-    /*var num = z.power(2).add(new Complex(-1, 0)).multiply(z.add(new Complex(-2, -1)).power(2));
-      var den = z.power(2).add(new Complex(2, 4));
-      var end = num.divide(den);*/
-      var end = z.add(new Complex(2, 0)).power(2).multiply(z.add(new Complex(-1, -2))).multiply(z.add(new Complex(0, 1)));
+      var scope = {
+        z: math.complex(z.re, z.im)
+      };
+      var end = math.eval(EQUATION);//.add(new Complex(0.9, 0.9)).multiply(z.add(new Complex(-0.9, 0.9))).multiply(z.add(new Complex(0, -0.5)));
+      console.log(end);
+      console.log(z);
       var color = end.angle()/(2*Math.PI);
       var brightness = end.magnitude();
       brightness = Math.log(brightness)/Math.log(2) % 1;
@@ -115,8 +122,6 @@
     }
   }
 
-  main();
-
   function getMousePos(canvas, evt){
     var rect = canvas.getBoundingClientRect();
     return {x: (evt.clientX-rect.left)/(rect.right-rect.left)*canvas.width,
@@ -125,7 +130,7 @@
 
   document.getElementById("submit").addEventListener("mousedown", function(event){
     EQUATION = document.getElementById("equation").value;
-    var re = new RegExp("-?(?:(?:(?:\\d+/\\d+|\\d+)\\*)?x(?:\\*\\*-?(?:\\d+/\\d+|\\d+))?|\\d+)", 'g');
+    var re = new RegExp("-?(?:(?:(?:\\d+/\\d+|\\d+)\\*)?z(?:\\*\\*-?(?:\\d+/\\d+|\\d+))?|\\d+)", 'g');
     var ans = re.exec(EQUATION);
     var terms = [];
     while(ans){
@@ -137,8 +142,4 @@
 
 }
   </script>
-</head>
-<body>
-  <input id="equation" type="text">Type Equation</input><button id="submit">Submit</button><br>
-  <canvas id="canvas" style="width:500px;height:500px" width=500 height=500></canvas>
 </body>
