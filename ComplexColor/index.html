@@ -3,8 +3,8 @@
   <meta charset="utf-8">
 </head>
 <body>
-
-  <input id="equation" type="text">Type Equation</input><button id="submit">Submit</button><br>
+  <p>Type in any equation in terms of z (a complex variable) and it will plot the function using color. For example, (z^3+5*z)/(z+z^6). Note that it will take about 30 seconds to generate a picture</p>
+  <input id="equation" type="text">Equation</input><button id="submit">Submit</button><br>
   <canvas id="canvas" style="width:100px;height:100px" width=100 height=100></canvas>
   <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/mathjs/4.1.0/math.min.js'></script>
   <script type="text/javascript">
@@ -17,7 +17,7 @@
     var y_min = -3;
     var LN_2 = Math.log(2);
     var y_max = 3;
-    var SIZE = Math.round(screen.height*0.5);
+    var SIZE = Math.round(screen.height*0.2);
     canvas.width = SIZE;
     canvas.height = SIZE;
     canvas.style = "width:"+SIZE+"px;height:"+SIZE+"px;";
