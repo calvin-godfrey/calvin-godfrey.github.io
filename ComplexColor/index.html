@@ -11,6 +11,10 @@
     var x_max = 3;
     var y_min = -3;
     var y_max = 3;
+    var SIZE = Math.round(screen.height*0.8);
+    canvas.width = SIZE;
+    canvas.height = SIZE;
+    canvas.style = "width:"+SIZE+"px;height:"+SIZE+"px;";
     var image = ctx.createImageData(canvas.width, canvas.height);
 
     Complex = function(re, im){
@@ -76,9 +80,10 @@
 
     function evaluate(i, j){
       var z = new Complex(x_min+j*(x_max-x_min)/canvas.width, y_min+i*(y_max-y_min)/canvas.height);
-      var num = z.power(2).add(new Complex(-1, 0)).multiply(z.add(new Complex(-2, -1)).power(2));
+    /*var num = z.power(2).add(new Complex(-1, 0)).multiply(z.add(new Complex(-2, -1)).power(2));
       var den = z.power(2).add(new Complex(2, 4));
-      var end = num.divide(den);
+      var end = num.divide(den);*/
+      var end = z.add(new Complex(2, 0)).power(2).multiply(z.add(new Complex(-1, -2))).multiply(z.add(new Complex(0, 1)));
       var color = end.angle()/(2*Math.PI);
       var brightness = end.magnitude();
       brightness = Math.log(brightness)/Math.log(2) % 1;
@@ -119,21 +124,21 @@
   }
 
   document.getElementById("submit").addEventListener("mousedown", function(event){
-    EQUATION = document.getElementById("equation").innerHTML;
-    var x = main();
-  })
-
-  document.getElementById("canvas").addEventListener("mousemove", function(event){
-    var loc = getMousePos(canvas, event);
-    document.getElementById('x').innerHTML = Math.round(loc.x*100)/100;
-    document.getElementById('y').innerHTML = Math.round(loc.y*100)/100;
-    document.getElementById('brightness').innerHTML = evaluate(loc.y, loc.x)[1];
-  })
+    EQUATION = document.getElementById("equation").value;
+    var re = new RegExp("-?(?:(?:(?:\\d+/\\d+|\\d+)\\*)?x(?:\\*\\*-?(?:\\d+/\\d+|\\d+))?|\\d+)", 'g');
+    var ans = re.exec(EQUATION);
+    var terms = [];
+    while(ans){
+      terms.push(ans[0]);
+      ans = re.exec(EQUATION);
+    }
+    console.log(terms);
+  });
 
 }
   </script>
 </head>
 <body>
   <input id="equation" type="text">Type Equation</input><button id="submit">Submit</button><br>
-  <canvas id="canvas" style="width:500px;height:500px" width=500 height=500></canvas><p> <span id="x"></span>, <span id="y"></span>, <span id="brightness"></span></p>
+  <canvas id="canvas" style="width:500px;height:500px" width=500 height=500></canvas>
 </body>
