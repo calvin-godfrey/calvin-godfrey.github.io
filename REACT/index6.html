@@ -1,0 +1,64 @@
+<div id="root"></div>
+<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style type="text/css">
+.box--small{
+  width: 60px;
+  height: 60px;
+}
+
+.box--medium{
+  width: 120px;
+  height: 120px;
+}
+
+.box--large{
+  width:180px;
+  height:180px;
+}
+
+.box{
+  border-color: black;
+  border-width: 1px;
+  border-style:solid;
+}
+</style>
+<script type="text/babel">
+const rootElement = document.getElementById("root");
+function Box({style, className = '', size, ...rest}){
+  const sizeClassName = size ? `box--${size}` : '';
+  return (
+    <div
+      className={`box ${className} ${sizeClassName}`}
+      style={{paddingLeft: 20, ...style}}
+      {...rest}
+      />
+  )
+}
+const className = 'box box--small'
+const props = {
+  className,
+  style: {paddingLeft: 20},
+}
+const element = (
+  <div>
+    <Box
+      size="small"
+      style={{backgroundColor: 'lightblue'}}
+      >small box
+    </Box>
+    <Box
+      size="medium"
+      style={{backgroundColor: 'pink'}}
+      >med box
+    </Box>
+    <Box
+      size="large"
+      style={{backgroundColor: 'green'}}
+      >large box
+    </Box>
+  </div>
+)
+ReactDOM.render(element, rootElement);
+</script>

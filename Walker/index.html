@@ -4,7 +4,7 @@
   <script>
 window.onload = function(){
   //var SCALE = .5;
-  var STEP = 6;
+  var STEP = 2;
   var canvas = document.getElementById("canvas");
   canvas.width = screen.width;
   canvas.height = screen.height;
@@ -34,6 +34,7 @@ window.onload = function(){
     //ctx.stroke();
     //ctx.restore();
     ctx.moveTo(this.prev_x, this.prev_y);
+    ctx.lineWidth = 0.2;
     ctx.lineTo(this.x, this.y);
     ctx.stroke();
     this.prev_x = this.x;
@@ -41,16 +42,6 @@ window.onload = function(){
   }
 
   Walker.prototype.step = function(){
-    /*this.angle %= 360;
-    if(this.angle == 0){
-      this.y += STEP;
-    } else if(this.angle == 90){
-      this.x += STEP;
-    } else if(this.angle == 180){
-      this.y -= STEP;
-    } else if(this.angle == 270){
-      this.x -= STEP;
-    }*/
     var x = Math.random();
     /*if(x < 0.25){
       this.angle += 90;
