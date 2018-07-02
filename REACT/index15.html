@@ -2,19 +2,36 @@
 <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/axios@0.16.2/dist/axios.min.js"></script>
 <script type="text/babel">
 class UserCompany extends React.Component {
-  state =
+  state = {company: undefined}
+  componentDidMount(){
+    axios({
+      url: 'https://api.github.com/graphql',
+      method: 'post',
+      data:{
+        query: `{
+          user(login: "${this.props.username}") {
+            company
+          }
+        }`
+      },
+      headers: {Authorization: `bearer e1998bf84bae5e8316c374eefb42c698656effac`}
+    }).then(response => {
+      this.setState({company: response.data.data.user.company})
+    })
+  }
   render(){
     return this.state.company || 'Unknown'
   }
 }
-const username = 'calvni'
+const username = 'ggodfrey'
 const element = (
   <div>
     <div>
       {`@${username} works at `}
-      ... some company
+      <UserCompany username={username} />
       </div>
       </div>
 )

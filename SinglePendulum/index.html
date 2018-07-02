@@ -1,0 +1,109 @@
+<head>
+  <title>Single Penulum</title>
+  <meta charset="utf-8">
+  <script>
+  window.onload = function(){
+
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext('2d');
+    var width = screen.width;
+    var height = screen.height;
+    var mouseDown = false;
+    var mousePos = [];
+    canvas.width = width;
+    canvas.height = height;
+
+    Pendulum = function(x, y, length){
+      this.x = x;
+      this.y = y;
+      this.length = length;
+      this.baseRadius = 5;
+      this.endRadius = 10;
+      this.angle = 0;
+      this.momentum = 0;
+    }
+
+    Pendulum.prototype.draw = function(){
+      ctx.strokeStyle = "#000";
+      ctx.fillStyle = "#000";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.baseRadius, 0, Math.PI*2);
+      ctx.moveTo(this.x, this.y);
+      var endX = this.x + this.length*Math.cos(this.angle + Math.PI/2);
+      var endY = this.y + this.length*Math.sin(this.angle + Math.PI/2);
+      ctx.lineTo(endX, endY);
+      ctx.stroke();
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(endX, endY, this.endRadius, 0, Math.PI*2);
+      ctx.stroke();
+      ctx.fill();
+    }
+
+    Pendulum.prototype.iterate = function(){
+      if(mouseDown)return;
+      var force = -0.01*Math.sin(this.angle);
+      this.momentum += force;
+      this.angle += this.momentum;
+      this.momentum *= 0.99;
+    }
+
+    var p = new Pendulum(width/2, height/2, height/3);
+
+    function getMousePos(canvas, evt){
+      var rect = canvas.getBoundingClientRect();
+      return {x: (evt.clientX-rect.left)/(rect.right-rect.left)*canvas.width,
+        y: (evt.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height};
+    }
+
+    function main(){
+      ctx.clearRect(0, 0, width, height);
+      p.draw();
+      p.iterate();
+      requestAnimationFrame(main);
+    }
+    requestAnimationFrame(main);
+
+    document.addEventListener("mousedown", function(event){
+      var pos = getMousePos(canvas, event);
+      if(Math.pow(Math.pow(pos.x-p.x, 2)+Math.pow(pos.y-p.y, 2), 0.5) > p.length)return;
+      mouseDown = true;
+      var angle = Math.atan2(p.x-pos.x, pos.y-p.y);
+      p.angle = angle;
+      p.momentum = 0;
+    })
+
+    document.addEventListener("mousemove", function(event){
+      if(!mouseDown)return;
+      var pos = getMousePos(canvas, event);
+      var angle = Math.atan2(p.x-pos.x, pos.y-p.y);
+      p.angle = angle;
+      p.momentum = 0;
+      mousePos.push(pos);
+    })
+
+    function norm(v){
+      var mag = Math.pow(Math.pow(v.x, 2)+Math.pow(v.y, 2), 0.5);
+      return {x: v.x/mag, y: v.y/mag};
+    }
+
+    document.addEventListener("mouseup", function(event){
+      mouseDown = false;
+      var pos = getMousePos(canvas, event);
+      var deltaPos = {x: pos.x-mousePos[mousePos.length-2].x, y: pos.y-mousePos[mousePos.length-2].y};
+      var pendulumVector = {x: pos.x-p.x, y: pos.y-p.y};
+      pendulumVector = norm(pendulumVector);
+      var crossProduct = deltaPos.x*pendulumVector.y - deltaPos.y*pendulumVector.x;
+      p.momentum = -0.003*crossProduct;
+      mousePos = [];
+      console.log(deltaPos);
+    })
+
+}
+  </script>
+</head>
+<body>
+    <canvas id="canvas" width="100%" height="100%"></canvas>
+  </div>
+</body>

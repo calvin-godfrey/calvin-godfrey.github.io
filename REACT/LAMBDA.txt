@@ -1,0 +1,29 @@
+(	(lambda n:
+		(lambda n:
+			(lambda a:
+				(lambda a:a(a))
+				(lambda b:
+					a(lambda*c:b(b)(*c))
+				)
+			)
+			(lambda a:
+				lambda b,i:
+					i*i>b or b%i and a(b,i+1)
+			)(n,2)
+		)(n)
+		*
+		(
+			(lambda n:
+				(lambda a:
+					(lambda a:
+						a(a)
+					)
+					(lambda b:
+						a(lambda*c:b(b)(*c))
+					)
+				)
+				(lambda f:
+					lambda a,b,i:i if a==b else
+						(b<=a and f(a, (lambda a:(lambda a:a(a))(lambda b:a(lambda*c:b(b)(*c)))) (lambda a:lambda b:(lambda a:(lambda a:a(a))(lambda b:a(lambda*c:b(b)(*c))))(lambda a:lambda b,n:a(b[1:],n-1)if n*len(b)-n else b[0])((lambda x:x*x-2*x+2,)*2+(lambda y:a(y-1)+a(y-2),),b)(b))(i+1),i+1))
+						)(n,2,0))
+				(n)!=False)
