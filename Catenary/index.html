@@ -1,0 +1,144 @@
+<head>
+  <title>Catenary</title>
+  <script>
+  window.onload = function(){
+    var doneFirstClick = false;
+    var doneSecondClick = false;
+    var mouseDown = false;
+    var whichDragging = null;
+    var firstPoint, secondPoint, mousePos, length;
+    var lengthSet = false;
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var multiplier = document.getElementById("multiplier");
+    var constant = document.getElementById("constant");
+    canvas.width = screen.width;
+    canvas.height = screen.height;
+
+    function getMousePos(canvas, evt){
+      var rect = canvas.getBoundingClientRect();
+      return {x: (evt.clientX-rect.left)/(rect.right-rect.left)*canvas.width,
+              y: (evt.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height};
+    }
+
+    function xToPixel(x) {
+      return Math.round(x/100 * canvas.width);
+    }
+
+    function yToPixel(y) {
+      return canvas.height - Math.round(y/100 * canvas.height);
+    }
+
+    function drawCatenary(x1, y1, x2, y2, l) {
+      var z = 1e-3;
+      while (Math.sinh(z)/z < Math.sqrt(l*l-(y2-y1)*(y2-y1))/(x2-x1)) {
+        z += 1e-3;
+      }
+      var a = (x2-x1)/2/z;
+      var p = (x1+x2-a*Math.log((l+y2-y1)/(l-y2+y1)))/2;
+      var q = (y2+y1-l*Math.cosh(z)/Math.sinh(z))/2;
+      var i = x1;
+      while (i <= x2) {
+        ctx.fillStyle = "#000";
+        ctx.fillRect(i, canvas.height - (a*Math.cosh((i-p)/a)+q), 1, 1);
+        i += 0.1;
+      }
+    }
+
+    canvas.addEventListener("mousedown", function(evt) {
+      var loc = getMousePos(canvas, evt);
+      if(doneFirstClick && doneSecondClick) {
+        mouseDown = true;
+        if(distance(loc, firstPoint) < 6) {
+          whichDragging = 1;
+          length = lengthSet ? length : distance(firstPoint, secondPoint)*multiplier.value;
+          lengthSet = true;
+        } else if (distance(loc, secondPoint) < 6) {
+          whichDragging = 2;
+          length = lengthSet ? length : distance(firstPoint, secondPoint)*multiplier.value;
+          lengthSet = true;
+        } else {
+          whichDragging = null;
+        }
+      }
+      if(!doneFirstClick){
+        firstPoint = loc;
+        doneFirstClick = true;
+      }
+      else if(doneFirstClick && !doneSecondClick) {
+        secondPoint = loc;
+        doneSecondClick = true;
+        ctx.fillStyle = "#FFF";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        main(firstPoint, secondPoint);
+      }
+    });
+
+    canvas.addEventListener("mousemove", function(evt) {
+      var loc = getMousePos(canvas, evt);
+      if(doneFirstClick && !doneSecondClick && !mouseDown){
+        ctx.strokeStyle = "#000";
+        ctx.fillStyle = "#FFF";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      else if(doneFirstClick && doneSecondClick && mouseDown && whichDragging !== null) {
+        ctx.fillStyle = "#FFF";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        mousePos = loc;
+        if (whichDragging == 1) {
+          main(loc, secondPoint);
+        } else {
+          main(firstPoint, loc);
+        }
+      }
+    });
+
+    canvas.addEventListener("mouseup", function(evt){
+      mouseDown = false;
+      if(doneFirstClick && doneSecondClick && whichDragging !== null ) {
+        if (whichDragging == 1) {
+          firstPoint = mousePos;
+        } else {
+          secondPoint = mousePos;
+        }
+      }
+    })
+
+    multiplier.addEventListener("input", function(evt){
+      ctx.fillStyle = "#FFF";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      main(firstPoint, secondPoint);
+    })
+
+    function main(firstPoint, secondPoint) {
+      var x1, x2, y1, y2;
+      if(firstPoint.x < secondPoint.x) {
+        x1 = firstPoint.x;
+        y1 = firstPoint.y;
+        x2 = secondPoint.x;
+        y2 = secondPoint.y;
+      } else {
+        x2 = firstPoint.x;
+        y2 = firstPoint.y;
+        x1 = secondPoint.x;
+        y1 = secondPoint.y;
+      }
+      if (whichDragging != null && constant.checked) {
+        drawCatenary(Math.round(x1), Math.round(canvas.height - y1), Math.round(x2), Math.round(canvas.height - y2), length);
+      } else {
+        drawCatenary(Math.round(x1), Math.round(canvas.height - y1), Math.round(x2), Math.round(canvas.height - y2), multiplier.value*Math.round(distance(firstPoint, secondPoint)));
+        }
+    }
+
+    function distance(p1, p2) {
+      return Math.pow(Math.pow(p1.x-p2.x, 2)+Math.pow(p1.y-p2.y, 2), 0.5);
+    }
+  }
+
+  </script>
+</head>
+<body>
+  <input type="range" id="multiplier" min="1.05" max="3" step="0.01" value="1.5">Length of string</input><br>
+  <input type="checkbox" id="constant" unchecked>Constant Length</input>
+  <canvas id="canvas" style='width:100%;height:100%'></canvas>
+</body>
