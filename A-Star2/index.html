@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<head>
+  <title>A Star Search</title>
+  <meta charset="utf-8">
+  <script src="script.js"></script>
+</head>
+<body>
+  <h1>A* Search Visualization</h1>
+  <p>A* (pronounced A star), is an algorithm used to find the shortest distance between from node to another on a graph, where a graph is simply a group of nodes connected by paths. It was created as an improved version of the Dijkstra search algorithm, which simply attempted to travel to the closest node until it reached a deadend or reached the end node.</p>
+  <h3>Explanation</h3>
+  <p>The basic way the A star algorithm works is simple. Once the graph is generated, each node is given a set value "d" measured by how close the node is the ending node. Then the algorithm starts on the starting node, and looks at all the nodes it is connected to. It gives these nodes a heuristic value that is the sum of the set value "d" to the end node and the edge's weight, that the user determines.
+    Then, it moves to the node with the lowest heuristic value, keeping track of where it came from, and repeats the process. It ignores nodes that it has already visited, and if it reaches a dead end it backtracks until there is a new choice and follows that path. This process repeats over and over again until all nodes are exhausted, although ideally it finds the end node before that happens.</p>
+  <p>Click to make the nodes of a graph. Click one node again to make it the start (green) and another to make it the end (red). Draw lines to connect them and make the graph. Click on a line after you draw it to change its 'weight' from the default, which is its length.</p>
+  <p>Click start to begin the algorithm, and hit step to go through the individual steps the algorithm takes so that you can see which nodes it considers at each step along the way.</p>
+  <button id="getPoints">Start</button><button id="step">Step</button>
+  <table id="queue" border="1"><tr><th>Node</th><th>Heuristic Value</th><th>Path From</th></tr></table>
+  <p id="path"></p>
+  <p id="percent"></p>
+  <canvas style="width:100%;height:100%" id="canvas"></canvas>
+</body>
+</html>
