@@ -1,0 +1,160 @@
+<head>
+  <title>Fourier</title>
+  <script>
+  window.onload = function(){
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var width = screen.width;
+    var height = screen.height;
+    var MAX_RADIUS = Math.max(width/6.4, height/2.5);
+    canvas.width = width;
+    canvas.height = height;
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "#000";
+    var circle_number = 0;
+    var circles = [];
+    var points = [];
+    var MAX_POINTS = 500;
+    var IS_SIN = true;
+    var time = 0;
+    var period = 1/(2*Math.PI)*500;
+    var stop = false;
+
+    function Point(x,y) {
+      this.x = x;
+      this.y = y;
+    }
+
+    function Base(frequency, amplitude, center) {
+      this.freq = frequency;
+      this.amp = amplitude;
+      this.center = center;
+    }
+
+    Base.prototype.draw = function() {
+      ctx.beginPath();
+      ctx.arc(this.center.x, this.center.y, this.amp, 0, Math.PI*2);
+      ctx.stroke();
+    }
+
+    Base.prototype.evaluate = function(i, s) {
+      return 0;
+    }
+
+    Base.prototype.calculate_center = function(){
+      return new Point(MAX_RADIUS, MAX_RADIUS);
+    }
+
+    function Circle(frequency, amplitude, parent) {
+      this.freq = frequency;
+      this.amp = amplitude;
+      this.center = this.calculate_center;
+      this.parent = parent;
+    }
+
+    Circle.prototype.draw = function() {
+      ctx.beginPath();
+      ctx.arc(this.center.x, this.center.y, this.amp, 0, Math.PI*2);
+      ctx.stroke();
+    }
+
+    Circle.prototype.evaluate = function(i, s) {
+      if (s) {
+        return this.amp * Math.sin(this.freq*i/period);
+      } else {
+        return this.amp * Math.cos(this.freq*i/period);
+      }
+    }
+
+    Circle.prototype.calculate_center = function() {
+      return new Point(this.parent.center.x + this.parent.evaluate(time, false), this.parent.center.y + this.parent.evaluate(time, true));
+    }
+
+    function main() {
+      ctx.clearRect(0, 0, width, height);
+      period = 800 - 1/(2*Math.PI)*document.getElementById("speed").value;
+      for (var i=0;i<circles.length;i++) {
+        circles[i].center = circles[i].calculate_center();
+        circles[i].draw();
+      }
+      var total_amp = 0;
+      for (var i=0;i<circles.length;i++) {
+        total_amp += circles[i].evaluate(time, IS_SIN);
+      }
+      points.splice(0, 0, total_amp);
+      if (points.length > MAX_POINTS) {
+        points.pop();
+      }
+      ctx.beginPath();
+      ctx.moveTo(MAX_RADIUS*2 + 3, MAX_RADIUS + points[0]);
+      for (var i=1;i<points.length;i++) {
+        ctx.lineTo(MAX_RADIUS*2 + 3*(i+1), MAX_RADIUS + points[i]);
+      }
+      ctx.stroke();
+      time++;
+      if(!stop) {
+        requestAnimationFrame(main);
+      } else {
+        stop = false;
+        circles = [];
+      }
+    }
+
+    document.getElementById("add").addEventListener("mousedown", function(e) {
+      var ele = document.getElementById("list");
+      var child = document.createElement('p');
+      child.id = 'p' + circle_number;
+      var freq_input = document.createElement('input');
+      freq_input.id = 'freq' + circle_number;
+      var amp_input = document.createElement('input');
+      amp_input.id = 'amp' + circle_number;
+      child.appendChild(freq_input);
+      child.appendChild(amp_input);
+      ele.appendChild(child);
+      circle_number++;
+    });
+
+    document.getElementById("remove").addEventListener("mousedown", function(e) {
+      if (circle_number == 0)return;
+      circle_number--;
+      var ele = document.getElementById("list");
+      var to_remove = document.getElementById("p" + circle_number);
+      ele.removeChild(to_remove);
+    });
+
+    document.getElementById("start").addEventListener("mousedown", function(e) {
+      var max_amp = 0;
+      for(var i=0;i<circle_number;i++) {
+        var amp = eval(document.getElementById("amp" + i).value);
+        max_amp += amp;
+      }
+
+      var scale = MAX_RADIUS/max_amp;
+
+      var base = new Base(0, 0, new Point(MAX_RADIUS, MAX_RADIUS));
+      circles.push(base);
+
+      for (var i=0;i<circle_number;i++) {
+        var freq = eval(document.getElementById("freq" + i).value);
+        var amp = eval(document.getElementById("amp" + i).value);
+        var c = new Circle(freq, amp * scale, circles[circles.length-1]);
+        circles.push(c);
+      }
+      requestAnimationFrame(main);
+    });
+
+    document.getElementById("stop").addEventListener("mousedown", function(e) {
+      stop = true;
+    });
+
+  }
+
+  </script>
+</head>
+<body>
+  <button id="add">Add Circle</button><button id="remove">Remove Circle</button>
+  <p id="list">Frequency&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amplitude</p>
+  <br>
+  <button id="start">Start</button><button id="stop">Stop</button><input id="speed" type="range" min="100" max="5000" value="400">Speed</input>
+  <canvas id="canvas" style='width:100%;height:100%'></canvas>
+</body>
