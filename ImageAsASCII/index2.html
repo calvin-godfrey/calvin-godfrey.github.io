@@ -17,7 +17,7 @@
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
 
     function handleVideo(stream) {
-        video.src = window.URL.createObjectURL(stream);
+        video.src = window.URL.createObjectURL(new Blob(stream));
     }
 
     function videoError(e) {
