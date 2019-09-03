@@ -1,0 +1,200 @@
+<head>
+  <title>Music Fractal</title>
+  <script src="Tone.js"></script>
+  <script>
+  window.onload = function(){
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    canvas.width = screen.width;
+    canvas.height = screen.height;
+    var width = canvas.width;
+    var height = canvas.height;
+    var numNotes = 16;
+    var numPitches = 15;
+    var widthInterval = width / numNotes;
+    var heightInterval = height / numPitches;
+    var MAIN_SCALE = 0;
+    const KEYS_MAP = {
+      "B#": 0,
+      "C": 0,
+      "C#": 1,
+      "Db": 1,
+      "D": 2,
+      "D#": 3,
+      "Eb": 3,
+      "E": 4,
+      "Fb": 4,
+      "E#": 5,
+      "F": 5,
+      "F#": 6,
+      "Gb": 6,
+      "G": 7,
+      "G#": 8,
+      "Ab": 8,
+      "A": 9,
+      "A#": 10,
+      "Bb": 10,
+      "B": 11,
+      "Cb": 11
+    };
+
+    var notes = [];
+    for (var i=0;i<numNotes;i++) {
+      notes.push(null);
+    }
+
+    var colors = ["#e33059", "#f7943d", "#edd929", "#56a754", "#5b37cc", "#a347bf", "#ea57b2"];
+    var names = [["C3",  "D3",  "E3",  "F3",  "G3",  "A3",  "B3",  "C4",  "D4",  "E4",  "F4",  "G4",  "A4",  "B4",  "C5"],
+                 ["C#3", "D#3", "F3",  "F#3", "G#3", "A#3", "C4",  "C#4", "D#4", "F4",  "F#4", "G#4", "A#4", "C5",  "C#5"],
+                 ["D3",  "E3",  "F#3", "G3",  "A3",  "B3",  "C#4", "D4",  "E4",  "F#4", "G4",  "A4",  "B4",  "C#5", "D5"],
+                 ["D#3", "F3",  "G3",  "G#3", "A#3", "C4",  "D4",  "D#4", "F4",  "G4",  "G#4", "A#4", "C5",  "D5",  "D#5"],
+                 ["E3",  "F#3", "G#3", "A3",  "B3",  "C#4", "D#4", "E4",  "F#4", "G#4", "A4",  "B4",  "C#5", "D#5", "E5"],
+                 ["F3",  "G3",  "A3",  "A#3", "C4",  "D4",  "E4",  "F4",  "G4",  "A4",  "A#4", "C5",  "D5",  "E5",  "F5"],
+                 ["F#3", "G#3", "A#3", "B3",  "C#4", "D#4", "F4",  "F#4", "G#4", "A#4", "B4",  "C#5", "D#5", "F5", "F#5"],
+                 ["G3",  "A3",  "B3",  "C4",  "D4",  "E4",  "F#4", "G4",  "A4",  "B4",  "C5",  "D5",  "E5",  "F#5", "G5"],
+                 ["G#3", "A#3", "C4",  "C#4", "D#4", "F4",  "G4",  "G#4", "A#4", "C5",  "C#5", "D#5", "F5",  "G5", "G#5"],
+                 ["A3",  "B3",  "C#4", "D4",  "E4",  "F#4", "G#4", "A4",  "B4",  "C#5", "D5",  "E5",  "F#5", "G#5", "A5"],
+                 ["A#3", "C4",  "D4",  "D#4", "F4",  "G4",  "A4",  "A#4", "C5",  "D5",  "D#5", "F5",  "G5",  "A5", "A#5"],
+                 ["B3",  "C#4", "D#4", "E4",  "F#4", "G#4", "A#4", "B4",  "C#5", "D#5", "E5",  "F#5", "G#5", "A#5", "B5"]];
+
+    var synth = new Tone.Synth({ oscillator:
+                                {
+                                  type: "triangle"
+                                },
+                                envelope: {
+                                  attack  : 0.05 ,
+                                  decay  : 0.1 ,
+                                  sustain  : 0.3 ,
+                                  release  : 1
+                                }
+                              }).toMaster();
+    Tone.Transport.bpm.value = 120;
+
+    var Note = function(num, scale) {
+      this.note = num;
+      this.color = colors[num % 7];
+      this.pitch = names[scale][numPitches - 1 - num];
+      this.scale = scale;
+    }
+
+    /* Note.prototype.play = function(position) {
+      if (position == 0) {
+        synth.triggerAttackRelease(this.pitch, '4n');
+      } else {
+        synth.triggerAttackRelease(this.pitch, '4n', Tone.Time('4n') * position);
+      }
+    } */
+
+    function getMousePos(canvas, evt){
+      var rect = canvas.getBoundingClientRect();
+      return {x: (evt.clientX-rect.left)/(rect.right-rect.left)*canvas.width,
+              y: (evt.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height};
+    }
+
+    function drawGrid() {
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "#888";
+      for (var i=0;i<numPitches;i++) {
+        ctx.beginPath();
+        ctx.moveTo(0, i*heightInterval);
+        ctx.lineTo(width, i*heightInterval);
+        ctx.stroke();
+      }
+      ctx.beginPath();
+      ctx.moveTo(0, height-1);
+      ctx.lineTo(width, height-1);
+      ctx.stroke();
+      for (var i=0;i<numNotes;i++) {
+        ctx.beginPath();
+        ctx.moveTo(i*widthInterval, 0);
+        ctx.lineTo(i*widthInterval, height);
+        ctx.stroke();
+      }
+      ctx.beginPath();
+      ctx.moveTo(width - 1, 0);
+      ctx.lineTo(width - 1, height);
+      ctx.stroke();
+    }
+
+    function drawNote(note, x, y) {
+      ctx.fillStyle = note.color;
+      ctx.fillRect(Math.round(widthInterval * x), Math.round(heightInterval * y), widthInterval, heightInterval);
+    }
+
+    function drawNotes() {
+      for (var i=0;i<notes.length;i++) {
+        var note = notes[i];
+        if (note != null) drawNote(note, i, note.note);
+      }
+    }
+
+    function playNotes() {
+      Tone.Transport.stop();
+      Tone.Transport.cancel();
+      var pattern = new Tone.Pattern(function(time, note) {
+        if (note != null) {
+          synth.triggerAttackRelease(note, Tone.Time('4n'));
+        }
+      }, notes.map(note => note == null ? null : note.pitch));
+      pattern.iterations = notes.length;
+      pattern.start(0);
+      Tone.Transport.start();
+    }
+
+    function updateNotes() {
+      for (var i=0;i<notes.length;i++) {
+        if (notes[i] != null) notes[i].pitch = names[MAIN_SCALE][numPitches - 1 - notes[i].note];
+      }
+    }
+
+
+    function main() {
+      ctx.clearRect(0, 0, width, height);
+      drawNotes();
+      drawGrid();
+      requestAnimationFrame(main);
+    }
+    requestAnimationFrame(main);
+
+    canvas.addEventListener("mousedown", function(evt){
+      if (Tone.context.state !== 'running') {
+        Tone.context.resume();
+      }
+      var loc = getMousePos(canvas, evt);
+      var whichX = Math.floor(loc.x / widthInterval);
+      var whichY = Math.floor(loc.y / heightInterval);
+      if (notes[whichX] != null && notes[whichX].note == whichY) {
+        notes[whichX] = null;
+      } else {
+        notes[whichX] = new Note(whichY, MAIN_SCALE);
+        synth.triggerAttackRelease(names[MAIN_SCALE][numPitches - 1 - whichY], '8n');
+      }
+    });
+
+    document.getElementById("play").addEventListener("mousedown", playNotes);
+    document.getElementById("Stop").addEventListener("mousedown", function(event) {
+      Tone.Transport.stop();
+      Tone.Transport.cancel();
+    });
+
+    document.getElementById("subkey").addEventListener("mousedown", function(evt) {
+      var key = document.getElementById("key").value;
+      var num = KEYS_MAP[key];
+      if (num === undefined) {
+        alert("Unknown key. If you used double sharps or double flats, please respell the key.");
+      } else {
+        MAIN_SCALE = num;
+        updateNotes();
+      }
+      document.getElementById("dispkey").innerHTML = key;
+    });
+}
+  </script>
+</head>
+<body>
+  <h1>Main Theme</h1>
+  <p>Pick Key:&nbsp;<input id="key"></input><button id="subkey">Submit</button></p>
+  <p>Current Key: <span id="dispkey">C</span></p>
+  <canvas id="canvas" style='width:99vw;height:50vh'></canvas>
+  <button id="play">Play</button><button id="Stop">Stop</button>
+</body>
