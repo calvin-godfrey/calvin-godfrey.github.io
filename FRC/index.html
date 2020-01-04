@@ -14,107 +14,61 @@
     field.onload = function(){
       ctx.drawImage(field, 0, 0, 1250, 600);
     }
-    var allianceRed = new Polygon([new Point(0, 80), new Point(160, 80), new Point(160, 520), new Point(0, 520)], "Red Alliance Zone - a 22 ft. (~671 cm) wide by 10 ft. (~305 cm) deep by 10 ft. (~305 cm) tall\
-volume formed by, and including three (3) PLAYER STATIONS, an EXCHANGE wall, and 2 in. ALLIANCE colored gaffers tape.");
-    var topBluePortal = new Polygon([new Point(0, 0), new Point(215, 0), new Point(215, 25), new Point(160, 80), new Point(0, 80)],
-    "Top Blue Portal - HUMAN PLAYERS may deliver POWER CUBES to ROBOTS through either of the PORTAL walls. Each \
-PORTAL wall features a 1 ft. 2 in. (~36 cm) square opening, centered across the width of the panel and\
-located 1 ft. 8 in. (~51 cm) from the carpet. Behind the opening is a 1 ft. 6 ½ in. (~47 cm) polycarbonate\
-chute. The chute featues a swinging wall that the HUMAN PLAYER uses to push the POWER CUBE onto the FIELD. \
-The PORTAL closest to PLAYER STATION 1 will also contain a game timer.");
-    var bottomBluePortal = new Polygon([new Point(0, 520), new Point(160, 520), new Point(215, 570), new Point(215, 600), new Point(0, 600)],
-    "Bottom Blue Portal- HUMAN PLAYERS may deliver POWER CUBES to ROBOTS through either of the PORTAL walls. Each \
-PORTAL wall features a 1 ft. 2 in. (~36 cm) square opening, centered across the width of the panel and\
-located 1 ft. 8 in. (~51 cm) from the carpet. Behind the opening is a 1 ft. 6 ½ in. (~47 cm) polycarbonate\
-chute. The chute featues a swinging wall that the HUMAN PLAYER uses to push the POWER CUBE onto the FIELD. \
-The PORTAL closest to PLAYER STATION 1 will also contain a game timer.");
-    var redExchangeZone = new Polygon([new Point(168, 200), new Point(216, 200), new Point(216, 276), new Point(168, 276)],
-    "Red Exchange Zone - An EXCHANGE is a polycarbonate wall 6 ft. 5 ¾ in. (~197 cm) tall by 4 ft. (~122 cm) wide located \
-between PLAYER STATION 1 and PLAYER STATION 2 and used by ROBOTS to deliver POWER \
-CUBES to HUMAN PLAYERS. HUMAN PLAYERS can then either place POWER CUBES in the VAULT \
-or feed them back to the ROBOT through the RETURN. Each EXCHANGE has a lower opening \
-1 ft. 4 ¼ in. (~41 cm) tall and is 1 ft. 9 in. (~53 cm) wide used to deliver POWER CUBES to the HUMAN PLAYER. \
-A small ramp, 1 ¾ in. (~4 cm) tall by 6 ½ in. (~17 cm) deep, leads to a series of conveyor rollers. \
-The conveyor rollers are spun by the HUMAN PLAYER to move the POWER CUBE through a polycarbonate tunnel \
-that is 1 ft. 11 ¾ in. (~60 cm) deep. Each EXCHANGE also features a RETURN used to deliver POWER CUBES to ROBOTS. \
-The RETURN opening is a 1ft. 2 in. (~36 cm) square, centered above the lower opening and is located \
-1 ft. 8 in. (~51 cm) above the carpet. Behind the RETURN opening is a 1 ft. 6 ½ in. (~47 cm) deep \
-polycarbonate chute. The chute features a swinging wall designed to push the POWER CUBE onto the FIELD.");
-    var redPowerZone = new Polygon([new Point(308, 265), new Point(361, 265), new Point(361, 335), new Point(308, 335)],
-    "Red Power Cube Zone - A rectangular area 3 ft. 9 in. (~114 cm) wide by 3 ft. 6 in. (~107 cm) deep, \
-bounded by the SWITCH and 2 in. (~5 cm) ALLIANCE colored gaffers tape. The POWER CUBE ZONE includes the \
-gaffers tape, but excludes the SWITCH. The cubes in this zone can only by used by that alliance.");
-    var redAutoLine = new Polygon([new Point(330, 30), new Point(347, 30), new Point(347, 567), new Point(330, 567)],
-    "Red Auto Line -  a line of 2 in. (~5 cm), black gaffers tape that is the width of the FIELD and is 10 ft. \
-(~305 cm) from each ALLIANCE WALL to the leading edge of the tape. During autonomous, robots may try to cross their \
-AUTO LINE to score 5 points.");
-    var redPlatform = new Polygon([new Point(433, 185), new Point(620, 185), new Point(610, 284), new Point(597, 284),
-                                   new Point(597, 315), new Point(610, 315), new Point(620, 408), new Point(433, 408)],
-    "Red Platform Zone -  a 11 ft. 1 ½ in. (~339 cm) wide by 9 ft. 11 ¾ in. (~304 cm) deep and infinitely tall \
-volume bounded by 2 in. (~5 cm) ALLIANCE colored gaffers tape, the faces of the OUTRIGGERS TOWER, and the SWITCH. \
-The PLATFORM ZONE includes the gaffers tape, but excludes the SWITCH and the faces of the OUTRIGGERS AND TOWER. \
-Each PLATFORM is 8 ft. 8 in. (~264 cm) wide by 3 ft. 5 ¼ in. (~105 cm) deep and 3 ½ in. (~9 cm) tall. The ramps \
-leading to the PLATFORM are 1 ft. 1 in. (~33 cm) long with a 15.35 deg. angle. In the end game, a robot can PARK \
-on the platform for 5 points, or attempt to CLIMB for 30 points.");
-    var topNull = new Polygon([new Point(574, 27), new Point(673, 27), new Point(673, 184), new Point(574, 184)],
-    "Top Null Territory - one of two, 7 ft. 11 ¼ in. (~242 cm) wide by 6 ft. (~183 cm) deep and infinitely \
-tall volumes formed by 2 in. (~5 cm), white gaffers tape and the GUARDRAILS. The NULL TERRITORY includes the \
-gaffers tape, but excludes the GUARDRAILS. The ALLIANCE’S NULL TERRITORY for a MATCH corresponds to the SCALE PLATE \
-color in that NULL TERRITORY and does not change when the FORCE POWER UP is played. A robot CAN launch POWER CUBES \
-When any part of its BUMPERS are inside its ALLIANCE’S NULL TERRITORY, and it’s attempting to place a POWER CUBE on \
-the SCALE PLATE in its ALLIANCE’S NULL TERRITORY.");
-    var bottomNull = new Polygon([new Point(575, 409), new Point(673, 409), new Point(673, 569), new Point(573, 569)],
-    "Bottom Null Territory - one of two, 7 ft. 11 ¼ in. (~242 cm) wide by 6 ft. (~183 cm) deep and infinitely \
-tall volumes formed by 2 in. (~5 cm), white gaffers tape and the GUARDRAILS. The NULL TERRITORY includes the \
-gaffers tape, but excludes the GUARDRAILS. The ALLIANCE’S NULL TERRITORY for a MATCH corresponds to the SCALE PLATE \
-color in that NULL TERRITORY and does not change when the FORCE POWER UP is played. A robot CAN launch POWER CUBES \
-When any part of its BUMPERS are inside its ALLIANCE’S NULL TERRITORY, and it’s attempting to place a POWER CUBE on \
-the SCALE PLATE in its ALLIANCE’S NULL TERRITORY.");
-    var redStartLine = new Polygon([new Point(119, 0), new Point(133, 0), new Point(133, 600), new Point(119, 600)],
-    "Red Starting Line - Prior to the start of the match, DRIVERS and COACHES must be in their ALLIANCE STATION\
-    and behind the STARTING LINE; HUMAN PLAYERS must be behind the STARTING LINE and either in their\
-ALLIANCE STATION or one of their ALLIANCE PORTALS. Match will not start until situation is corrected");
-    var leftSwitch = new Polygon([new Point(367, 176), new Point(439, 176), new Point(439, 423), new Point(367, 423)],
-    "Red Switch - An ALLIANCE’S SWITCH is the one located closest to its ALLIANCE STATION. Each SWITCH features two (2) \
-    PLATES which are 3 ft. (~91 cm) wide and 4 ft. (~122 cm) deep. If the outside edge of an ALLIANCE colored PLATE is \
-    positioned between 3 in. (~8 cm) and 6 in. (~15cm) above the FIELD carpet then the ALLIANCE has OWNERSHIP of the \
-    SWITCH. If the outside edge of an ALLIANCE colored PLATE is positioned between 12 in (~30 cm) and 15 in. (~38 cm) \
-    above the FIELD carpet then the opposing ALLIANCE has OWNERSHIP. When neither ALLIANCE has OWNERSHIP of the SWITCH, \
-    the outside edges of the PLATES are between 6 in (~15 cm) and 12 in. (~30 cm) above the FIELD carpet. When you are \
-    in ownership of your own SWITCH, your ALLIANCE gets 1 point per second (2 in autonomous). Although this switch 'belongs' to the red alliance, \
-    it is impossible to know until the match starts which way the switch should tilt to get points.");
-    var towers = new Polygon([new Point(621, 185), new Point(633, 185), new Point(633, 284), new Point(621, 284)],
-    "Scale, Tower, and Outriggers - Each SCALE features two (2) PLATES which are 3 ft. (~91 cm) wide and 4 ft. (~122 cm) deep. \
-    At the start of the MATCH the PLATES are even, such that the outside edges of each PLATE are 5 ft. (~152 cm) +/- 1 in. (~2.5 cm) \
-    above the FIELD carpet. If the outside edge of an ALLIANCE colored PLATE is positioned between 4 ft. (~122 cm) and 4 ft. 8 in. \
-(~142 cm) above the FIELD carpet then the ALLIANCE has OWNERSHIP of the SCALE. If the outside edge of an alliance colored PLATE is \
-positioned between 5 ft. 4 in. (~163 cm) and 6 ft. (~182 cm) above the FIELD carpet then the opposing ALLIANCE has OWNERSHIP. When \
-neither ALLIANCE has OWNERSHIP of the SCALE, the outside edges of the PLATES are between 5 ft. 4 in. (~163 cm) and 4 ft. 8 in. (~142 cm) \
-above the FIELD carpet. If your ALLIANCE is in control of the SCALE, your ALLIANCE gets 1 point per second (2 in autonomous). The PLATES \
-have a wall 3-1/2 in. high on three sides and 1 ft. 3 in. on the side connected to the rest of the SCALE.");
-    var towersBottom = new Polygon([new Point(612, 315), new Point(636, 315), new Point(636, 407), new Point(612, 407)],
-      "Scale, Tower, and Outriggers - Each SCALE features two (2) PLATES which are 3 ft. (~91 cm) wide and 4 ft. (~122 cm) deep. \
-      At the start of the MATCH the PLATES are even, such that the outside edges of each PLATE are 5 ft. (~152 cm) +/- 1 in. (~2.5 cm) \
-      above the FIELD carpet. If the outside edge of an ALLIANCE colored PLATE is positioned between 4 ft. (~122 cm) and 4 ft. 8 in. \
-  (~142 cm) above the FIELD carpet then the ALLIANCE has OWNERSHIP of the SCALE. If the outside edge of an alliance colored PLATE is \
-  positioned between 5 ft. 4 in. (~163 cm) and 6 ft. (~182 cm) above the FIELD carpet then the opposing ALLIANCE has OWNERSHIP. When \
-  neither ALLIANCE has OWNERSHIP of the SCALE, the outside edges of the PLATES are between 5 ft. 4 in. (~163 cm) and 4 ft. 8 in. (~142 cm) \
-  above the FIELD carpet. If your ALLIANCE is in control of the SCALE, your ALLIANCE gets 1 point per second (2 in autonomous). The PLATES \
-  have a wall 3-1/2 in. high on three sides and 1 ft. 3 in. on the side connected to the rest of the SCALE.");
-  var redVault = new Polygon([new Point(0, 244), new Point(27, 244), new Point(27, 352), new Point(0, 352)],
-  "Red Vault - The VAULT is an aluminum and plastic structure used by HUMAN PLAYERS to turn POWER CUBES in to POWER UPS. There are \
-  three (3) columns within the VAULT. Each column is 1 ft. 1-1/2 in. (~34 cm) wide by 3 ft. 3-1/4 in. (~100 cm) tall with the bottom \
-  located 1 ft. 3-1/2 in. (~39 cm) above the carpet. Each of the three (3) columns in the VAULT correspond to a POWER UP. Your ALLIANCE \
-  gets 5 points for every POWER CUBE placead inside the VAULT. Yellow lights in the vault correspond with how many POWER CUBES are in the \
-  corresponding column; a solid blue light indicate the powerup is played, while a blue pulsing light mean the powerup is queued. NOTE: \
-  There are orientations such that three POWER CUBES will not fit in a VAULT  column, but if HUMAN PLAYERS place POWER CUBES logo side up \
-  they’ll fit.");
-  var rings = new Polygon([new Point(612, 284), new Point(648, 284), new Point(648, 315), new Point(612, 315)],
-  "Rungs - An ALLIANCE’S RUNG extends into their PLATFORM ZONE. RUNGS consist of a 1 ft. 1 ft. 1 in. (~33 cm) long 1 ¼ in. Schedule 40 \
-aluminum pipe supported by 2 in. (~5 cm) box tubing. Each RUNG extends 8 ¼ in. (~21 cm). from the vertical face of the SCALE supports \
-and 7 ft. (~213 cm) from the carpet to the top of the RUNG. The RUNG in Figure 3-9 is highlighted for clarity.");
-    var polygons = [redVault, redStartLine, allianceRed, topBluePortal, bottomBluePortal, redExchangeZone, redPowerZone,
-                    redAutoLine, redPlatform, topNull, bottomNull, leftSwitch, towers, towersBottom];
+    var loadingZone = new Polygon([new Point(180, 350), new Point(220, 400), new Point(180, 446)], "LOADING ZONE: a 5 ft. (~152 cm) wide, 2 ft. 6 in. (~76 cm) deep infinitely tall volume with a triangular \
+base bounded by the LOADING BAY and ALLIANCE colored tape. The LOADING ZONE includes the \
+ALLIANCE colored tape.");
+    var allianceStation = new Polygon([new Point(0, 0), new Point(140, 0), new Point(140, 600), new Point(0, 600)], "ALLIANCE STATION: a 30-ft. (~914 cm) wide by 10 ft. 9⅛ in. (~328 cm) to 12 ft. 10⅞ in. (~393 cm) deep \
+infinitely tall volume formed by, and including the ALLIANCE WALL, the edge of the carpet, and \
+ALLIANCE colored tape. Scoring in autonomous: 2 points in LOWER PORT, 4 in OUTER PORT, 6 in INNER PORT. Points are halved during teleop.");
+    var initiationLine = new Polygon([new Point(340, 30), new Point(360, 30), new Point(360, 600), new Point(340, 600)], "INITIATION LINE: a white tape line spanning the width of the FIELD and located 10 ft. (~305 cm) from the \
+face of PLAYER STATION 2 to the near edge of the tape. An ALLIANCE’S INITIATION LINE is located in \
+the opponent’s SECTOR. You get 5 points for crossing during autonomous.");
+    var rendevousZone = new Polygon([new Point(483, 238), new Point(680, 137), new Point(725, 250), new Point(521, 347)], "RENDEZVOUS POINT: a 5 ft. 6¾ in. (~170 cm) wide, 12 ft. 6¾ in. (~383 cm) deep, infinitely tall volume \
+formed by the ALLIANCE colored BOUNDARIES and the black BOUNDARY pair that divides the Red \
+and the Blue BOUNDARIES. The RENDEZVOUS POINT includes the ALLIANCE colored BOUNDARIES. It is contained within the SHIELD GENERATOR. The SHIELD GENERATOR is a 14 ft. 1½ in. (~431 cm) wide, 15 ft. ¾ in. (~459 cm) deep, and 9 ft. 6½ in. \
+(~291 cm) tall structure located in the center of the field, oriented at a 22.5 degree angle relative to the \
+guardrails. The SHIELD GENERATOR has one (1) GENERATOR SWITCH per ALLIANCE. \
+BOUNDARIES divide the floor of the SHIELD GENERATOR into sections. Spaces between BOUNDARIES include flooring protection to prevent floor damage. All flooring between BOUNDARIES is \
+part of the SHIELD GENERATOR.");
+    var shieldGenerator = new Polygon([new Point(525, 350), new Point(730, 250), new Point(764, 357), new Point(564, 454)], "SHIELD GENERATOR: each SHIELD GENERATOR has one (1) GENERATOR SWITCH per ALLIANCE. A GENERATOR \
+    SWITCH is a 7 ft. 6 in. (~229 cm) wide, 10 ft. 1½ in. deep (~309 cm), and 4 ft. 6 in. (~137 cm) tall \
+    assembly that swings from the top of the SHIELD GENERATOR. Each GENERATOR SWITCH has a \
+    HANDLE. The HANDLE is a structure that consists of a RUNG and the supporting structure below the \
+    horizontal beam of the GENERATOR SWITCH. A RUNG is a 1¼ in. schedule 40 aluminum pipe (1.66 in. \
+    (~4 cm) outer diameter) with two (2) exposed 4 ft. 7⅝ in. (~141 cm) long sections. The amount of \
+    clearance above the RUNG varies from a minimum of 3½ in (~9 cm) to a maximum of 12 in (~30 cm). For \
+    safety, foam corner cushions line the lowest edges of the HANDLE. The SHIELD GENERATOR has a set of stack lights for each ALLIANCE which are enabled from the start \
+    of the END GAME until five (5) seconds after the MATCH. These lights illuminate when the corresponding \
+    GENERATOR SWITCH is LEVEL. \
+    Each half of the SHIELD GENERATOR features three (3) ALLIANCE colored light bars inside of the truss \
+    structure. \
+    The first light bar, inside the vertical truss section adjacent to the ALLIANCE’S TRENCH, \
+    turns on once Stage 1 is ACTIVATED. \
+    The second light bar, inside the vertical truss section closest to the ALLIANCE’S POWER \
+    PORT, turns on once Stage 2 is ACTIVATED. \
+    The third light bar, inside the horizontal truss connecting the two (2) previous truss sections, \
+    turns on once Stage 3 is ACTIVATED. In Endgame: 25 points for CLIMB, 5 points for PARK. 65 end-game points yields 1 RANK POINT.")
+    var sector = new Polygon([new Point(216, 30), new Point(340, 60), new Point(340, 600), new Point(216, 600)], "SECTOR: A 26 ft. 11¼ in. (~821 cm) wide by 10 ft. 2 in. (~310 cm) deep infinitely tall volume formed by \
+an ALLIANCE’S ALLIANCE WALL, guardrail, and INITIATION LINE. The SECTOR includes the \
+INITIATION LINE.");
+    var targetZone = new Polygon([new Point(180, 150), new Point(215, 186), new Point(180, 225)], "TARGET ZONE: a 4 ft. (~122 cm) wide, 2 ft. 6 in. (~76 cm) deep infinitely tall volume with a triangular \
+base bounded by the POWER PORT and ALLIANCE colored tape. The TARGET ZONE includes the \
+ALLIANCE colored tape.");
+    var trenchRun = new Polygon([new Point(474, 570), new Point(474, 478), new Point(771, 478), new Point(771, 570)], "TRENCH RUN: a 4 ft. 7 ½ in. (~141 cm) wide, 18 ft. (~549 cm) deep, infinitely tall volume that is bounded \
+by the guardrail, the edge of the TRENCH vertical support closest to the center of the FIELD, and \
+ALLIANCE colored tape. The TRENCH RUN includes the ALLIANCE colored tape. Each ALLIANCE has a TRENCH in their TRENCH RUN that spans the gap between the guardrail and \
+SHIELD GENERATOR. On the top of each TRENCH is an ALLIANCE specific CONTROL PANEL and a \
+yellow stack light. Each TRENCH is a 3 ft. ½ in. (~93 cm) tall, 4 ft. 8 in. (~142 cm) wide, and 3 ft. 5½ in. (~105 cm) deep \
+structure that forms a 4 ft. 4 in. (~132 cm) wide, 2 ft. 4 in. (~71 cm) tall, and 2 ft. 6 in. (~76 cm) deep \
+tunnel. Each TRENCH has two (2) ⅛ in. (~3 mm) thick baseplates. Each baseplate has two (2) 1-in. \
+(~3cm) diameter holes used to stage POWER CELLS. Holes are 1 ft. 6½ in. (~47 cm) apart.");
+    var controlPanel = new Polygon([new Point(530, 500), new Point(584, 500), new Point(580, 550), new Point(536, 538)], "A CONTROL PANEL is centered on the top of each TRENCH. The CONTROL PANEL is a 2 in. (~5 cm) \
+tall, 2 ft. 8 in. (~81 cm) diameter disk constructed of two pieces of ¼ in. (~6 mm) thick polycarbonate, \
+spaced apart by ten ½ in. (~13 mm) diameter metal spacers at regular intervals. The centers of the \
+spacers are located 1 in. (~3 cm) in from the outer perimeter of the CONTROL PANEL. The bottom edge \
+of the CONTROL PANEL is located 2 ft. 6¼ in. (~77 cm) above the carpet. 10 points for ROTATION CONTROL, 20 points for POSITION CONTROL.");
+
+    var polygons = [controlPanel, loadingZone, allianceStation, initiationLine, rendevousZone, sector, targetZone, shieldGenerator, trenchRun];
 
 
     function getMousePos(canvas, evt){
@@ -206,7 +160,7 @@ and 7 ft. (~213 cm) from the carpet to the top of the RUNG. The RUNG in Figure 3
         }
       }
       if(!done){
-        document.getElementById("desc").innerHTML = '';
+        // document.getElementById("desc").innerHTML = '';
       }
       requestAnimationFrame(main);
     }
@@ -220,13 +174,14 @@ and 7 ft. (~213 cm) from the carpet to the top of the RUNG. The RUNG in Figure 3
     document.getElementById("canvas").addEventListener("mousemove", function(evt){
       var loc = getMousePos(canvas, evt);
       mousePos = loc;
+      document.getElementById("desc").innerHTML = mousePos.x + " " + mousePos.y;
     });
 
   }
   </script>
 </head>
 <body style="font-family:Arial;">
-  <h1>Team 612's FIRST Power Up Field Description</h1>
+  <h1>Team 612's FIRST Infinite Recharge Description</h1>
   <p id="desc" style="height:20%;font-size:15px;"></p>
   <canvas id="canvas" style="width:100%;height:100%"></canvas>
 </body>
