@@ -160,7 +160,7 @@ of the CONTROL PANEL is located 2 ft. 6¼ in. (~77 cm) above the carpet. 10 poin
         }
       }
       if(!done){
-        // document.getElementById("desc").innerHTML = '';
+        document.getElementById("desc").innerHTML = '';
       }
       requestAnimationFrame(main);
     }
@@ -174,7 +174,7 @@ of the CONTROL PANEL is located 2 ft. 6¼ in. (~77 cm) above the carpet. 10 poin
     document.getElementById("canvas").addEventListener("mousemove", function(evt){
       var loc = getMousePos(canvas, evt);
       mousePos = loc;
-      document.getElementById("desc").innerHTML = mousePos.x + " " + mousePos.y;
+      // document.getElementById("desc").innerHTML = mousePos.x + " " + mousePos.y;
     });
 
   }
