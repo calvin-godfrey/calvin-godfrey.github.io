@@ -64,10 +64,10 @@
       function generateWalk() {
         var i = Math.floor(Math.random() * WIDTH);
         var j = Math.floor(Math.random() * HEIGHT);
-        for (var _=0;_<LENGTH;_++) {
+        for (var k=0;k<LENGTH;k++) {
           grid[j][i].active = true;
-          grid[j][i].index = _ + 1;
-          grid[j][i].secret = _ + 1;
+          grid[j][i].index = k + 1;
+          grid[j][i].secret = k + 1;
           var newi, newj;
           var index = 0;
           while (true) {
