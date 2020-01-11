@@ -1,0 +1,219 @@
+<head>
+  <title>Snake Game</title>
+  <meta charset="utf-8">
+  <script>
+  window.onload = function(){
+    var canvas = document.getElementById("canvas");
+    canvas.width = screen.width;
+    canvas.height = screen.height;
+    var h = canvas.height;
+    var w = canvas.width;
+    var minX = ~~(canvas.width / 10);
+    var maxX = ~~(9 * canvas.width / 10);
+    var minY = ~~(canvas.height / 10);
+    var maxY = ~~(9 * canvas.height / 10);
+    var width = maxX - minX;
+    var height = maxY - minY;
+    var ctx = canvas.getContext('2d');
+
+    var solving = false;
+    var GAP = 10;
+    var curri, currj, currIndex, pos, grid, WIDTH, HEIGHT, LENGTH;
+
+    function Square(i, j, index) {
+      this.width =  width / WIDTH;
+      this.height = height / HEIGHT;
+      this.y = i;
+      this.x = j;
+      this.index = index;
+      this.active = false;
+      this.used = true;
+      this.secret = index;
+    }
+
+    Square.prototype.draw = function() {
+      if (!this.used) return;
+      var x = minX + this.width * this.x;
+      var y = minY + this.height * this.y;
+      ctx.fillStyle = this.active ? "#000" : "#bbb";
+      ctx.fillRect(x+10, y+10, this.width-10, this.height-10);
+      if (this.active) {
+        if (this.y >= 1 && grid[this.y-1][this.x].active && grid[this.y-1][this.x].index == this.index + 1) {
+          ctx.fillRect(x+10, y-1, this.width-10, 12);
+        }
+        if (this.y + 1 < HEIGHT && grid[this.y+1][this.x].active && grid[this.y+1][this.x].index == this.index + 1) {
+          ctx.fillRect(x + 10, y + this.height - 1, this.width - 10, 12);
+        }
+        if (this.x >= 1 && grid[this.y][this.x-1].active && grid[this.y][this.x-1].index == this.index + 1) {
+          ctx.fillRect(x - 1, y + 10, 12, this.height - 10);
+        }
+        if (this.x + 1 < WIDTH && grid[this.y][this.x+1].active && grid[this.y][this.x+1].index == this.index + 1) {
+          ctx.fillRect(x + this.width - 1, y + 10, 12, this.height - 10);
+        }
+      }
+      // ctx.fillStyle = "#FFF";
+      // ctx.fillText(`${this.index},${this.y},${this.x}`, x + this.width/2, y + this.width/2);
+    }
+
+    function getMousePos(canvas, evt){
+      var rect = canvas.getBoundingClientRect();
+      return {x: (evt.clientX-rect.left)/(rect.right-rect.left)*canvas.width,
+        y: (evt.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height};
+      }
+
+      function generateWalk() {
+        var i = Math.floor(Math.random() * WIDTH);
+        var j = Math.floor(Math.random() * HEIGHT);
+        for (var _=0;_<LENGTH;_++) {
+          grid[j][i].active = true;
+          grid[j][i].index = _ + 1;
+          grid[j][i].secret = _ + 1;
+          var newi, newj;
+          var index = 0;
+          while (true) {
+            index++;
+            var option = Math.floor(Math.random() * 4);
+            newi = i + (option == 0) - (option == 1);
+            newj = j + (option == 2) - (option == 3);
+            if (newi >= 0 && newi < WIDTH && newj >= 0 && newj < HEIGHT && !grid[newj][newi].active) break;
+            if (index == 100) { // we're stuck
+              return false;
+            }
+          }
+          i = newi;
+          j = newj;
+        }
+        return true;
+      }
+
+      function start() {
+        solving = false;
+        WIDTH = +document.getElementById('width').value;
+        HEIGHT = +document.getElementById('height').value;
+        LENGTH = ~~(WIDTH * HEIGHT * parseFloat(document.getElementById('prop').value));
+        grid = generateGrid();
+        currIndex = 2;
+        while (!generateWalk()) {
+          grid = generateGrid();
+        }
+        for (var i=0;i<HEIGHT;i++) {
+          for (var j=0;j<WIDTH;j++) {
+            if (grid[i][j].index == 0) {
+              grid[i][j].used = false;
+            }
+            if (grid[i][j].index != 1) {
+              grid[i][j].active = false;
+              grid[i][j].index = 0;
+            }
+            if (grid[i][j].index == 1) {
+              curri = i;
+              currj = j;
+            }
+          }
+        }
+      }
+
+      requestAnimationFrame(main);
+
+      function main() {
+        ctx.clearRect(0, 0, w, h);
+        if (grid) for (var i=0;i<HEIGHT;i++) for (var j=0;j<WIDTH;j++) grid[i][j].draw();
+        if (solving) {
+          if (pos > LENGTH) {
+            solving = false;
+          } else {
+            for (var i=0;i<HEIGHT;i++) {
+              for (var j=0;j<WIDTH;j++) {
+                if (grid[i][j].secret == pos) {
+                  grid[i][j].active = true;
+                  grid[i][j].index = grid[i][j].secret;
+                }
+              }
+            }
+            pos++;
+          }
+        }
+        requestAnimationFrame(main);
+      }
+
+      function done() {
+        for (var i=0;i<HEIGHT;i++) {
+          for (var j=0;j<WIDTH;j++) {
+            if (!grid[i][j].used || grid[i][j].active) continue;
+            return false;
+          }
+        }
+        return true;
+      }
+
+      function generateGrid() {
+        var temp = [];
+        for (var i=0;i<HEIGHT;i++) {
+          temp.push([]);
+          for (var j=0;j<WIDTH;j++) temp[i].push(new Square(i, j, 0));
+        }
+        return temp;
+      }
+
+      function move(dx, dy) {
+        var newi = curri + dy;
+        var newj = currj + dx;
+        if (!grid[newi][newj].used) return;
+        if (grid[newi][newj].active && grid[newi][newj].index != currIndex - 2) return;
+        if (grid[newi][newj].active && grid[newi][newj].index == currIndex - 2) {
+          currIndex--;
+          grid[curri][currj].active = false;
+          grid[curri][currj].index = 0;
+          curri = newi;
+          currj = newj;
+          return;
+        } else {
+          curri = newi;
+          currj = newj;
+          grid[curri][currj].index = currIndex;
+          grid[curri][currj].active = true;
+          currIndex++;
+        }
+      }
+
+      document.addEventListener('keydown', function(event) {
+        if (event.keyCode <= 40 && event.keyCode >= 37) event.preventDefault();
+        if (event.keyCode == 37) {
+          // left
+          move(-1, 0);
+        }
+        if (event.keyCode == 38) {
+          // up
+          move(0, -1);
+        }
+        if (event.keyCode == 39) {
+          // right
+          move(1, 0);
+        }
+        if (event.keyCode == 40) {
+          // down
+          move(0, 1);
+        }
+      });
+
+      document.getElementById('solve').addEventListener('mousedown', function(event) {
+        solving = true;
+        pos = 1;
+        currIndex = 0;
+      });
+
+      document.getElementById('start').addEventListener('mousedown', start);
+      // NO CODE BELOW HERE
+    }
+    </script>
+  </head>
+  <body>
+    <h3>One-Line Game</h3>
+    <p style='font-family:sans-serif;'>The objective is simple; you have a grid of points, and need to connect them all with a single line. Input a width and height for the playing field, as well as a proportion for how 'dense' you want the path to be, then click 'Start'. Then use the arrow keys to control the path that you create starting from the given tile. If you give up, you can click 'Solve' and it will show the solution.</p>
+    <p style='font-family:sans-serif;'>Note that if any of the values become too large, the page may freeze and will require a reload.</p>
+    <input type='number' value='20' min='5' max='60' id='width'>Width</input><br>
+    <input type='number' value='10' min='5' max ='50' id='height'>Height</input><br>
+    <input type='number' value='0.25' min='0.01' max='0.5' step='0.001' id='prop'>Proportion filled</input><br>
+    <button id="start">Start</button><button id="solve">Solve</button>
+    <canvas id="canvas" style="width:100%;height:100%"></canvas>
+  </body>
