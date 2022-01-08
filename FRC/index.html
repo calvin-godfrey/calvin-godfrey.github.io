@@ -14,7 +14,7 @@
     field.onload = function(){
       ctx.drawImage(field, 0, 0, 1185, 647);
     }
-    var generalRules = "GENERAL RULES: \
+    var generalRules = "GENERAL RULES:<br> \
     \
     ROBOT height, as measured when it's resting normally on a \
 flat floor, may not exceed the maximum STARTING CONFIGURATION height (4 ft. 4 in. (~132 \
@@ -23,17 +23,17 @@ may not exceed 5 ft. 6 in. (~167 cm). ROBOTS may not extend more than 16 in. (~4
 FRAME PERIMETER. A ROBOT may not position itself such that any part of its BUMPERS is higher than \
 the HIGH RUNG. ROBOTS may never extend beyond the PURPLE PLANE. ROBOTS may not PIN an opponent's ROBOT for more than 5 \
 seconds. \
-\
+<br>\
 A ROBOT may not contact (either directly or transitively through CARGO and \
 regardless of who initiates contact) an opponent ROBOT whose BUMPERS are contacting their \
 LAUNCH PAD. A ROBOT may not contact (either directly or transitively through CARGO and \
 regardless of who initiates contact). A ROBOT may not be fully supported by a partner ROBOT. \
-\
+<br>\
 During AUTO, a ROBOT with any part of its BUMPERS on the opposite \
 side of the FIELD (i.e. on the other side of the CENTER LINE from its ALLIANCE'S TARMACS) may \
 contact neither an opponent ROBOT nor CARGO still in its staged location on the opposite side of \
 the FIELD.\
-\
+<br>\
 ROBOTS may not have greater-than-MOMENTARY CONTROL of more than 2 \
 CARGO at a time, either directly or transitively through other objects. A ROBOT may not REPEATEDLY gain greater-than-MOMENTARY CONTROL \
 of CARGO released by an UPPER EXIT until and unless that CARGO contacts anything else \
@@ -52,7 +52,7 @@ A HANGAR is located in front of each HANGAR WALL and DRIVER STATION 1. A HANGAR 
 consists of truss structure, bases, 4 RUNGS, RUNG mounting brackets, floor protection, and 2 LAUNCH \
 PADS. The maximum ROBOT height limit described in G106 is marked on the center of each horizontal \
 truss assembly in black tape (i.e. the bottom edge of the tape is 5 ft. 6 in. (~168 cm) above FIELD carpet). \
-\
+<br>\
 Each HANGAR has 4 RUNGS highlighted in Figure 5-16: LOW, MID, HIGH, and TRAVERSAL. RUNGS are 1¼ \
 in. Schedule 40 steel pipes, with a 1.66 in. (~4 cm) outer diameter, and are powder coated to reflect the \
 ALLIANCE color. RUNGS are 7 ft. (~213 cm) wide and bound by the truss and brackets (note that pipe\
@@ -71,7 +71,7 @@ infinitely tall volumes bounded by and including the ALLIANCE colored tape. Each
     var shieldGenerator = new Polygon([new Point(50, 535), new Point(115, 470), new Point(200, 560), new Point(135, 630)], "TERMINAL AREA: 1 of 2 7 ft. 8½ in, (~235 cm) wide by 6 ft. 9 in. (~206 cm) deep and infinitely \
 tall volumes bounded by and including purple tape. Includes the TERMINAL STARTING LINE: a white line spanning the width of the TERMINAL AREA and \
 located 2 ft. (~61 cm) from the back of the TERMINAL AREA. \
-\
+<br>\
 One TERMINAL is in each of the 2 FIELD corners opposite the HANGARS. Each TERMINAL is shared \
 between ALLIANCES. A TERMINAL consists of 1 ramp, 1 GUARD, 1 PURPLE PLANE, 1 CHUTE, and other \
 structure elements shown in Figure 5-20. Each TERMINAL has 5 CARGO delivery openings through which \
@@ -85,16 +85,16 @@ is a maximum of 5 ft. 1¾ in. (~157 cm) tall. A 2¾ in. (~7 cm) tall ramp leads 
 (an UPPER HUB and a LOWER HUB), UPPER and LOWER EXITS, and 4 fenders. The HUB is 8 ft. 11 in. \
 (~272 cm) wide by 8 ft. 11 in. (~272 cm) deep by 8 ft. 8 in. (~264 cm) tall. CARGO in the LOWER HUB during AUTONOMOUS is worth 2 points, and CARGO in the UPPER HUB during AUTONOMOUS is worth 4 points. Point values are halved during the TELEOPERATED period of the match.\
 If 20 or more ALLIANCE colored CARGO is scored in the HUB, an ALLIANCE earns (1) additional RANKING POINT. If at least 5 ALLIANCE colored CARGO are scored in AUTO, called a QUIINTET, this threshold drops to 18. \
-\
+<br>\
 An agitator extends up the center of each HUB and rotates throughout the MATCH. Generally, the agitator \
 causes a single CARGO dropped into the UPPER HUB to reenter play in approximately 7 seconds and a \
 CARGO dropped in the LOWER HUB to reenter play in approximately 5 seconds. An UPPER EXIT is 1 of the 4 extensions on which CARGO leaves the UPPER HUB, and a LOWER EXIT is \
 one of the 4 tunnels from which CARGO leaves the LOWER HUB. \
-\
+<br>\
 4 legs, each centered under an UPPER EXIT, support the UPPER HUB. The maximum ROBOT height \
 defined in G106 is marked with black tape on each leg (i.e. the bottom edge of the tape is 4 ft. 4 in. (~132 \
 cm) above FIELD carpet). A fender is located in between each of the LOWER EXITS. \
-\n\
+<br>\
 The opening of the LOWER HUB is 3 ft. 5 in. (~104 cm) above FIELD carpet, and the opening of the UPPER \
 HUB is 8 ft. 8 in. (~264 cm) above the FIELD carpet. A web of #2 black plastic chain is hung 7½ in. (~19 \
 cm) below the rim of the LOWER HUB opening. \
@@ -232,6 +232,6 @@ the truss base. Each LAUNCH PAD is a piece of ¼ in. (~6 mm) thick, 1 ft. 5¼ in
 <body style="font-family:Arial;">
   <h1>Team 612's FIRST Rapid React Description</h1>
   <p>Hover over different parts of the field, and the relevant rules will appear below. For the sake of symmetry, and to save time, I have only marked the left half of the field, and when applicable, the blue alliance pieces.</p><br>
-  <p id="desc" style="height:32%;font-size:15px;"></p>
-  <canvas id="canvas" style="width:100%;height:100%"></canvas>
+  <p id="desc" style="height:32%;font-size:12px;width:80%;padding-left:0;padding-right:0; margin-left:auto;margin-right:auto;display:block;"></p>
+  <canvas id="canvas" style="width:60%;height:60%;padding-left:0;padding-right:0; margin-left:auto;margin-right:auto;display:block;"></canvas>
 </body>
