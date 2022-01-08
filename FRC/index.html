@@ -12,63 +12,112 @@
     var field = new Image();
     field.src = "field.png";
     field.onload = function(){
-      ctx.drawImage(field, 0, 0, 1250, 600);
+      ctx.drawImage(field, 0, 0, 1185, 647);
     }
-    var loadingZone = new Polygon([new Point(180, 350), new Point(220, 400), new Point(180, 446)], "LOADING ZONE: a 5 ft. (~152 cm) wide, 2 ft. 6 in. (~76 cm) deep infinitely tall volume with a triangular \
-base bounded by the LOADING BAY and ALLIANCE colored tape. The LOADING ZONE includes the \
-ALLIANCE colored tape.");
-    var allianceStation = new Polygon([new Point(0, 0), new Point(140, 0), new Point(140, 600), new Point(0, 600)], "ALLIANCE STATION: a 30-ft. (~914 cm) wide by 10 ft. 9⅛ in. (~328 cm) to 12 ft. 10⅞ in. (~393 cm) deep \
+    var generalRules = "GENERAL RULES: \
+    \
+    ROBOT height, as measured when it's resting normally on a \
+flat floor, may not exceed the maximum STARTING CONFIGURATION height (4 ft. 4 in. (~132 \
+cm)) unless any part of the ROBOT'S BUMPERS is in its HANGAR ZONE, in which case its height \
+may not exceed 5 ft. 6 in. (~167 cm). ROBOTS may not extend more than 16 in. (~40 cm) beyond their \
+FRAME PERIMETER. A ROBOT may not position itself such that any part of its BUMPERS is higher than \
+the HIGH RUNG. ROBOTS may never extend beyond the PURPLE PLANE. ROBOTS may not PIN an opponent's ROBOT for more than 5 \
+seconds. \
+\
+A ROBOT may not contact (either directly or transitively through CARGO and \
+regardless of who initiates contact) an opponent ROBOT whose BUMPERS are contacting their \
+LAUNCH PAD. A ROBOT may not contact (either directly or transitively through CARGO and \
+regardless of who initiates contact). A ROBOT may not be fully supported by a partner ROBOT. \
+\
+During AUTO, a ROBOT with any part of its BUMPERS on the opposite \
+side of the FIELD (i.e. on the other side of the CENTER LINE from its ALLIANCE'S TARMACS) may \
+contact neither an opponent ROBOT nor CARGO still in its staged location on the opposite side of \
+the FIELD.\
+\
+ROBOTS may not have greater-than-MOMENTARY CONTROL of more than 2 \
+CARGO at a time, either directly or transitively through other objects. A ROBOT may not REPEATEDLY gain greater-than-MOMENTARY CONTROL \
+of CARGO released by an UPPER EXIT until and unless that CARGO contacts anything else \
+besides that ROBOT or CARGO controlled by that ROBOT.";
+    var loadingZone = new Polygon([new Point(160, 360), new Point(175, 360), new Point(175, 415), new Point(160, 415)], "CARGO LINE: a 3 ft. (~91 cm) black line that starts 1 ft. (~30 cm) from the intersection of the \
+TERMINAL and the ALLIANCE WALL and runs parallel to and 1 ft. (~30 cm) from the \
+ALLIANCE WALL.");
+    var allianceStation = new Polygon([new Point(4, 64), new Point(150, 64), new Point(150, 430), new Point(4, 550)], "ALLIANCE AREA: a 30-ft. (~914 cm) wide by 8 ft. 10in. (~269 cm) deep \
 infinitely tall volume formed by, and including the ALLIANCE WALL, the edge of the carpet, and \
-ALLIANCE colored tape. Scoring in autonomous: 2 points in LOWER PORT, 4 in OUTER PORT, 6 in INNER PORT. Points are halved during teleop.");
-    var initiationLine = new Polygon([new Point(340, 30), new Point(360, 30), new Point(360, 600), new Point(340, 600)], "INITIATION LINE: a white tape line spanning the width of the FIELD and located 10 ft. (~305 cm) from the \
-face of PLAYER STATION 2 to the near edge of the tape. An ALLIANCE’S INITIATION LINE is located in \
-the opponent’s SECTOR. You get 5 points for crossing during autonomous.");
-    var rendevousZone = new Polygon([new Point(483, 238), new Point(680, 137), new Point(725, 250), new Point(521, 347)], "RENDEZVOUS POINT: a 5 ft. 6¾ in. (~170 cm) wide, 12 ft. 6¾ in. (~383 cm) deep, infinitely tall volume \
-formed by the ALLIANCE colored BOUNDARIES and the black BOUNDARY pair that divides the Red \
-and the Blue BOUNDARIES. The RENDEZVOUS POINT includes the ALLIANCE colored BOUNDARIES. It is contained within the SHIELD GENERATOR. The SHIELD GENERATOR is a 14 ft. 1½ in. (~431 cm) wide, 15 ft. ¾ in. (~459 cm) deep, and 9 ft. 6½ in. \
-(~291 cm) tall structure located in the center of the field, oriented at a 22.5 degree angle relative to the \
-guardrails. The SHIELD GENERATOR has one (1) GENERATOR SWITCH per ALLIANCE. \
-BOUNDARIES divide the floor of the SHIELD GENERATOR into sections. Spaces between BOUNDARIES include flooring protection to prevent floor damage. All flooring between BOUNDARIES is \
-part of the SHIELD GENERATOR.");
-    var shieldGenerator = new Polygon([new Point(525, 350), new Point(730, 250), new Point(764, 357), new Point(564, 454)], "SHIELD GENERATOR: each SHIELD GENERATOR has one (1) GENERATOR SWITCH per ALLIANCE. A GENERATOR \
-    SWITCH is a 7 ft. 6 in. (~229 cm) wide, 10 ft. 1½ in. deep (~309 cm), and 4 ft. 6 in. (~137 cm) tall \
-    assembly that swings from the top of the SHIELD GENERATOR. Each GENERATOR SWITCH has a \
-    HANDLE. The HANDLE is a structure that consists of a RUNG and the supporting structure below the \
-    horizontal beam of the GENERATOR SWITCH. A RUNG is a 1¼ in. schedule 40 aluminum pipe (1.66 in. \
-    (~4 cm) outer diameter) with two (2) exposed 4 ft. 7⅝ in. (~141 cm) long sections. The amount of \
-    clearance above the RUNG varies from a minimum of 3½ in (~9 cm) to a maximum of 12 in (~30 cm). For \
-    safety, foam corner cushions line the lowest edges of the HANDLE. The SHIELD GENERATOR has a set of stack lights for each ALLIANCE which are enabled from the start \
-    of the END GAME until five (5) seconds after the MATCH. These lights illuminate when the corresponding \
-    GENERATOR SWITCH is LEVEL. \
-    Each half of the SHIELD GENERATOR features three (3) ALLIANCE colored light bars inside of the truss \
-    structure. \
-    The first light bar, inside the vertical truss section adjacent to the ALLIANCE’S TRENCH, \
-    turns on once Stage 1 is ACTIVATED. \
-    The second light bar, inside the vertical truss section closest to the ALLIANCE’S POWER \
-    PORT, turns on once Stage 2 is ACTIVATED. \
-    The third light bar, inside the horizontal truss connecting the two (2) previous truss sections, \
-    turns on once Stage 3 is ACTIVATED. In Endgame: 25 points for CLIMB, 5 points for PARK. 65 end-game points yields 1 RANK POINT.")
-    var sector = new Polygon([new Point(216, 30), new Point(340, 60), new Point(340, 600), new Point(216, 600)], "SECTOR: A 26 ft. 11¼ in. (~821 cm) wide by 10 ft. 2 in. (~310 cm) deep infinitely tall volume formed by \
-an ALLIANCE’S ALLIANCE WALL, guardrail, and INITIATION LINE. The SECTOR includes the \
-INITIATION LINE.");
-    var targetZone = new Polygon([new Point(180, 150), new Point(215, 186), new Point(180, 225)], "TARGET ZONE: a 4 ft. (~122 cm) wide, 2 ft. 6 in. (~76 cm) deep infinitely tall volume with a triangular \
-base bounded by the POWER PORT and ALLIANCE colored tape. The TARGET ZONE includes the \
-ALLIANCE colored tape.");
-    var trenchRun = new Polygon([new Point(474, 570), new Point(474, 478), new Point(771, 478), new Point(771, 570)], "TRENCH RUN: a 4 ft. 7 ½ in. (~141 cm) wide, 18 ft. (~549 cm) deep, infinitely tall volume that is bounded \
-by the guardrail, the edge of the TRENCH vertical support closest to the center of the FIELD, and \
-ALLIANCE colored tape. The TRENCH RUN includes the ALLIANCE colored tape. Each ALLIANCE has a TRENCH in their TRENCH RUN that spans the gap between the guardrail and \
-SHIELD GENERATOR. On the top of each TRENCH is an ALLIANCE specific CONTROL PANEL and a \
-yellow stack light. Each TRENCH is a 3 ft. ½ in. (~93 cm) tall, 4 ft. 8 in. (~142 cm) wide, and 3 ft. 5½ in. (~105 cm) deep \
-structure that forms a 4 ft. 4 in. (~132 cm) wide, 2 ft. 4 in. (~71 cm) tall, and 2 ft. 6 in. (~76 cm) deep \
-tunnel. Each TRENCH has two (2) ⅛ in. (~3 mm) thick baseplates. Each baseplate has two (2) 1-in. \
-(~3cm) diameter holes used to stage POWER CELLS. Holes are 1 ft. 6½ in. (~47 cm) apart.");
-    var controlPanel = new Polygon([new Point(530, 500), new Point(584, 500), new Point(580, 550), new Point(536, 538)], "A CONTROL PANEL is centered on the top of each TRENCH. The CONTROL PANEL is a 2 in. (~5 cm) \
-tall, 2 ft. 8 in. (~81 cm) diameter disk constructed of two pieces of ¼ in. (~6 mm) thick polycarbonate, \
-spaced apart by ten ½ in. (~13 mm) diameter metal spacers at regular intervals. The centers of the \
-spacers are located 1 in. (~3 cm) in from the outer perimeter of the CONTROL PANEL. The bottom edge \
-of the CONTROL PANEL is located 2 ft. 6¼ in. (~77 cm) above the carpet. 10 points for ROTATION CONTROL, 20 points for POSITION CONTROL.");
+ALLIANCE colored tape. It includes neither the TERMINAL AREA nor the TERMINAL.");
+    var initiationLine = new Polygon([new Point(150, 90), new Point(325, 90), new Point(325, 245), new Point(150, 245)], "HANGAR ZONE: a 9 ft. 8 in. (~295 cm) wide, 10 ft. 8¾ in. (327 cm) deep, and infinitely tall \
+volume defined by the ALLIANCE WALL, guardrail, and ALLIANCE colored tape. The HANGAR \
+ZONE includes the tape. Also includes SHADOW LINE: a black line that lies directly below the MID RUNG. A team will earn 4 points for hanging on the LOW RUNG, 6 points on the MID RUNG, 10 points on the HIGH RUNG, and 15 points on the TRAVERSAL RUNG. If an ALLIANCE earns 16 HANGAR points, it earns (1) additional RANKING POINT.\
+\
+A HANGAR is located in front of each HANGAR WALL and DRIVER STATION 1. A HANGAR assembly \
+consists of truss structure, bases, 4 RUNGS, RUNG mounting brackets, floor protection, and 2 LAUNCH \
+PADS. The maximum ROBOT height limit described in G106 is marked on the center of each horizontal \
+truss assembly in black tape (i.e. the bottom edge of the tape is 5 ft. 6 in. (~168 cm) above FIELD carpet). \
+\
+Each HANGAR has 4 RUNGS highlighted in Figure 5-16: LOW, MID, HIGH, and TRAVERSAL. RUNGS are 1¼ \
+in. Schedule 40 steel pipes, with a 1.66 in. (~4 cm) outer diameter, and are powder coated to reflect the \
+ALLIANCE color. RUNGS are 7 ft. (~213 cm) wide and bound by the truss and brackets (note that pipe\
+that overlaps the truss structure and brackets is not considered part of the RUNG).\
+\
+The top of the LOW RUNG is 4 ft. ¾ in. (~124 cm) above \
+FIELD carpet. The top of the MID RUNG is 5 ft. ¼ in. (~153 cm) above floor protection carpet, and its \
+center is 3 ft. 6 in. (~107 cm) from the center of the LOW RUNG. The top of the HIGH RUNG is 6 ft. 3⅝ in. \
+(~192 cm) above floor protection carpet, and the top of the TRAVERSAL RUNG is 7 ft. 7 in. (~231 cm) \
+above floor protection carpet. MID, HIGH, and TRAVERSAL RUNGS are spaced such that their centers are \
+2 ft. (~61 cm) apart. The horizontal distance between the center of the TRAVERSAL RUNG and the \
+ALLIANCE WALL is 3 ft. 3 in. (~99 cm).");
+    var rendevousZone = new Polygon([new Point(520, 164), new Point(560, 260), new Point(535, 315), new Point(445, 360), new Point(440, 250)], "TARMAC: 1 of 4 (2 per ALLIANCE) 12 ft. 9 in. (~389 cm) wide by 7 ft. ¾ in. (~215 cm) deep \
+infinitely tall volumes bounded by and including the ALLIANCE colored tape. Each ROBOT must start the match such that its BUMPERS are fully contained within 1 of its TARMACS. In AUTONOMOUS mode, a team may score 2 MATCH points by having its ROBOT completely leave its starting TARMAC at any point during AUTO.");
+    var tarmac = new Polygon([new Point(450, 380), new Point(545, 345), new Point(600, 360), new Point(645, 455), new Point(535, 460)], rendevousZone.text);
+    var shieldGenerator = new Polygon([new Point(50, 535), new Point(115, 470), new Point(200, 560), new Point(135, 630)], "TERMINAL AREA: 1 of 2 7 ft. 8½ in, (~235 cm) wide by 6 ft. 9 in. (~206 cm) deep and infinitely \
+tall volumes bounded by and including purple tape. Includes the TERMINAL STARTING LINE: a white line spanning the width of the TERMINAL AREA and \
+located 2 ft. (~61 cm) from the back of the TERMINAL AREA. \
+\
+One TERMINAL is in each of the 2 FIELD corners opposite the HANGARS. Each TERMINAL is shared \
+between ALLIANCES. A TERMINAL consists of 1 ramp, 1 GUARD, 1 PURPLE PLANE, 1 CHUTE, and other \
+structure elements shown in Figure 5-20. Each TERMINAL has 5 CARGO delivery openings through which \
+ROBOTS may transfer CARGO to HUMAN PLAYERS. The space between the PURPLE PLANE and the \
+retention chain can hold approximately 10 CARGO. \
+\
+Each TERMINAL is 4 ft. (~122 cm) deep, 8 ft. 1⅛ in. (~247 cm) wide (excluding the ends of the ramp) and \
+is a maximum of 5 ft. 1¾ in. (~157 cm) tall. A 2¾ in. (~7 cm) tall ramp leads to the 1 ft. 5¼ in. (~44 cm) wide, 1 ft. (~30 cm) tall openings.")
 
-    var polygons = [controlPanel, loadingZone, allianceStation, initiationLine, rendevousZone, sector, targetZone, shieldGenerator, trenchRun];
+    var sector = new Polygon([new Point(545, 330), new Point(570, 260), new Point(640, 290), new Point(615, 360)], "The HUB is centered on the FIELD and shared between ALLIANCES. It consists of 2 funnel-shaped goals \
+(an UPPER HUB and a LOWER HUB), UPPER and LOWER EXITS, and 4 fenders. The HUB is 8 ft. 11 in. \
+(~272 cm) wide by 8 ft. 11 in. (~272 cm) deep by 8 ft. 8 in. (~264 cm) tall. CARGO in the LOWER HUB during AUTONOMOUS is worth 2 points, and CARGO in the UPPER HUB during AUTONOMOUS is worth 4 points. Point values are halved during the TELEOPERATED period of the match.\
+If 20 or more ALLIANCE colored CARGO is scored in the HUB, an ALLIANCE earns (1) additional RANKING POINT. If at least 5 ALLIANCE colored CARGO are scored in AUTO, called a QUIINTET, this threshold drops to 18. \
+\
+An agitator extends up the center of each HUB and rotates throughout the MATCH. Generally, the agitator \
+causes a single CARGO dropped into the UPPER HUB to reenter play in approximately 7 seconds and a \
+CARGO dropped in the LOWER HUB to reenter play in approximately 5 seconds. An UPPER EXIT is 1 of the 4 extensions on which CARGO leaves the UPPER HUB, and a LOWER EXIT is \
+one of the 4 tunnels from which CARGO leaves the LOWER HUB. \
+\
+4 legs, each centered under an UPPER EXIT, support the UPPER HUB. The maximum ROBOT height \
+defined in G106 is marked with black tape on each leg (i.e. the bottom edge of the tape is 4 ft. 4 in. (~132 \
+cm) above FIELD carpet). A fender is located in between each of the LOWER EXITS. \
+\n\
+The opening of the LOWER HUB is 3 ft. 5 in. (~104 cm) above FIELD carpet, and the opening of the UPPER \
+HUB is 8 ft. 8 in. (~264 cm) above the FIELD carpet. A web of #2 black plastic chain is hung 7½ in. (~19 \
+cm) below the rim of the LOWER HUB opening. \
+\
+The UPPER HUB opening has a 4-ft. (~122-cm) diameter, and the LOWER HUB opening has a 5-ft. ⅛ in. \
+(~153 cm) diameter. he UPPER HUB is marked with a single 360° vision target consisting of 5 in. (~13 cm) long strips of 2 in. \
+(~5 cm) wide 3M 8830 Scotchlite™ Reflective Material. A sample of the material is included in each \
+Rookie Kickoff Kit and FIRST Choice. The target is a 4 ft. 5⅜ in. (~136 cm) diameter ring of plastic with 16 \
+strips adhered to it with 5½ in. (~14 cm) gaps between them. The ring is aligned such that 1 of the gaps is \
+centered over each UPPER EXIT. The distance from FIELD carpet to the top of the target is 8 ft. 8 in. \
+(~264 cm). \
+\
+The HUB is surrouned by CARGO RING: 1 of 14 small rings used to keep the CARGO in place prior to the start of the \
+MATCH. Rings are ⅛ in. (~3mm) thick, 1¾ in. (~4 cm) diameter O-rings (McMaster Item#: \
+9452K63). 12 rings are placed around the HUB, and 1 ring is in front of each TERMINAL. They \
+are secured to FIELD carpet with red or blue tape to indicate the color CARGO to be placed on \
+it.");
+    var targetZone = new Polygon([new Point(325, 90), new Point(355, 90), new Point(355, 120), new Point(325, 120)], "LAUNCH PADS are mounted to the 2 truss legs closest to the HUB such that they are flush to the top of \
+the truss base. Each LAUNCH PAD is a piece of ¼ in. (~6 mm) thick, 1 ft. 5¼ in. (~44 cm) tall, and 10 in. \
+(~25 cm) wide HDPE of the corresponding ALLIANCE color. When a ROBOT is in contact with the LAUNCH PAD, other ROBOTS may not initiate contact with said ROBOT.");
+    var pad = new Polygon([new Point(325, 220), new Point(355, 220), new Point(355, 240), new Point(325, 240)], targetZone.text);
+
+    var polygons = [loadingZone, allianceStation, initiationLine, rendevousZone, sector, targetZone, shieldGenerator, tarmac, pad];
 
 
     function getMousePos(canvas, evt){
@@ -160,7 +209,7 @@ of the CONTROL PANEL is located 2 ft. 6¼ in. (~77 cm) above the carpet. 10 poin
         }
       }
       if(!done){
-        document.getElementById("desc").innerHTML = '';
+        document.getElementById("desc").innerHTML = generalRules;
       }
       requestAnimationFrame(main);
     }
@@ -182,6 +231,7 @@ of the CONTROL PANEL is located 2 ft. 6¼ in. (~77 cm) above the carpet. 10 poin
 </head>
 <body style="font-family:Arial;">
   <h1>Team 612's FIRST Infinite Recharge Description</h1>
-  <p id="desc" style="height:20%;font-size:15px;"></p>
+  <p>Hover over different parts of the field, and the relevant rules will appear below. For the sake of symmetry, and to save time, I have only marked the left half of the field, and when applicable, the blue alliance pieces.</p><br>
+  <p id="desc" style="height:32%;font-size:15px;"></p>
   <canvas id="canvas" style="width:100%;height:100%"></canvas>
 </body>
