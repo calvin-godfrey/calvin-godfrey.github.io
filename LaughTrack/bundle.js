@@ -209,6 +209,7 @@ client.on('message', (channel, tags, message, self) => {
     // UPDATE CURRENT MESSAGE.
     document.getElementById("chat").innerHTML = `${tags['display-name']}: ${message}`;
 
+    // CHECK IF THE MESSAGE IS ICANTs
     let is_icant = true;
     words = message.split(" ");
     for (let i = 0; i < words.length; ++i)
