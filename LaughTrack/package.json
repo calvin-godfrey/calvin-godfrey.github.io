@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@babel/preset-env": "^7.23.9",
+    "babel": "^6.23.0",
+    "babelify": "^10.0.0",
+    "tmi.js": "^1.8.5"
+  }
+}
