@@ -37,7 +37,7 @@ client.on('message', (channel, tags, message, self) => {
         if (current_laugh_count == LAUGH_THRESHOLD)
         {
             let current_time = new Date() / 1000;
-            if (current_time - last_laugh_time > LAUGH_THRESHOLD)
+            if (current_time - last_laugh_time > LAUGH_COOLDOWN_IN_SECONDS)
             {
                 last_laugh_time = current_time;
                 const audio = audio_files[Math.floor(Math.random() * audio_files.length)];
