@@ -10,9 +10,11 @@ client.connect();
 // LOAD AUDIO FILES
 const audio_files = [new Audio('media/laugh1.mp3'), new Audio('media/laugh2.mp3'), new Audio('media/laugh3.mp3'), new Audio('media/laugh4.mp3'), new Audio('media/laugh5.mp3'), new Audio('media/laugh6.mp3')];
 let last_laugh_time = new Date() / 1000;
-const LAUGH_THRESHOLD = 6;
 const LAUGH_COOLDOWN_IN_SECONDS = 15;
-let current_laugh_count = 0;
+
+const ICANT_THRESHOLD = 5;
+const MESSAGES_KEPT = 10;
+let recent_messages = [];
 
 client.on('message', (channel, tags, message, self) => {
     message = message.trim();
@@ -20,34 +22,29 @@ client.on('message', (channel, tags, message, self) => {
     // UPDATE CURRENT MESSAGE.
     document.getElementById("chat").innerHTML = `${tags['display-name']}: ${message}`;
 
-    // CHECK IF THE MESSAGE IS ICANTs
-    let is_icant = true;
-    words = message.split(" ");
-    for (let i = 0; i < words.length; ++i)
+    recent_messages.push(message);
+    if (recent_messages.length > MESSAGES_KEPT)
     {
-        if (words[i].length > 0 && words[i] != 'ICANT')
-        {
-            is_icant = false;
-            break;
-        }
+      recent_messages.shift();
     }
-    if (is_icant)
+
+    let icant_count = 0;
+    for (let i = 0; i < recent_messages.length; ++i)
     {
-        current_laugh_count += 1;
-        if (current_laugh_count == LAUGH_THRESHOLD)
-        {
-            let current_time = new Date() / 1000;
-            if (current_time - last_laugh_time > LAUGH_COOLDOWN_IN_SECONDS)
-            {
-                last_laugh_time = current_time;
-                const audio = audio_files[Math.floor(Math.random() * audio_files.length)];
-                audio.play();
-            }
-            current_laugh_count = 0;
-        }
+      if (recent_messages[i].includes("ICANT"))
+      {
+        icant_count += 1;
+      }
     }
-    else
+
+    if (icant_count > ICANT_THRESHOLD)
     {
-        current_laugh_count = 0;
+      let current_time = new Date() / 1000;
+      if (current_time - last_laugh_time > LAUGH_THRESHOLD)
+      {
+          last_laugh_time = current_time;
+          const audio = audio_files[Math.floor(Math.random() * audio_files.length)];
+          audio.play();
+      }
     }
 });
