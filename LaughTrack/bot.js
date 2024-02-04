@@ -51,6 +51,8 @@ client.on('message', (channel, tags, message, self) => {
       }
     }
 
+    console.log(`${icant_count} ${ican_count} ${moo_count}`);
+
     if (icant_count > THRESHOLD)
     {
       let current_time = new Date() / 1000;
