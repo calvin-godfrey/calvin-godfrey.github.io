@@ -53,7 +53,7 @@ client.on('message', (channel, tags, message, self) => {
 
     console.log(`${icant_count} ${ican_count} ${moo_count}`);
 
-    if (icant_count > THRESHOLD)
+    if (icant_count >= THRESHOLD)
     {
       let current_time = new Date() / 1000;
       if (current_time - last_laugh_time > LAUGH_COOLDOWN_IN_SECONDS)
@@ -63,7 +63,7 @@ client.on('message', (channel, tags, message, self) => {
           audio.play();
       }
     }
-    else if (ican_count > THRESHOLD)
+    else if (ican_count >= THRESHOLD)
     {
         let current_time = new Date() / 1000;
         if (current_time - last_laugh_time > LAUGH_COOLDOWN_IN_SECONDS)
@@ -72,7 +72,7 @@ client.on('message', (channel, tags, message, self) => {
             crickets.play();
         }
     }
-    else if (moo_count > THRESHOLD)
+    else if (moo_count >= THRESHOLD)
     {
         let current_time = new Date() / 1000;
         if (current_time - last_laugh_time > LAUGH_COOLDOWN_IN_SECONDS)
