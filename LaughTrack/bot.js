@@ -19,9 +19,17 @@ const THRESHOLD = 5;
 const MESSAGES_KEPT = 10;
 let recent_messages = [];
 
+function activateTwitchChat()
+{
+    console.log("CLICKED POGGIES");
+    clicked = true;
+}
+module.exports = {activate: activateTwitchChat};
+
 client.on('message', (channel, tags, message, self) => {
     message = message.trim();
 
+    console.log(clicked);
     // UPDATE CURRENT MESSAGE.
     if (clicked)
     {
