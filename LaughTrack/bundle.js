@@ -218,7 +218,6 @@ module.exports = {activate: activateTwitchChat};
 client.on('message', (channel, tags, message, self) => {
     message = message.trim();
 
-    console.log(clicked);
     // UPDATE CURRENT MESSAGE.
     if (clicked)
     {
@@ -251,8 +250,6 @@ client.on('message', (channel, tags, message, self) => {
         moo_count += 1;
       }
     }
-
-    console.log(`${icant_count} ${ican_count} ${moo_count}`);
 
     if (icant_count >= THRESHOLD)
     {
