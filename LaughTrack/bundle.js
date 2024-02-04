@@ -199,6 +199,7 @@ client.connect();
 // LOAD AUDIO FILES
 const audio_files = [new Audio('media/laugh1.mp3'), new Audio('media/laugh2.mp3'), new Audio('media/laugh3.mp3'), new Audio('media/laugh4.mp3'), new Audio('media/laugh5.mp3'), new Audio('media/laugh6.mp3')];
 const crickets = new Audio('media/cricket.mp3');
+const moooo = new Audio('media/MOOOO.mp3');
 let last_laugh_time = new Date() / 1000;
 const LAUGH_COOLDOWN_IN_SECONDS = 15;
 
@@ -222,6 +223,7 @@ client.on('message', (channel, tags, message, self) => {
     // CHECK FOR SOUND EFFECTS.
     let icant_count = 0;
     let ican_count = 0;
+    let moo_count = 0;
     for (let i = 0; i < recent_messages.length; ++i)
     {
       if (recent_messages[i].includes("ICANT"))
@@ -231,6 +233,10 @@ client.on('message', (channel, tags, message, self) => {
       else if (recent_messages[i].includes("ICAN"))
       {
         ican_count += 1;
+      }
+      else if (recent_messages[i].includes("MOOOO"))
+      {
+        moo_count += 1;
       }
     }
 
@@ -251,6 +257,15 @@ client.on('message', (channel, tags, message, self) => {
         {
             last_laugh_time = current_time;
             crickets.play();
+        }
+    }
+    else if (moo_count > THRESHOLD)
+    {
+        let current_time = new Date() / 1000;
+        if (current_time - last_laugh_time > LAUGH_THRESHOLD)
+        {
+            last_laugh_time = current_time;
+            moooo.play();
         }
     }
 });
