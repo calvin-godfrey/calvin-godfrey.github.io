@@ -243,7 +243,7 @@ client.on('message', (channel, tags, message, self) => {
     if (icant_count > THRESHOLD)
     {
       let current_time = new Date() / 1000;
-      if (current_time - last_laugh_time > LAUGH_THRESHOLD)
+      if (current_time - last_laugh_time > LAUGH_COOLDOWN_IN_SECONDS)
       {
           last_laugh_time = current_time;
           const audio = audio_files[Math.floor(Math.random() * audio_files.length)];
@@ -253,7 +253,7 @@ client.on('message', (channel, tags, message, self) => {
     else if (ican_count > THRESHOLD)
     {
         let current_time = new Date() / 1000;
-        if (current_time - last_laugh_time > LAUGH_THRESHOLD)
+        if (current_time - last_laugh_time > LAUGH_COOLDOWN_IN_SECONDS)
         {
             last_laugh_time = current_time;
             crickets.play();
@@ -262,7 +262,7 @@ client.on('message', (channel, tags, message, self) => {
     else if (moo_count > THRESHOLD)
     {
         let current_time = new Date() / 1000;
-        if (current_time - last_laugh_time > LAUGH_THRESHOLD)
+        if (current_time - last_laugh_time > LAUGH_COOLDOWN_IN_SECONDS)
         {
             last_laugh_time = current_time;
             moooo.play();
