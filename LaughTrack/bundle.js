@@ -202,6 +202,7 @@ const crickets = new Audio('media/cricket.mp3');
 const moooo = new Audio('media/MOOOO.mp3');
 let last_laugh_time = new Date() / 1000;
 const LAUGH_COOLDOWN_IN_SECONDS = 15;
+let clicked = false;
 
 const THRESHOLD = 5;
 const MESSAGES_KEPT = 10;
@@ -211,7 +212,10 @@ client.on('message', (channel, tags, message, self) => {
     message = message.trim();
 
     // UPDATE CURRENT MESSAGE.
-    document.getElementById("chat").innerHTML = `${tags['display-name']}: ${message}`;
+    if (clicked)
+    {
+        document.getElementById("chat").innerHTML = `${tags['display-name']}: ${message}`;
+    }
 
     // UPDATE RECENT MESSAGES.
     recent_messages.push(message);
