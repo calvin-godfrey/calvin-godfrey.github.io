@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MusicStand — Privacy Policy</title>
+<style>
+  :root {
+    --text: #1c1c1e;
+    --muted: #5c5c62;
+    --border: #e2e2e5;
+    --accent: #2f5d8a;
+    --bg: #ffffff;
+    --bg-soft: #f7f7f8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.6;
+  }
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  h1 {
+    font-size: 28px;
+    margin-bottom: 4px;
+  }
+  .updated {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 40px;
+  }
+  h2 {
+    font-size: 19px;
+    margin-top: 40px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  h3 {
+    font-size: 16px;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+  p, li { font-size: 15.5px; color: var(--text); }
+  ul { padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  .callout {
+    background: var(--bg-soft);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    border-radius: 4px;
+    margin: 20px 0;
+    font-size: 15px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14.5px;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th {
+    background: var(--bg-soft);
+    font-weight: 600;
+  }
+  a { color: var(--accent); }
+  .contact {
+    background: var(--bg-soft);
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 12px;
+  }
+  code {
+    background: var(--bg-soft);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  footer {
+    margin-top: 56px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Privacy Policy for MusicStand</h1>
+  <div class="updated">Last updated: July 21, 2026</div>
+
+  <p>MusicStand ("the app," "we," "our") is a sheet music reader and annotation app for Android, developed and maintained by a single independent developer. This policy explains what data the app collects, why, and what control you have over it.</p>
+
+  <div class="callout">
+    <strong>Short version:</strong> Your sheet music, annotations, and collections are stored only on your device. They are never uploaded anywhere unless you explicitly choose to export or share them yourself. The app uses Firebase (Google) for crash reporting and basic usage analytics, which does leave your device, but is never sold or used for advertising.
+  </div>
+
+  <h2>1. Data we collect</h2>
+
+  <h3>1.1 Your documents and content</h3>
+  <p>PDFs you import, page annotations, collection organization, and related metadata (such as document names) are stored locally in the app's database on your device. This data is <strong>not</strong> transmitted to us, to Firebase, or to any other party by the app itself. Android's automatic cloud backup is disabled for MusicStand, so this content is not silently copied to Google Drive or any other cloud service in the background.</p>
+
+  <h3>1.2 Diagnostics and crash reports (Firebase Crashlytics)</h3>
+  <p>If the app crashes or encounters an error, we automatically collect:</p>
+  <ul>
+    <li>Stack traces and the app's state at the time of the crash</li>
+    <li>Device metadata (e.g. device model, OS version)</li>
+    <li>A per-installation identifier used to measure how many users are affected by a given issue (this identifier is not linked to your name, email, or any other personal identity)</li>
+  </ul>
+  <p>This is used solely to find and fix bugs.</p>
+
+  <h3>1.3 Usage analytics (Firebase Analytics)</h3>
+  <p>We collect basic, aggregate usage information, such as:</p>
+  <ul>
+    <li>App session counts and durations</li>
+    <li>Which features are used (e.g. general interaction and navigation events)</li>
+    <li>A per-installation identifier, similar to the one described above</li>
+  </ul>
+  <p>This helps us understand which parts of the app are actually used so we can prioritize fixes and improvements. It does not include the content of your documents or annotations.</p>
+
+  <h3>1.4 What we do not collect</h3>
+  <ul>
+    <li>We do not require or support account creation. There is no login, and no name, email address, or other personal identifier is collected by the app.</li>
+    <li>We do not access your precise location.</li>
+    <li>We do not read the contents of your PDFs or annotations, and this data never leaves your device through the app.</li>
+  </ul>
+
+  <h2>2. How this data is used and shared</h2>
+  <p>Crash and analytics data described in Sections 1.2 and 1.3 is processed by Firebase (a Google service) on our behalf, strictly to provide us with crash reporting and analytics. Google acts as our service provider in this context -- it does not use this data for its own independent purposes, such as advertising. This data is:</p>
+  <ul>
+    <li><strong>Collected</strong> — transmitted from your device to Firebase's servers</li>
+    <li><strong>Not shared</strong> — not sold, and not passed to unrelated third parties</li>
+  </ul>
+  <p>All data sent to Firebase is encrypted in transit (HTTPS/TLS).</p>
+
+  <h3>Exporting or sharing files yourself</h3>
+  <p>MusicStand lets you export a PDF or backup file to a location of your choosing (via Android's file picker), or share a document directly to another app (e.g. email, messaging apps) using Android's built-in share feature. These actions are entirely initiated and directed by you -- the app does not automatically send your files anywhere. We are not able to see or access files transferred this way.</p>
+
+  <h2>3. Backups</h2>
+  <p>MusicStand includes its own manual backup and restore feature, which lets you save a backup of your library to a location you choose (such as local storage, an SD card, or a cloud-synced folder you've set up yourself). This is entirely under your control -- nothing is backed up automatically or without your action. Android's system-level Auto Backup is disabled for this app.</p>
+
+  <h2>4. Data deletion</h2>
+  <ul>
+    <li><strong>On-device content</strong> (documents, annotations, collections): deleted immediately when you uninstall the app, or can be removed manually within the app.</li>
+    <li><strong>Firebase analytics/crash data:</strong> while individual data cannot be deleted, such data contains no personalized information and is automatically deleted after 14 months.</li>
+  </ul>
+
+  <h2>5. Children's privacy</h2>
+  <p>MusicStand is not directed at children under 13, and we do not knowingly collect personal information from children. The app does not require any personal information to function.</p>
+
+  <h2>6. Changes to this policy</h2>
+  <p>If this policy changes, we'll update the "Last updated" date above. Since MusicStand has no account or login system, we're unable to notify you directly -- please check back periodically if you have concerns.</p>
+
+  <h2>7. Contact</h2>
+  <div class="contact">
+    <p>If you have questions about this policy, contact:</p>
+    <p><strong>calvin.godfrey.trumpet@gmail.com</strong></p>
+  </div>
+
+  <footer>
+    MusicStand is developed independently by Calvin Godfrey. This policy applies to the Android app distributed as <code>com.calvingodfrey.musicstand</code>.
+  </footer>
+
+</div>
+</body>
+</html>
